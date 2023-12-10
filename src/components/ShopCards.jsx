@@ -7,7 +7,7 @@ const ShopCards = ({ card }) => {
     <section id="shopCards">
       <section className="flex pl-[7%] pr-[14%] items-center gap-8  py-20">
         <div className="w-[50%] h-[714px]  relative ">
-          <div className="w-[520px] h-72 absolute bottom-0 bg-[#2d8bc0bf] pt-16 pl-16 flex flex-col gap-5 ">
+          <div className="w-[520px] h-72 absolute bottom-0 bg-[#2d8bc0bf] p-16 flex flex-col gap-5 hover:w-full hover:h-full items-center justify-center transition-all duration-500">
             <p className=" text-white text-3xl font-bold font-['Montserrat'] tracking-tight">
               Top Product Of <br />
               the Week
@@ -18,7 +18,7 @@ const ShopCards = ({ card }) => {
         </div>
         <section className="flex flex-wrap gap-10 content-between w-[45%] ">
           <div className="w-full relative">
-            <div className="w-[425px] h-48 absolute bottom-0 bg-[#2d8bc0bf] pt-10 pl-16 flex flex-col gap-5 ">
+            <div className="w-[425px] h-48 absolute bottom-0 bg-[#2d8bc0bf] p-10 flex flex-col gap-5 items-center justify-center hover:w-full hover:h-full  transition-all duration-500">
               <p className=" text-white text-2xl font-bold font-['Montserrat'] tracking-tight">
                 Top Product Of the Week
               </p>
@@ -27,7 +27,7 @@ const ShopCards = ({ card }) => {
             <img src={img2} className="w-full" />
           </div>
           <div className="w-full relative">
-            <div className="w-[425px] h-48 absolute bottom-0 bg-[#2d8bc0bf] pt-10 pl-16 flex flex-col gap-5 ">
+            <div className="w-[425px] h-48 absolute bottom-0 bg-[#2d8bc0bf] p-10 flex flex-col gap-5 items-center justify-center hover:w-full hover:h-full  transition-all duration-500">
               <p className=" text-white text-2xl font-bold font-['Montserrat'] tracking-tight">
                 Top Product Of the Week
               </p>
