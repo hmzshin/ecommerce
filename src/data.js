@@ -122,3 +122,27 @@ export const contents = [
     ],
   },
 ];
+
+export const footerLinks = [
+  {
+    header: "Company Info",
+    body: ["About Us", "Carrier", "We are hiring", "Blog"],
+  },
+  {
+    header: "Legal",
+    body: ["About Us", "Carrier", "We are hiring", "Blog"],
+  },
+  {
+    header: "Features",
+    body: [
+      "Business Marketing",
+      "User Analitic",
+      "Live Chat",
+      "Unlimited Support",
+    ],
+  },
+  {
+    header: "Resources",
+    body: ["IOS & Android", "Watch s Demo", "Customers", "API"],
+  },
+];
