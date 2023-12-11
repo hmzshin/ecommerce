@@ -49,15 +49,20 @@ const Header = () => {
         <div className="flex w-full justify-between items-center">
           <nav>
             <ul className="flex gap-10 ">
-              <Link className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight">
+              <Link
+                to="/"
+                className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight"
+              >
                 Home
               </Link>
-              <Link>
-                <select className="bg-white outline-none ">
-                  <option>Shop</option>
-                  <option>Men</option>
-                  <option>Women</option>
-                </select>
+              <Link to="/shop">
+                <label>
+                  Shop
+                  <select className="bg-white outline-none invisible">
+                    <option>Men</option>
+                    <option>Women</option>
+                  </select>
+                </label>
               </Link>
               <Link className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight">
                 About

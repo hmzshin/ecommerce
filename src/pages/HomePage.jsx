@@ -6,7 +6,7 @@ import Features from "../components/Features.jsx";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header.jsx";
 import Hero from "../components/Hero.jsx";
-import ShopCards from "../components/ShopCards.jsx";
+import ShopCards from "../components/ShopCards-home.jsx";
 
 const HomePage = () => {
   return (
