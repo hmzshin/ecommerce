@@ -9,7 +9,7 @@ const clients = [hooli, lyft, brand1, stripe, amazon, reddit];
 const Clients = () => {
   return (
     <section id="clients">
-      <div className="flex justify-around py-10 px-[10%]">
+      <div className="flex justify-around py-20 px-[10%]">
         {clients.map((client) => (
           <img src={client} />
         ))}

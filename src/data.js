@@ -15,6 +15,19 @@ import icon3 from "./assets/blog/icon3.svg";
 import card1 from "./assets/blog/card1.svg";
 import card2 from "./assets/blog/card2.svg";
 
+import product1 from "./assets/products/product1.svg";
+import product2 from "./assets/products/product2.svg";
+import product3 from "./assets/products/product3.svg";
+import product4 from "./assets/products/product4.svg";
+import product5 from "./assets/products/product5.svg";
+import product6 from "./assets/products/product6.svg";
+import product7 from "./assets/products/product7.svg";
+import product8 from "./assets/products/product8.svg";
+import product9 from "./assets/products/product9.svg";
+import product10 from "./assets/products/product10.svg";
+import product11 from "./assets/products/product11.svg";
+import product12 from "./assets/products/product12.svg";
+
 export const products = [
   {
     img: cover1,
@@ -144,5 +157,104 @@ export const footerLinks = [
   {
     header: "Resources",
     body: ["IOS & Android", "Watch s Demo", "Customers", "API"],
+  },
+];
+
+export const shopProducts = [
+  {
+    img: product1,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product2,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product3,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product4,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product5,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product6,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product7,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product8,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product9,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product10,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product11,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+  {
+    img: product12,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+    colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
   },
 ];
