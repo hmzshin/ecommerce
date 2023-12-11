@@ -34,12 +34,12 @@ const ShopCards = ({ card }) => {
         {content.map((cardContent, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center w-56 h-64 relative "
+            className="flex flex-col items-center justify-center w-56 h-[243.3px] relative "
           >
             <div className="w-full h-full absolute top-0 left-0 bg-neutral-800 bg-opacity-25 z-[1]"></div>
             <img
               src={cardContent.img}
-              className="absolute top-0 left-0 z-[0] h-64"
+              className="absolute top-0 left-0 z-[0] w-full"
             />
             <p className="text-center text-white text-lg font-bold font-['Montserrat'] tracking-[0.2px] z-[10]">
               {cardContent.title}
