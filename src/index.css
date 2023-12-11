@@ -7,3 +7,7 @@
 .exploreBtn {
   @apply w-1/2 py-3.5 rounded border border-white text-white text-base text-center font-bold font-['Montserrat'] leading-snug tracking-tight;
 }
+
+.swiper-slide {
+  @apply w-fit;
+}
