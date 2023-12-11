@@ -1,4 +1,5 @@
 import BestsellerProducts from "../components/BestsellerProducts.jsx";
+import Blog from "../components/Blog.jsx";
 import Clients from "../components/Clients.jsx";
 import Content from "../components/Content.jsx";
 import Features from "../components/Features.jsx";
@@ -16,6 +17,7 @@ const HomePage = () => {
       <BestsellerProducts />
       <Content />
       <Features />
+      <Blog />
     </>
   );
 };
