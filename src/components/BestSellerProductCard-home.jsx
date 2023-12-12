@@ -1,7 +1,10 @@
 const ProductCard = ({ product }) => {
   return (
-    <div className="flex flex-col items-center gap-7 border hover:shadow-2xl hover:scale-[1.02] transition-all ">
-      <img src={product.img} className="w-56" />
+    <div className="flex flex-col items-center w-56 h-[500px] gap-7 border hover:shadow-2xl hover:scale-[1.02] transition-all ">
+      <img
+        src={product.img}
+        className="object-cover object-center w-full h-full "
+      />
       <div className="flex flex-col items-center gap-4 pb-3">
         <p className="text-center text-slate-800 text-xl font-bold font-['Montserrat'] tracking-[0.2px]">
           {product.name}
