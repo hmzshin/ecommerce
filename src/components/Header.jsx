@@ -10,6 +10,7 @@ import search from "../assets/header/search.svg";
 import chart from "../assets/header/chart.svg";
 import like from "../assets/header/like.svg";
 import { Link } from "react-router-dom";
+
 const data = [
   { svg: phone, text: "(225) 555-0118" },
   { svg: mail, text: "michelle.rivera@example.com" },
@@ -28,6 +29,7 @@ const Header = () => {
           {data.map((list, i) => (
             <li key={i} className="flex p-2 items-center gap-3 ">
               <img src={list.svg} />
+
               <span className="text-white text-sm font-bold font-['Montserrat'] leading-normal tracking-[0.2px]">
                 {list.text}
               </span>
