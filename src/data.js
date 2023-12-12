@@ -28,7 +28,7 @@ import product10 from "./assets/products/product10.svg";
 import product11 from "./assets/products/product11.svg";
 import product12 from "./assets/products/product12.svg";
 
-import productCover1 from "./assets/bestsellers/product-cover-1.svg";
+import productCover1 from "./assets/bestsellers/product-cover-1.jpeg";
 import productCover2 from "./assets/bestsellers/product-cover-2.svg";
 import productCover3 from "./assets/bestsellers/product-cover-3.svg";
 import productCover4 from "./assets/bestsellers/product-cover-4.svg";
