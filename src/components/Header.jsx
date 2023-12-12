@@ -51,53 +51,33 @@ const Header = () => {
         <div className="flex w-full justify-between items-center">
           <nav>
             <ul className="flex gap-10 ">
-              <Link
-                to="/"
-                className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight"
-              >
-                Home
-              </Link>
-              <Link to="/shop">
-                <label>
-                  Shop
-                  <select className="bg-white outline-none invisible">
-                    <option>Men</option>
-                    <option>Women</option>
-                  </select>
-                </label>
-              </Link>
-              <Link className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight">
-                About
-              </Link>
-              <Link className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight">
-                Blog
-              </Link>
-              <Link className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight">
-                Contact
-              </Link>
-              <Link className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight">
-                Pages
-              </Link>
+              {[
+                { path: "/", text: "Home" },
+                { path: "/shop", text: "Shop" },
+                { path: "/about", text: "About" },
+                { path: "/contact", text: "Contact" },
+                { path: "", text: "Pages" },
+              ].map((link, i) => (
+                <Link
+                  to={link.path}
+                  className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight"
+                >
+                  {link.text}
+                </Link>
+              ))}
             </ul>
           </nav>
-          <div className="flex gap-5 items-center text-center text-sky-500 text-sm font-bold font-['Montserrat'] leading-normal tracking-tight">
-            <div className="flex gap-2 ">
-              <div className="">
-                <img className="" src={user} />
-              </div>
-
+          <div className="flex items-center text-center text-sky-500 font-bold font-['Montserrat'] tracking-tight">
+            <div className="flex gap-2 mr-16 ">
+              <img className="w-5 h-5 mr-1" src={user} />
               <p>Login</p>
               <p>/</p>
               <p>Register</p>
             </div>
-            <div className="w-14 h-14 p-4">
-              <img src={search} />
-            </div>
-            <div className="flex w-14 h-14 p-4">
-              <img src={chart} /> 1
-            </div>
-            <div className="flex w-14 h-14 p-4">
-              <img src={like} /> 1
+            <div className="flex gap-2">
+              <img src={search} className="w-5 h-5 mr-10" />
+              <img src={chart} className="w-5 h-5" /> 1
+              <img src={like} className="w-5 h-5 ml-10" /> 1
             </div>
           </div>
         </div>
