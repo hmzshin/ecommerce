@@ -1,41 +1,30 @@
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Mousewheel,
-} from "swiper/modules";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import Hero from "./Hero";
+import "swiper/css/thumbs";
+import "swiper/css/free-mode";
 
-export default () => {
+export default ({ slides, config }) => {
   return (
     <Swiper
-      modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]}
-      spaceBetween={0}
+      modules={config.modules}
+      spaceBetween={config.spaceBetween}
       slidesPerView={1}
       navigation
       pagination={{ clickable: true }}
-      className="w-[90vw]"
-      speed="1000"
+      speed={config.speed}
       direction={"horizontal"}
       mousewheel={{
         releaseOnEdges: true,
         thresholdDelta: 1,
       }}
+      className={config.className}
     >
-      <SwiperSlide>
-        <Hero />
-      </SwiperSlide>
-      <SwiperSlide>
-        <Hero />
-      </SwiperSlide>
+      {slides.map((slide, i) => (
+        <SwiperSlide key={i}>{slide}</SwiperSlide>
+      ))}
     </Swiper>
   );
 };

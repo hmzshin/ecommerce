@@ -28,7 +28,16 @@ import product10 from "./assets/products/product10.svg";
 import product11 from "./assets/products/product11.svg";
 import product12 from "./assets/products/product12.svg";
 
-export const products = [
+import productCover1 from "./assets/bestsellers/product-cover-1.svg";
+import productCover2 from "./assets/bestsellers/product-cover-2.svg";
+import productCover3 from "./assets/bestsellers/product-cover-3.svg";
+import productCover4 from "./assets/bestsellers/product-cover-4.svg";
+import productCover5 from "./assets/bestsellers/product-cover-5.svg";
+import productCover6 from "./assets/bestsellers/product-cover-6.svg";
+import productCover7 from "./assets/bestsellers/product-cover-7.svg";
+import productCover8 from "./assets/bestsellers/product-cover-8.svg";
+
+export const homeBestsellers = [
   {
     img: cover1,
     name: "Graphic Design",
@@ -256,5 +265,64 @@ export const shopProducts = [
     price: "$16.48",
     priceDiscount: "$6.48",
     colors: ["bg-[#23A6F0]", "bg-[#23856D]", "bg-[#E77C40]", "bg-[#23856D]"],
+  },
+];
+
+export const productRelatedBestsellers = [
+  {
+    img: productCover1,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+  },
+  {
+    img: productCover2,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+  },
+  {
+    img: productCover3,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+  },
+  {
+    img: productCover4,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+  },
+  {
+    img: productCover5,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+  },
+  {
+    img: productCover6,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+  },
+  {
+    img: productCover7,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
+  },
+  {
+    img: productCover8,
+    name: "Graphic Design",
+    description: "English Department",
+    price: "$16.48",
+    priceDiscount: "$6.48",
   },
 ];
