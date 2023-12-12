@@ -1,5 +1,5 @@
-import { products } from "../data";
-import ProductCard from "./ProductCard";
+import ProductCard from "./BestSellerProductCard-home";
+import { homeBestsellers } from "../data";
 const BestsellerProducts = () => {
   return (
     <section id="bestsellers">
@@ -17,7 +17,7 @@ const BestsellerProducts = () => {
         </div>
 
         <div className=" flex flex-wrap gap-10 justify-around">
-          {products.map((product) => (
+          {homeBestsellers.map((product) => (
             <ProductCard product={product} />
           ))}
         </div>

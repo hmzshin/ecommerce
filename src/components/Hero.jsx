@@ -2,7 +2,7 @@ import heroImg from "../assets/hero/heroImg.png";
 
 const Hero = () => {
   return (
-    <section id="hero" className="py-20 w-[1700px]">
+    <section id="hero" className="py-20 ">
       <div className="flex justify-end h-[70vh] rounded-3xl mr-20 bg-gradient-to-r from-[#96E9FB] to-[#ABECD6] ">
         <section className="flex flex-col justify-center items-start gap-8">
           <p className="text-sky-600 text-base font-bold font-['Montserrat'] leading-normal tracking-tight">

@@ -3,10 +3,12 @@ import twitter from "../assets/footer/twitter.svg";
 import instagram from "../assets/footer/instagram.svg";
 
 import { footerLinks } from "../data";
-const Footer = () => {
+const Footer = ({ bgColor = "bg-neutral-50" }) => {
   return (
     <section id="footer" className="">
-      <div className="bg-neutral-50 flex justify-between items-center h-40 px-[15%]">
+      <div
+        className={`${bgColor} flex justify-between items-center h-40 px-[15%]`}
+      >
         <p className="text-slate-800 text-3xl font-bold font-['Montserrat'] tracking-[0.2px]">
           Bandage
         </p>

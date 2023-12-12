@@ -6,10 +6,10 @@ import reddit from "../assets/clients/reddit.svg";
 import stripe from "../assets/clients/stripe.svg";
 
 const clients = [hooli, lyft, brand1, stripe, amazon, reddit];
-const Clients = () => {
+const Clients = ({ bgColor }) => {
   return (
     <section id="clients">
-      <div className="flex justify-around py-20 px-[10%]">
+      <div className={`flex justify-around py-20 px-[10%] ${bgColor}`}>
         {clients.map((client) => (
           <img src={client} />
         ))}
