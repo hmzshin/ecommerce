@@ -1,4 +1,5 @@
 import BestsellerProducts from "../components/BestsellerProducts-home.jsx";
+import TopProductsOfWeek from "../components/TopProductOfWeek.jsx";
 import Blog from "../components/Blog.jsx";
 import Clients from "../components/Clients.jsx";
 import Content from "../components/Content.jsx";
@@ -6,7 +7,6 @@ import Features from "../components/Features.jsx";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header.jsx";
 import Hero from "../components/Hero.jsx";
-import ShopCards from "../components/ShopCards-home.jsx";
 import Swiper from "../components/Swiper.jsx";
 
 import {
@@ -16,6 +16,7 @@ import {
   A11y,
   Mousewheel,
 } from "swiper/modules";
+
 const HomePage = () => {
   return (
     <>
@@ -30,7 +31,7 @@ const HomePage = () => {
         }}
       />
       <Clients />
-      <ShopCards />
+      <TopProductsOfWeek />
       <BestsellerProducts />
       <Content />
       <Features />
