@@ -1,4 +1,4 @@
-const ProductCardShop = ({ product }) => {
+const ProductCard = ({ product }) => {
   return (
     <div className="flex flex-col items-center border gap-7 w-72  hover:shadow-2xl hover:scale-[1.01] transition-all pb-5">
       <img src={product.img} className="w-72 " />
@@ -23,4 +23,4 @@ const ProductCardShop = ({ product }) => {
   );
 };
 
-export default ProductCardShop;
+export default ProductCard;

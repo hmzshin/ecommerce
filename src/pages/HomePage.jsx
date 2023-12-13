@@ -1,13 +1,15 @@
-import BestsellerProducts from "../components/BestsellerProducts-home.jsx";
 import TopProductsOfWeek from "../components/TopProductOfWeek.jsx";
 import Blog from "../components/Blog.jsx";
 import Clients from "../components/Clients.jsx";
-import Content from "../components/Content.jsx";
 import Features from "../components/Features.jsx";
 import Footer from "../components/Footer.jsx";
 import Header from "../components/Header.jsx";
 import Hero from "../components/Hero.jsx";
+import BestSellerProductCard from "../components/BestsellerProductCard.jsx";
 import Swiper from "../components/Swiper.jsx";
+import contentImg1 from "../assets/content/contentImg1.svg";
+import contentImg2 from "../assets/content/contentImg2.svg";
+import { homeBestsellers } from "../data.js";
 
 import {
   Navigation,
@@ -32,8 +34,59 @@ const HomePage = () => {
       />
       <Clients />
       <TopProductsOfWeek />
-      <BestsellerProducts />
-      <Content />
+      <section id="bestsellers">
+        <div className=" flex flex-col items-center gap-20 px-[15%] py-20">
+          <div className="inline-flex flex-col justify-start items-center gap-2.5 ">
+            <p className="text-center text-neutral-500 text-xl font-normal font-['Montserrat'] leading-loose tracking-tight">
+              Featured Products
+            </p>
+            <p className="text-center text-slate-800 text-2xl font-bold font-['Montserrat'] leading-loose tracking-tight">
+              BESTSELLER PRODUCTS
+            </p>
+            <p className="text-center text-neutral-500 text-sm font-normal font-['Montserrat'] leading-tight tracking-tight">
+              Problems trying to resolve the conflict between{" "}
+            </p>
+          </div>
+
+          <div className=" flex flex-wrap gap-10 justify-around">
+            {homeBestsellers.map((product) => (
+              <BestSellerProductCard bsProduct={product} style={"w-56"} />
+            ))}
+          </div>
+          <div className="w-64 h-14 px-10 py-4 rounded-md border border-sky-500 flex-col justify-start items-center gap-2.5 inline-flex">
+            <p className="text-center text-sky-500 text-sm font-bold font-['Montserrat'] leading-snug tracking-tight">
+              LOAD MORE PRODUCTS
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="content">
+        <div className="px-[10%] py-20 flex justify-between">
+          <div className="flex gap-5">
+            {" "}
+            <img src={contentImg1} className="h-[700px]" />
+            <img src={contentImg2} className="h-[700px]" />
+          </div>
+
+          <div className="flex-col justify-center items-start gap-10 inline-flex">
+            <div className="text-sky-500 text-2xl font-bold font-['Montserrat'] leading-normal tracking-[0.1px]">
+              Featured Products
+            </div>
+            <div className="w-[700px] text-slate-800 text-6xl font-bold font-['Montserrat'] leading-[50px] tracking-tight">
+              We love what we do
+            </div>
+            <div className="w-[500px] text-neutral-500 text-lg font-normal font-['Montserrat'] leading-tight tracking-[0.2px]">
+              Problems trying to resolve the conflict between <br />
+              the two major realms of Classical physics: <br />
+              Newtonian mechanics.
+              <br /> <br />
+              Problems trying to resolve the conflict between <br />
+              the two major realms of Classical physics: <br />
+              Newtonian mechanics{" "}
+            </div>
+          </div>
+        </div>
+      </section>
       <Features />
       <Blog />
       <Footer />

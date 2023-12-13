@@ -1,4 +1,4 @@
-import BestSellerProductCard from "../components/BestsellerProductCard-product";
+import BestSellerProductCard from "../components/BestsellerProductCard";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ProductDetail from "../components/ProductDetail";
@@ -19,7 +19,7 @@ const ProductPage = () => {
         <div className=" flex flex-col items-center gap-20 pt-20">
           <div className=" flex flex-wrap gap-10 justify-around">
             {productRelatedBestsellers.map((bsProduct) => (
-              <BestSellerProductCard bsProduct={bsProduct} />
+              <BestSellerProductCard bsProduct={bsProduct} style={"w-72"} />
             ))}
           </div>
         </div>

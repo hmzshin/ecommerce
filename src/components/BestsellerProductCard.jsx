@@ -1,6 +1,8 @@
-const BestSellerProductCard = ({ bsProduct }) => {
+const BestSellerProductCard = ({ bsProduct, style }) => {
   return (
-    <div className="flex flex-col w-72 items-center gap-7 border hover:shadow-2xl hover:scale-[1.02] transition-all ">
+    <div
+      className={`flex flex-col items-center gap-7 border hover:shadow-2xl hover:scale-[1.02] transition-all ${style}`}
+    >
       <img
         src={bsProduct.img}
         className="w-full h-full object-cover object-bottom"

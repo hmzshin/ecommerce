@@ -2,7 +2,8 @@ import icon1 from "../assets/products/icon1.svg";
 import icon2 from "../assets/products/icon2.svg";
 
 import { shopProducts } from "../data";
-import ProductCardShop from "./ProductCard-shop";
+import ProductCard from "./ProductCard";
+
 const Products = () => {
   return (
     <section id="products">
@@ -32,7 +33,7 @@ const Products = () => {
       </div>
       <div className=" flex flex-wrap gap-20 justify-around px-[12%]">
         {shopProducts.map((product) => (
-          <ProductCardShop product={product} />
+          <ProductCard product={product} />
         ))}
       </div>
 
