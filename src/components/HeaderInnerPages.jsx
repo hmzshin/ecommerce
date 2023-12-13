@@ -20,6 +20,7 @@ const HeaderInnerPages = () => {
                 { path: "", text: "Pages" },
               ].map((link, i) => (
                 <Link
+                  key={i}
                   to={link.path}
                   className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight"
                 >

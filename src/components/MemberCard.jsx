@@ -1,8 +1,10 @@
 import { Icon } from "@iconify/react";
 
-const MemberCard = ({ member }) => {
+const MemberCard = ({ member, style = "w-80" }) => {
   return (
-    <div className="flex flex-col items-center gap-7 w-80 border  hover:shadow-2xl hover:scale-[1.01] transition-all pb-5">
+    <div
+      className={`flex flex-col items-center gap-7 ${style} border  hover:shadow-2xl hover:scale-[1.01] transition-all pb-5`}
+    >
       <img
         src={member.img}
         className="w-full h-full object-cover object-center "
