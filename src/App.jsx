@@ -4,6 +4,7 @@ import ShopPage from "./pages/ShopPage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
+import ContactPage from "./pages/ContactPage.jsx";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/product" exact element={<ProductPage />} />
         <Route path="/about" exact element={<AboutPage />} />
         <Route path="/team" exact element={<TeamPage />} />
+        <Route path="/contact" exact element={<ContactPage />} />
       </Routes>
     </>
   );
