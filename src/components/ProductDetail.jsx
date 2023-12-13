@@ -2,8 +2,6 @@ import { Icon } from "@iconify/react";
 import Swiper from "./Swiper";
 import {
   Pagination,
-  FreeMode,
-  Thumbs,
   Navigation,
   Scrollbar,
   A11y,
@@ -45,15 +43,7 @@ const ProductDetail = ({ product }) => {
           config={{
             spaceBetween: 50,
             speed: "1000",
-            modules: [
-              FreeMode,
-              Pagination,
-              Thumbs,
-              Navigation,
-              Scrollbar,
-              A11y,
-              Mousewheel,
-            ],
+            modules: [Pagination, Navigation, Scrollbar, A11y, Mousewheel],
             className: "w-[600px] h-[450px] m-0",
           }}
         />
