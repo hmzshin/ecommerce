@@ -19,3 +19,7 @@
 /* * {
   border: 1px solid lime;
 } */
+
+.default-img {
+  @apply w-full h-full object-cover object-center;
+}

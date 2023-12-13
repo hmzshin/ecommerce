@@ -23,8 +23,8 @@ const ProductDetail = ({ product }) => {
             Home
           </p>
           <Icon
-            icon="simple-li ne-icons:arrow-right"
-            className="w-5 h-5  text-stone-300 font-bold"
+            icon="mingcute:right-fill"
+            className="w-5 h-5 text-stone-300 font-bold"
           />
           <p className="text-center text-lg text-stone-300 font-bold font-['Montserrat'] tracking-[0.2px]">
             Shop
