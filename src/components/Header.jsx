@@ -56,7 +56,7 @@ const Header = () => {
                 { path: "/shop", text: "Shop" },
                 { path: "/about", text: "About" },
                 { path: "/contact", text: "Contact" },
-                { path: "", text: "Pages" },
+                { path: "/team", text: "Pages" },
               ].map((link, i) => (
                 <Link
                   to={link.path}
