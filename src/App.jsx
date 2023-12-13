@@ -8,11 +8,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" exact element={<HomePage />} />
-      </Routes>
-      <Routes>
         <Route path="/shop" exact element={<ShopPage />} />
-      </Routes>
-      <Routes>
         <Route path="/product" exact element={<ProductPage />} />
       </Routes>
     </>
