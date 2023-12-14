@@ -4,7 +4,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-export default ({ slides, config }) => {
+export default ({ slides, config }: any) => {
   return (
     <>
       <Swiper
@@ -15,7 +15,7 @@ export default ({ slides, config }) => {
         className={config.className}
         mousewheel={{ releaseOnEdges: true, invert: true }}
       >
-        {slides.map((slide, i) => (
+        {slides.map((slide: any, i: number) => (
           <SwiperSlide key={i}>{slide}</SwiperSlide>
         ))}
       </Swiper>
