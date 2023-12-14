@@ -2,7 +2,7 @@ import img1 from "../assets/shopCards/img1.svg";
 import img2 from "../assets/shopCards/img2.svg";
 import img3 from "../assets/shopCards/img3.svg";
 
-const TopProductsOfWeek = ({ card }) => {
+const TopProductsOfWeek = () => {
   return (
     <section id="shopCards">
       <section className="flex pl-[7%] pr-[14%] items-center gap-8  py-20">

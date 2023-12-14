@@ -14,7 +14,7 @@ import img3 from "../assets/productDetail/img3.jpg";
 import img4 from "../assets/productDetail/img4.jpg";
 import detailImg from "../assets/productDetail/detailImage.jpeg";
 
-const ProductDetail = ({ product }) => {
+const ProductDetail = () => {
   return (
     <section id="productDatails " className="pb-20">
       <section className="bg-neutral-50 flex justify-between items-center py-10 px-[15%]">
@@ -53,8 +53,8 @@ const ProductDetail = ({ product }) => {
             Floating Phone
           </p>
           <div className="flex items-center py-5 ">
-            {[1, 2, 3, 4, 5].map((star, i) =>
-              i == "4" ? (
+            {[1, 2, 3, 4, 5].map((star: any, i) =>
+              i == 4 ? (
                 <Icon
                   className="text-[#F3CD03] w-6 h-6"
                   icon="mdi:star-outline"

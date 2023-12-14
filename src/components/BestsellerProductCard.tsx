@@ -1,4 +1,4 @@
-const BestSellerProductCard = ({ bsProduct, style }) => {
+const BestSellerProductCard = ({ bsProduct, style }: any) => {
   return (
     <div
       className={`flex flex-col items-center gap-7 border hover:shadow-2xl hover:scale-[1.02] transition-all ${style}`}

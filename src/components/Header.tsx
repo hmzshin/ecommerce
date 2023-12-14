@@ -1,4 +1,3 @@
-import React from "react";
 import phone from "../assets/header/phone.svg";
 import mail from "../assets/header/mail.svg";
 import instagram from "../assets/header/instagram.svg";

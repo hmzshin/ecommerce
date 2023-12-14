@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 
-const MemberCard = ({ member, style = "w-80" }) => {
+const MemberCard = ({ member, style = "w-80" }: any) => {
   return (
     <div
       className={`flex flex-col items-center gap-7 ${style} border  hover:shadow-2xl hover:scale-[1.01] transition-all pb-5`}

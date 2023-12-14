@@ -6,12 +6,11 @@ import ProductDetail from "../components/ProductDetail";
 import { productRelatedBestsellers } from "../data";
 import Clients from "../components/Clients";
 
-const product = {};
 const ProductPage = () => {
   return (
     <>
       <Header />
-      <ProductDetail product={product} />
+      <ProductDetail />
       <section id="bestsellers" className="px-[15%] py-20 bg-neutral-50 ">
         <p className=" text-slate-800 text-2xl font-bold font-['Montserrat'] tracking-tight">
           BESTSELLER PRODUCTS
