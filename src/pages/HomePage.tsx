@@ -49,8 +49,12 @@ const HomePage = () => {
           </div>
 
           <div className=" flex flex-wrap gap-10 justify-around">
-            {homeBestsellers.map((product) => (
-              <BestSellerProductCard bsProduct={product} style={"w-56"} />
+            {homeBestsellers.map((product, i) => (
+              <BestSellerProductCard
+                key={i}
+                bsProduct={product}
+                style={"w-56"}
+              />
             ))}
           </div>
           <div className="w-64 h-14 px-10 py-4 rounded-md border border-sky-500 flex-col justify-start items-center gap-2.5 inline-flex">

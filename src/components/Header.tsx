@@ -33,9 +33,9 @@ const Header = () => {
                 {list.text}
               </span>
               <div className="flex items-center gap-5 ">
-                {list.socialMedia?.map((social, index) => (
-                  <a href="#" className="w-6 h-6 p-1">
-                    <img key={index} src={social} className="" />
+                {list.socialMedia?.map((social, i) => (
+                  <a key={i} href="#" className="w-6 h-6 p-1">
+                    <img src={social} className="" />
                   </a>
                 ))}
               </div>
@@ -58,6 +58,7 @@ const Header = () => {
                 { path: "/team", text: "Pages" },
               ].map((link, i) => (
                 <Link
+                  key={i}
                   to={link.path}
                   className="text-neutral-500 text-base font-bold font-['Montserrat'] leading-normal tracking-tight"
                 >

@@ -10,8 +10,8 @@ const Clients = ({ bgColor }: any) => {
   return (
     <section id="clients">
       <div className={`flex justify-around py-20 px-[10%] ${bgColor}`}>
-        {clients.map((client) => (
-          <img src={client} />
+        {clients.map((client, i) => (
+          <img key={i} src={client} />
         ))}
       </div>
     </section>

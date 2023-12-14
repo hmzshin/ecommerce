@@ -17,8 +17,12 @@ const ProductPage = () => {
         </p>
         <div className=" flex flex-col items-center gap-20 pt-20">
           <div className=" flex flex-wrap gap-10 justify-around">
-            {productRelatedBestsellers.map((bsProduct) => (
-              <BestSellerProductCard bsProduct={bsProduct} style={"w-72"} />
+            {productRelatedBestsellers.map((bsProduct, i) => (
+              <BestSellerProductCard
+                key={i}
+                bsProduct={bsProduct}
+                style={"w-72"}
+              />
             ))}
           </div>
         </div>
