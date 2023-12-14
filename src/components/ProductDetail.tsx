@@ -1,22 +1,9 @@
 import { Icon } from "@iconify/react";
-import Swiper from "./Swiper";
-import {
-  Pagination,
-  FreeMode,
-  Thumbs,
-  Navigation,
-  Scrollbar,
-  A11y,
-  Mousewheel,
-} from "swiper/modules";
 
-import img1 from "../assets/productDetail/img1.svg";
-import img2 from "../assets/productDetail/img2.jpg";
-import img3 from "../assets/productDetail/img3.jpg";
-import img4 from "../assets/productDetail/img4.jpg";
 import detailImg from "../assets/productDetail/detailImage.jpeg";
+import Thumb from "./Thumb";
 
-const ProductDetail = ({ product }) => {
+const ProductDetail = () => {
   return (
     <section id="productDatails " className="pb-20">
       <section className="bg-neutral-50 flex justify-between items-center py-10 px-[15%]">
@@ -25,8 +12,8 @@ const ProductDetail = ({ product }) => {
             Home
           </p>
           <Icon
-            icon="simple-li ne-icons:arrow-right"
-            className="w-5 h-5  text-stone-300 font-bold"
+            icon="mingcute:right-fill"
+            className="w-5 h-5 text-stone-300 font-bold"
           />
           <p className="text-center text-lg text-stone-300 font-bold font-['Montserrat'] tracking-[0.2px]">
             Shop
@@ -35,42 +22,25 @@ const ProductDetail = ({ product }) => {
       </section>
 
       <section className="flex gap-20 bg-neutral-50 px-[15%] pb-20 ">
-        <Swiper
-          slides={[
-            <img src={img1} className="w-full h-full" />,
-            <img src={img2} className="w-full h-full" />,
-            <img src={img3} className="w-full h-full" />,
-            <img src={img4} className="w-full h-full" />,
-          ]}
-          config={{
-            spaceBetween: 50,
-            speed: "1000",
-            modules: [
-              FreeMode,
-              Pagination,
-              Thumbs,
-              Navigation,
-              Scrollbar,
-              A11y,
-              Mousewheel,
-            ],
-            className: "w-[600px] h-[450px] m-0",
-          }}
-        />
-
+        <Thumb />
         <div className="w-[500px] flex flex-col items-start ">
           <p className="text-slate-800 text-2xl font-normal font-['Montserrat']  tracking-[0.2px]">
             Floating Phone
           </p>
           <div className="flex items-center py-5 ">
             {[1, 2, 3, 4, 5].map((star, i) =>
-              i == "4" ? (
+              i == 4 ? (
                 <Icon
+                  key={i}
                   className="text-[#F3CD03] w-6 h-6"
                   icon="mdi:star-outline"
                 />
               ) : (
-                <Icon className="text-[#F3CD03] w-6 h-6" icon="mdi:star" />
+                <Icon
+                  key={i}
+                  className="text-[#F3CD03] w-6 h-6"
+                  icon="mdi:star"
+                />
               )
             )}
 

@@ -1,4 +1,4 @@
-const ProductCardShop = ({ product }) => {
+const ProductCard = ({ product }: any) => {
   return (
     <div className="flex flex-col items-center border gap-7 w-72  hover:shadow-2xl hover:scale-[1.01] transition-all pb-5">
       <img src={product.img} className="w-72 " />
@@ -14,7 +14,7 @@ const ProductCardShop = ({ product }) => {
           <span className="text-teal-700">{product.priceDiscount}</span>
         </p>
         <div className="flex justify-start items-center gap-2">
-          {product.colors.map((color, i) => (
+          {product.colors.map((color: any, i: number) => (
             <div key={i} className={`w-4 h-4 ${color} rounded-full`} />
           ))}
         </div>
@@ -23,4 +23,4 @@ const ProductCardShop = ({ product }) => {
   );
 };
 
-export default ProductCardShop;
+export default ProductCard;

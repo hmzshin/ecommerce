@@ -37,6 +37,7 @@ import productCover6 from "./assets/bestsellers/product-cover-6.svg";
 import productCover7 from "./assets/bestsellers/product-cover-7.svg";
 import productCover8 from "./assets/bestsellers/product-cover-8.svg";
 
+import member1 from "./assets/about/member1.jpeg";
 export const homeBestsellers = [
   {
     img: cover1,
@@ -325,4 +326,16 @@ export const productRelatedBestsellers = [
     price: "$16.48",
     priceDiscount: "$6.48",
   },
+];
+
+export const teamMembers = [
+  { img: member1, username: "Username", profession: "engineer" },
+  { img: member1, username: "Username", profession: "engineer" },
+  { img: member1, username: "Username", profession: "engineer" },
+  { img: member1, username: "Username", profession: "engineer" },
+  { img: member1, username: "Username", profession: "engineer" },
+  { img: member1, username: "Username", profession: "engineer" },
+  { img: member1, username: "Username", profession: "engineer" },
+  { img: member1, username: "Username", profession: "engineer" },
+  { img: member1, username: "Username", profession: "engineer" },
 ];

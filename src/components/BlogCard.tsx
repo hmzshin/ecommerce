@@ -2,7 +2,7 @@ import start from "../assets/blog/star.svg";
 import salesIcon from "../assets/blog/salesIcon.svg";
 import arrowRight from "../assets/blog/arrowIcon.svg";
 
-const BlogCard = ({ content }) => {
+const BlogCard = ({ content }: any) => {
   return (
     <div className="flex">
       <img src={content.img} className="w-64" />
@@ -36,12 +36,12 @@ const BlogCard = ({ content }) => {
           <span className=" text-teal-700 ml-3">{content.prices.discount}</span>
         </p>
         <div className="flex justify-start items-center gap-2">
-          {content.colors.map((color, i) => (
+          {content.colors.map((color: any, i: number) => (
             <div key={i} className={`w-4 h-4 ${color} rounded-full`} />
           ))}
         </div>
         <div className="flex py-3 justify-between items-center self-stretch">
-          {content.frame.map((item, i) => (
+          {content.frame.map((item: any, i: number) => (
             <div key={i} className="justify-start items-center gap-[5px] flex">
               <img src={item.icon} />
               <p className="text-neutral-500 text-base font-normal font-['Montserrat'] tracking-[0.2px]">
