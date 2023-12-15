@@ -1,6 +1,11 @@
+import { Link } from "react-router-dom";
+
 const ProductCard = ({ product }: any) => {
   return (
-    <div className="flex flex-col items-center border gap-7 w-72  hover:shadow-2xl hover:scale-[1.01] transition-all pb-5">
+    <Link
+      to={`/product`}
+      className="flex flex-col items-center border gap-7 w-72  hover:shadow-2xl hover:scale-[1.01] transition-all pb-5"
+    >
       <img src={product.img} className="w-72 " />
       <div className="flex flex-col items-center gap-4 pb-3">
         <p className="text-center text-slate-800 text-xl font-bold font-['Montserrat'] tracking-[.0.2px]">
@@ -19,7 +24,7 @@ const ProductCard = ({ product }: any) => {
           ))}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

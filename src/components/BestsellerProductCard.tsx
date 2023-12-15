@@ -1,6 +1,9 @@
+import { Link } from "react-router-dom";
+
 const BestSellerProductCard = ({ bsProduct, style }: any) => {
   return (
-    <div
+    <Link
+      to="/product"
       className={`flex flex-col items-center gap-7 border hover:shadow-2xl hover:scale-[1.02] transition-all ${style}`}
     >
       <img
@@ -19,7 +22,7 @@ const BestSellerProductCard = ({ bsProduct, style }: any) => {
           <span className="text-teal-700">{bsProduct.priceDiscount}</span>
         </p>
       </div>
-    </div>
+    </Link>
   );
 };
 
