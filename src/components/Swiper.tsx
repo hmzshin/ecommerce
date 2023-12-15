@@ -9,11 +9,11 @@ export default ({ slides, config }: any) => {
     <>
       <Swiper
         spaceBetween={config.spaceBetween}
-        navigation={true}
         speed={config.speed}
         modules={config.modules}
         className={config.className}
         mousewheel={{ releaseOnEdges: true, invert: true }}
+        pagination={{ clickable: true }}
       >
         {slides.map((slide: any, i: number) => (
           <SwiperSlide key={i}>{slide}</SwiperSlide>
