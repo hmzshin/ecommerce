@@ -26,7 +26,7 @@ const HomePage = () => {
       <Swiper
         slides={[<Hero />, <Hero />]}
         config={{
-          spaceBetween: 0,
+          spaceBetween: 100,
           speed: "1000",
           modules: [Navigation, Pagination, Scrollbar, A11y, Mousewheel],
           className: "w-[90vw]",
@@ -57,10 +57,8 @@ const HomePage = () => {
               />
             ))}
           </div>
-          <div className="w-64 h-14 px-10 py-4 rounded-md border border-sky-500 flex-col justify-start items-center gap-2.5 inline-flex">
-            <p className="text-center text-sky-500 text-sm font-bold font-['Montserrat'] leading-snug tracking-tight">
-              LOAD MORE PRODUCTS
-            </p>
+          <div className="h-14 px-10 py-4 rounded-md border border-sky-500 flex justify-center items-center  text-sky-500 text-sm font-bold font-['Montserrat'] tracking-tight ">
+            LOAD MORE PRODUCTS
           </div>
         </div>
       </section>

@@ -3,7 +3,7 @@ import heroImg from "../assets/hero/heroImg.png";
 const Hero = () => {
   return (
     <section id="hero" className="">
-      <div className="flex justify-between h-[700px] rounded-3xl mr-20 bg-gradient-to-r from-[#96E9FB] to-[#ABECD6] ">
+      <div className="flex justify-between h-[650px] rounded-3xl mr-20 bg-gradient-to-r from-[#96E9FB] to-[#ABECD6] ">
         <section className="flex flex-col justify-center items-start pl-32 gap-8">
           <p className="text-sky-600 text-base font-bold font-['Montserrat'] leading-normal tracking-tight">
             SUMMER 2020
@@ -26,7 +26,7 @@ const Hero = () => {
         <section className="w-1/2 relative">
           <img
             src={heroImg}
-            className=" absolute -right-40 bottom-0 w-[900px] z-10"
+            className=" absolute -right-[155px] bottom-0 w-[900px] z-10"
           />
           <div className="w-20 h-20 bg-white rounded-full absolute left-1/3 " />
           <div className="w-[550px] h-[550px] bg-white rounded-full absolute -top-5 -right-5" />
