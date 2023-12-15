@@ -36,17 +36,17 @@ const Footer = ({ bgColor = "bg-neutral-50" }) => {
             </div>
           </div>
         ))}
-        <div className="flex flex-col items-start gap-5">
+        <div className="flex flex-col items-start gap-5 ">
           <h4 className="text-slate-800 text-lg font-bold font-['Montserrat'] tracking-[0.2px]">
             Get in Touch
           </h4>
-          <form className="w-[321px] h-[58px] flex">
+          <form className=" h-14 flex">
             <input
               type="text"
               placeholder="Your Email"
               className="pl-3 h-full bg-stone-50 rounded-tl-lg rounded-bl-lg border border-neutral-200 "
             />
-            <button className="text-center text-white text-base font-normal font-['Montserrat'] leading-7 tracking-[0.2px] w-28 h-full bg-sky-500 rounded-tr-lg rounded-br-lg border border-neutral-200">
+            <button className="text-center text-white text-base font-normal font-['Montserrat'] tracking-tight bg-sky-500 rounded-tr-lg rounded-br-lg border border-neutral-200 p-2">
               Subscribe
             </button>
           </form>
