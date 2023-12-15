@@ -1,15 +1,14 @@
-import HeaderInnerPages from "../components/HeaderInnerPages";
-
 import heroImg from "../assets/contact/none.png";
 import { Icon } from "@iconify/react";
 import Footer from "../components/Footer";
 
 import arrow from "../assets/contact/arrow.svg";
+import Header from "../components/Header";
 const ContactPage = () => {
   return (
     <>
-      <HeaderInnerPages />
-      <section id="hero" className="px-[15%] flex pt-10">
+      <Header />
+      <section id="hero" className="px-[15%] flex h-[800px]">
         <div className="w-1/2 flex flex-col gap-10 py-40">
           <p className="text-slate-800 text-lg font-bold font-['Montserrat'] tracking-tight">
             CONTACT US
@@ -32,12 +31,12 @@ const ContactPage = () => {
         <div className="w-1/2 ">
           <img
             src={heroImg}
-            className="w-full h-full object-cover object center"
+            className="w-full h-full object-scale-down object center"
           />
         </div>
       </section>
 
-      <section>
+      <section className="pt-32">
         <div className="flex flex-col items-center gap-10">
           <p className="text-center text-slate-800 text-base font-bold font-['Montserrat']  tracking-tight">
             VISIT OUR OFFICE

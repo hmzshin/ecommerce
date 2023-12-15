@@ -1,5 +1,4 @@
 import Footer from "../components/Footer";
-import HeaderInnerPages from "../components/HeaderInnerPages";
 import Clients from "../components/Clients";
 import MemberCard from "../components/MemberCard";
 import { Icon } from "@iconify/react";
@@ -8,11 +7,12 @@ import happyWoman from "../assets/about/none.svg";
 import videoPreview from "../assets/about/videoPreview.jpeg";
 import member1 from "../assets/about/member1.jpeg";
 import workWithUs from "../assets/about/workWithUs.jpeg";
+import Header from "../components/Header";
 
 const AboutPage = () => {
   return (
     <>
-      <HeaderInnerPages />
+      <Header />
       <section id="hero" className="px-[15%] flex pt-10">
         <div className="w-1/2 flex flex-col gap-10 py-40">
           <p className="text-slate-800 text-lg font-bold font-['Montserrat'] tracking-tight">

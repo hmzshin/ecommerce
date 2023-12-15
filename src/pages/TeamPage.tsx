@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react";
 import Footer from "../components/Footer";
-import HeaderInnerPages from "../components/HeaderInnerPages";
 import MemberCard from "../components/MemberCard";
 import { teamMembers } from "../data";
 
@@ -8,11 +7,12 @@ import hero1 from "../assets/members/hero1.jpeg";
 import hero2 from "../assets/members/hero2.jpeg";
 import hero3 from "../assets/members/hero3.jpeg";
 import hero4 from "../assets/members/hero1.jpeg";
+import Header from "../components/Header";
 
 const TeamPage = () => {
   return (
     <>
-      <HeaderInnerPages />
+      <Header />
       <section id="hero">
         <div className="flex flex-col items-center gap-5 py-20 ">
           <p className="text-center text-neutral-500 text-base font-bold font-['Montserrat'] tracking-tight ">
