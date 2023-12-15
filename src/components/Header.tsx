@@ -22,7 +22,7 @@ const data = [
 const Header = () => {
   return (
     <section id="header">
-      <div className="w-full h-16 py-3 px-16 bg-slate-800">
+      <div className="w-full h-16 py-3 px-[4%] bg-slate-800">
         {" "}
         <ul className="flex gap-5 justify-between items-center xl:[&>*:nth-child(3)]:px-[15%]">
           {data.map((list, i) => (
@@ -43,8 +43,8 @@ const Header = () => {
           ))}
         </ul>
       </div>
-      <div className="w-full h-14 px-16 my-5 flex gap-40 items-center">
-        <h1 className="text-slate-800 text-2xl font-bold font-['Montserrat'] leading-loose tracking-tight">
+      <div className="h-14 pl-[5%] pr-[4%] my-5 flex gap-40 items-center">
+        <h1 className="text-slate-800 text-3xl font-bold font-['Montserrat'] tracking-tight">
           Bandage
         </h1>
         <div className="flex w-full justify-between items-center">
