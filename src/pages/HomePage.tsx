@@ -29,7 +29,7 @@ const HomePage = () => {
           spaceBetween: 100,
           speed: "1000",
           modules: [Navigation, Pagination, Scrollbar, A11y, Mousewheel],
-          className: "w-[90vw]",
+          className: "xl:w-[90vw]",
         }}
       />
       <Clients />
