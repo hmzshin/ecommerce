@@ -27,3 +27,11 @@
 .active {
   @apply opacity-100;
 }
+
+.active-menu {
+  @apply -left-0;
+}
+
+.passive-menu {
+  @apply -left-full;
+}
