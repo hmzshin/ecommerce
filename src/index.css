@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 .exploreBtn {
-  @apply w-1/2 py-3.5 rounded border border-white text-white text-base text-center font-bold font-['Montserrat'] leading-snug tracking-tight;
+  @apply py-3.5 px-5 rounded border border-white text-white text-base text-center font-bold font-['Montserrat'] leading-snug tracking-tight;
 }
 
 .swiper-slide {

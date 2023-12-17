@@ -12,7 +12,7 @@ const TopProductsOfWeek = () => {
               Top Product Of <br />
               the Week
             </p>
-            <p className="exploreBtn">EXPLORE ITEMS</p>
+            <p className="exploreBtn whitespace-nowrap">EXPLORE ITEMS</p>
           </div>
           <img src={img1} className="default-img" />
         </div>
@@ -22,7 +22,7 @@ const TopProductsOfWeek = () => {
               <p className=" text-white text-2xl font-bold font-['Montserrat'] tracking-tight">
                 Top Product Of the Week
               </p>
-              <p className="exploreBtn">EXPLORE ITEMS</p>
+              <p className="exploreBtn  whitespace-nowrap">EXPLORE ITEMS</p>
             </div>
             <img src={img2} className="default-img" />
           </div>
@@ -31,7 +31,7 @@ const TopProductsOfWeek = () => {
               <p className=" text-white text-2xl font-bold font-['Montserrat'] tracking-tight">
                 Top Product Of the Week
               </p>
-              <p className="exploreBtn">EXPLORE ITEMS</p>
+              <p className="exploreBtn  whitespace-nowrap">EXPLORE ITEMS</p>
             </div>
             <img src={img3} className="default-img" />
           </div>

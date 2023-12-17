@@ -13,7 +13,7 @@ const Clients = ({ bgColor }: any) => {
         className={`flex flex-wrap gap-32 xl:gap-20 items-center justify-center py-20 px-[5%] ${bgColor}`}
       >
         {clients.map((client, i) => (
-          <div key={i} className="w-40  h-16">
+          <div key={i} className="w-32 h-16">
             <img src={client} className="w-full h-full object-fill" />
           </div>
         ))}

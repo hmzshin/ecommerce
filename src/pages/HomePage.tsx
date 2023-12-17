@@ -63,21 +63,27 @@ const HomePage = () => {
         </div>
       </section>
       <section id="featuredProducts">
-        <div className="px-10 lg:px-[10%] py-20 flex flex-wrap-reverse 2xl:flex-nowrap items items- 2xl:justify-around gap-20">
-          <div className="flex gap-5">
+        <div className="px-[10%] py-20 gap-20 flex flex-wrap-reverse xl:flex-nowrap items-center justify-around 2xl:justify-around">
+          <div className="flex gap-5  ">
             {" "}
-            <img src={contentImg1} className="h-[350px] md:h-[700px] " />
-            <img src={contentImg2} className="h-[350px] md:h-[700px]" />
+            <img
+              src={contentImg1}
+              className="h-[300px] sm:h-[450px]  2xl:h-[600px]"
+            />
+            <img
+              src={contentImg2}
+              className="h-[300px] sm:h-[450px]  2xl:h-[600px]"
+            />
           </div>
 
-          <div className="flex-col justify-center items-start gap-10 inline-flex ">
-            <div className="text-sky-500 text-2xl font-bold font-['Montserrat'] leading-normal tracking-[0.1px]">
+          <div className="flex flex-col justify-center items-start gap-10 ">
+            <div className="text-sky-500 text-xl xl:text-2xl font-bold font-['Montserrat'] leading-normal tracking-[0.1px]">
               Featured Products
             </div>
-            <div className="w-[400px] lg:max-w-[700px] text-slate-800 text-6xl font-bold font-['Montserrat'] tracking-tight">
+            <div className="max-w-[400px] xl:max-w-[700px] text-slate-800 text-5xl  xl:text-6xl font-bold font-['Montserrat'] tracking-tight">
               We love what we do
             </div>
-            <div className="w-[370px] lg:w-[500px] text-neutral-500 text-lg font-normal font-['Montserrat'] leading-tight tracking-[0.2px]">
+            <div className="max-w-[370px] xl:max-w-[500px] text-neutral-500 text-lg font-normal font-['Montserrat'] leading-tight tracking-[0.2px]">
               Problems trying to resolve the conflict between{" "}
               <br className="hidden md:block" />
               the two major realms of Classical physics:{" "}
