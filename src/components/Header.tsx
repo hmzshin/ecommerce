@@ -31,7 +31,6 @@ const Header = () => {
   const w = innerWidth;
   useEffect(() => {
     window.addEventListener("click", (event): any => {
-      console.log(event.target);
       if (
         isVisible &&
         menuRef.current &&
@@ -45,31 +44,11 @@ const Header = () => {
 
     if (isVisible && w < 1024) {
       document.body.style.overflowY = "hidden";
-      document.body.style.width = "90%";
     } else {
       document.body.style.overflowY = "auto";
     }
   }, [isVisible]);
 
-  useEffect(() => {
-    const preventScroll = (e: any) => {
-      if (isVisible) {
-        e.preventDefault();
-      }
-    };
-
-    if (isVisible) {
-      document.addEventListener("touchmove", preventScroll, {
-        passive: false,
-      });
-    } else {
-      document.removeEventListener("touchmove", preventScroll);
-    }
-
-    return () => {
-      document.removeEventListener("touchmove", preventScroll);
-    };
-  }, [isVisible]);
   return (
     <section id="header" className="">
       <div className="h-16 py-3 px-[4%] bg-slate-800 hidden xl:block">
@@ -115,7 +94,7 @@ const Header = () => {
         >
           <nav
             ref={menuRef}
-            className={`transition-all h-[100vh] w-1/2 xl:w-auto xl:h-auto duration-700 absolute top-full bg-white xl:bg-none xl:shadow-none xl:static rounded-md shadow-md px-7 py-10 xl:p-4 ${
+            className={`transition-all h-[100vh] w-1/2 xl:w-auto xl:h-auto duration-700 absolute top-full bg-white xl:bg-none xl:shadow-none xl:static rounded-md shadow-md px-7 py-10 xl:p-4 overscroll-none ${
               isVisible ? "active-menu" : "passive-menu"
             }  ${
               isVisible ? "pointer-events-auto" : "pointer-events-none"
