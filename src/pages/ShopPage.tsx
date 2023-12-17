@@ -37,11 +37,11 @@ const ShopPage = () => {
             </p>
           </div>
         </div>
-        <div className="flex flex-wrap gap-10 px-[15%] pb-20 bg-neutral-50 ">
+        <div className="flex flex-wrap justify-center items-center gap-y-10  gap-x-5 xl:pb-20 bg-neutral-50 ">
           {content.map((cardContent, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center w-56 h-[243.3px] relative "
+              className="flex flex-col items-center justify-center w-[350px] h-[382px] lg:w-56 lg:h-[243.3px] relative "
             >
               <div className="w-full h-full absolute top-0 left-0 bg-neutral-800 bg-opacity-25 z-[1]"></div>
               <img

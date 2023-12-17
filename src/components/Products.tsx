@@ -7,7 +7,7 @@ import ProductCard from "./ProductCard";
 const Products = () => {
   return (
     <section id="products">
-      <div className="flex justify-between items-center px-[15%] py-20">
+      <div className="flex flex-wrap justify-center gap-5 md:justify-between items-center px-[15%] py-20">
         <p className="text-neutral-500 text-base font-bold font-['Montserrat']  tracking-[0.2px]">
           Showing all 12 results
         </p>
@@ -22,7 +22,7 @@ const Products = () => {
             <img src={icon2} />
           </div>
         </div>
-        <form>
+        <form className="m-auto lg:m-0">
           <select className="w-40 h-14 bg-stone-50 rounded-md border border-zinc-300 pl-8">
             <option value="product">Product</option>
           </select>{" "}
@@ -31,7 +31,7 @@ const Products = () => {
           </button>
         </form>
       </div>
-      <div className=" flex flex-wrap gap-20 justify-around px-[12%]">
+      <div className=" flex flex-wrap gap-20 justify-around px-[7%] lg:px-[12%]">
         {shopProducts.map((product) => (
           <ProductCard product={product} />
         ))}
