@@ -4,11 +4,11 @@ const BestSellerProductCard = ({ bsProduct, style }: any) => {
   return (
     <Link
       to="/product"
-      className={`flex flex-col items-center gap-7 border hover:shadow-2xl hover:scale-[1.02] transition-all ${style}`}
+      className={`flex flex-col items-center gap-7 border rounded-xl hover:shadow-2xl hover:scale-[1.02] transition-all ${style}`}
     >
       <img
         src={bsProduct.img}
-        className="w-full h-full object-cover object-bottom"
+        className="w-full h-full object-cover object-bottom rounded-t-xl"
       />
       <div className="flex flex-col items-center gap-4 pb-3">
         <p className="text-center text-slate-800 text-xl font-bold font-['Montserrat'] tracking-[0.2px]">

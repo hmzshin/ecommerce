@@ -1,7 +1,7 @@
 import TopProductsOfWeek from "../components/TopProductOfWeek.tsx";
 import Blog from "../components/Blog.tsx";
 import Clients from "../components/Clients.tsx";
-import Features from "../components/Features.tsx";
+import Featured from "../components/Featured.tsx";
 import Footer from "../components/Footer.tsx";
 import Header from "../components/Header.tsx";
 import Hero from "../components/Hero.tsx";
@@ -29,15 +29,15 @@ const HomePage = () => {
           spaceBetween: 100,
           speed: "1000",
           modules: [Navigation, Pagination, Scrollbar, A11y, Mousewheel],
-          className: "w-[90vw]",
+          className: "xl:w-[90vw]",
         }}
       />
       <Clients />
       <TopProductsOfWeek />
       <section id="bestsellers">
-        <div className=" flex flex-col items-center gap-20 px-[15%] py-20">
+        <div className=" flex flex-col items-center gap-20 px-[12%] py-20">
           <div className="inline-flex flex-col justify-start items-center gap-2.5 ">
-            <p className="text-center text-neutral-500 text-xl font-normal font-['Montserrat'] leading-loose tracking-tight">
+            <p className="text-center text-neutral-500 text-xl font-normal font-['Montserrat'] leading-loose tracking-tight hidden lg:block">
               Featured Products
             </p>
             <p className="text-center text-slate-800 text-2xl font-bold font-['Montserrat'] leading-loose tracking-tight">
@@ -53,7 +53,7 @@ const HomePage = () => {
               <BestSellerProductCard
                 key={i}
                 bsProduct={product}
-                style={"w-56"}
+                style={"w-80 sm:w-56"}
               />
             ))}
           </div>
@@ -62,34 +62,44 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <section id="content">
-        <div className="px-[10%] py-20 flex justify-between">
-          <div className="flex gap-5">
+      <section id="featuredProducts">
+        <div className="px-[10%] py-20 gap-20 flex flex-wrap-reverse xl:flex-nowrap items-center justify-around 2xl:justify-around">
+          <div className="flex gap-5  ">
             {" "}
-            <img src={contentImg1} className="h-[700px]" />
-            <img src={contentImg2} className="h-[700px]" />
+            <img
+              src={contentImg1}
+              className="h-[300px] sm:h-[450px]  2xl:h-[600px]"
+            />
+            <img
+              src={contentImg2}
+              className="h-[300px] sm:h-[450px]  2xl:h-[600px]"
+            />
           </div>
 
-          <div className="flex-col justify-center items-start gap-10 inline-flex">
-            <div className="text-sky-500 text-2xl font-bold font-['Montserrat'] leading-normal tracking-[0.1px]">
+          <div className="flex flex-col justify-center items-start gap-10 ">
+            <div className="text-sky-500 text-xl xl:text-2xl font-bold font-['Montserrat'] leading-normal tracking-[0.1px]">
               Featured Products
             </div>
-            <div className="w-[700px] text-slate-800 text-6xl font-bold font-['Montserrat'] leading-[50px] tracking-tight">
+            <div className="max-w-[400px] xl:max-w-[700px] text-slate-800 text-5xl  xl:text-6xl font-bold font-['Montserrat'] tracking-tight">
               We love what we do
             </div>
-            <div className="w-[500px] text-neutral-500 text-lg font-normal font-['Montserrat'] leading-tight tracking-[0.2px]">
-              Problems trying to resolve the conflict between <br />
-              the two major realms of Classical physics: <br />
+            <div className="max-w-[370px] xl:max-w-[500px] text-neutral-500 text-lg font-normal font-['Montserrat'] leading-tight tracking-[0.2px]">
+              Problems trying to resolve the conflict between{" "}
+              <br className="hidden md:block" />
+              the two major realms of Classical physics:{" "}
+              <br className="hidden md:block" />
               Newtonian mechanics.
               <br /> <br />
-              Problems trying to resolve the conflict between <br />
-              the two major realms of Classical physics: <br />
+              Problems trying to resolve the conflict between{" "}
+              <br className="hidden md:block" />
+              the two major realms of Classical physics:{" "}
+              <br className="hidden md:block" />
               Newtonian mechanics{" "}
             </div>
           </div>
         </div>
       </section>
-      <Features />
+      <Featured />
       <Blog />
       <Footer />
     </>
