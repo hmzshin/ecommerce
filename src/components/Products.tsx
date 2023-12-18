@@ -43,7 +43,10 @@ const Products = () => {
         </p>
 
         {[1, 2, 3].map((number, i) => (
-          <p className="py-7 w-20 bg-white border border-gray-200  text-center text-sky-500 text-base font-bold font-['Montserrat'] tracking-[0.2px] hover:text-white hover:bg-sky-500">
+          <p
+            key={i}
+            className="py-7 w-20 bg-white border border-gray-200  text-center text-sky-500 text-base font-bold font-['Montserrat'] tracking-[0.2px] hover:text-white hover:bg-sky-500"
+          >
             {number}
           </p>
         ))}
