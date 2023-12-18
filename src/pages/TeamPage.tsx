@@ -14,11 +14,11 @@ const TeamPage = () => {
     <>
       <Header />
       <section id="hero">
-        <div className="flex flex-col items-center gap-5 py-20 ">
+        <div className="flex flex-col items-center gap-5 py-20  ">
           <p className="text-center text-neutral-500 text-base font-bold font-['Montserrat'] tracking-tight ">
             WHAT WE DO
           </p>
-          <h3 className="text-center text-slate-800 text-6xl font-bold font-['Montserrat'] leading-[80px] tracking-tight">
+          <h3 className="text-center text-slate-800 text-5xl font-bold font-['Montserrat'] leading-[80px] tracking-tight lg-text-6xl">
             Innovation tailored for you
           </h3>
           <p className="text-center text-neutral-500 text-base font-bold font-['Montserrat']  tracking-tight flex gap-5">
@@ -27,11 +27,11 @@ const TeamPage = () => {
             <span>Team</span>
           </p>
         </div>
-        <div className="flex justify-between gap-5 items-center ">
-          <div className="w-1/2 h-[70vh]">
+        <div className="flex flex-wrap justify-between gap-5 items-center md:flex-nowrap">
+          <div className="h-[70vh] md:w-1/2">
             <img src={hero1} className="default-img" />
           </div>
-          <div className="w-1/2 h-[70vh] flex flex-wrap justify-between content-between">
+          <div className="flex flex-wrap justify-between content-between h-[70vh] md:w-1/2 ">
             {[hero1, hero2, hero3, hero4].map((img, i) => (
               <div key={i} className="w-[49%] h-[49%]  ">
                 <img src={img} className="default-img" />
@@ -40,21 +40,24 @@ const TeamPage = () => {
           </div>
         </div>
       </section>
-      <section id="teamMembers" className="px-[15%] py-20">
-        <h3 className="text-slate-800 text-5xl text-center font-bold font-['Montserrat'] tracking-tight p-32 ">
+      <section
+        id="teamMembers"
+        className="flex flex-col items-center px-[12%] py-20"
+      >
+        <h3 className="py-32 text-slate-800 text-5xl text-center font-bold font-['Montserrat'] tracking-tight ">
           Meet Our Team
         </h3>
-        <div className="flex flex-wrap items-center justify-between gap-10 pt-20 ">
+        <div className="flex flex-wrap items-center justify-around gap-10 pt-20 ">
           {teamMembers.map((member, i) => (
-            <MemberCard key={i} member={member} style={"w-96"} />
+            <MemberCard key={i} member={member} style={"w-80"} />
           ))}
         </div>
       </section>
       <section
         id="trial"
-        className="flex flex-col gap-10 items-center px-[15%] py-20"
+        className="flex flex-col gap-10 items-center px-[12%] py-20"
       >
-        <p className="text-center text-slate-800 text-4xl font-bold font-['Montserrat']  tracking-tight">
+        <p className="text-center text-slate-800 text-4xl font-bold font-['Montserrat']  tracking-tight xl:text-5xl">
           Start your 14 days free trial
         </p>
         <p className="text-center text-neutral-500 text-base font-normal font-['Montserrat'] tracking-tight max-w-md">
