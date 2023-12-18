@@ -35,9 +35,10 @@ const Thumb = () => {
       }
     }
   }, [activeId]);
+
   return (
     <div className="flex flex-col gap-2">
-      <section className="relative w-[600px] h-[500px]">
+      <section className="relative ">
         <div
           className="absolute top-0 left-0 w-16 h-full flex items-center"
           onClick={toLeft}
@@ -68,13 +69,13 @@ const Thumb = () => {
         )}
       </section>
       <section
-        className="w-[600px] h-[200px] flex gap-5 overflow-hidden "
+        className="w-96 h-16 md:w-[600px] md:h-32 flex gap-5 overflow-x-scroll "
         ref={container2Ref}
       >
         {arr.map((image, i) => (
           <div
             key={i}
-            className={`w-36 h-24 opacity-50 shrink-0  ${
+            className={`opacity-50 shrink-0 md:w-52 ${
               activeId == i ? "active" : ""
             }`}
             onClick={() => handleClick(i)}

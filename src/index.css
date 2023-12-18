@@ -3,6 +3,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* @layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+} */
 
 .exploreBtn {
   @apply py-3.5 px-5 rounded border border-white text-white text-base text-center font-bold font-['Montserrat'] leading-snug tracking-tight;
