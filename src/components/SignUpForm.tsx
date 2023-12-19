@@ -1,6 +1,8 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { AxiosInstance } from "../api/axiosInstance";
 
 type FormData = {
   name: string;
@@ -16,6 +18,19 @@ type FormData = {
   storeBankAccount: string;
 };
 const SignUpForm = () => {
+  const [roles, setRoles]: any = useState();
+  const fetchData = async () => {
+    try {
+      const response = await AxiosInstance.get("roles");
+      setRoles([...response.data.roles]);
+    } catch (error) {
+      console.log(errors);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const [hidePassword, setHidePassword] = useState(true);
   function activateStoreDetails(e: any) {
     const activeElement = document.getElementById("storeDetails");
@@ -231,7 +246,7 @@ const SignUpForm = () => {
               })}
               className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
             >
-              {["Customer", "Store", "Admin"].map((role) => (
+              {roles?.map((role: any) => (
                 <option key={role} value={role.toLowerCase()}>
                   {role}
                 </option>
