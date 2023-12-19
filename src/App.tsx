@@ -5,6 +5,7 @@ import ProductPage from "./pages/ProductPage.tsx";
 import AboutPage from "./pages/AboutPage.tsx";
 import TeamPage from "./pages/TeamPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
+import SignUpPage from "./pages/SignUpPage.tsx";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     </>
   );
