@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AxiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type FormData = {
   name: string;
@@ -20,6 +21,13 @@ type FormData = {
 };
 const SignUpForm = () => {
   const [roles, setRoles]: any = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("buradan geldik", location.state);
+  }, [location]);
   const fetchData = async () => {
     try {
       const response = await AxiosInstance.get("roles");
@@ -78,7 +86,13 @@ const SignUpForm = () => {
           autoClose: 3000,
           className: "w-[500px]",
         });
-    console.log(data);
+        setIsLoading(false);
+        localStorage.setItem("token", "hamza");
+        if (location.state) {
+          navigate(location.state.pathname);
+        } else {
+          navigate("/");
+        }
       })
       .catch((err) => {
         toast.update(loading, {
@@ -89,6 +103,7 @@ const SignUpForm = () => {
         });
 
         console.log(err);
+        setIsLoading(false);
       });
   };
 
