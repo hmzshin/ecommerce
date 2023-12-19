@@ -36,8 +36,11 @@ const Featured = () => {
           </p>
         </section>
         <section className="flex flex-wrap  justify-center gap-10 ">
-          {features.map((feature) => (
-            <div className="px-10 py-9 flex-col justify-start items-center gap-5 inline-flex">
+          {features.map((feature, i) => (
+            <div
+              key={i}
+              className="px-10 py-9 flex-col justify-start items-center gap-5 inline-flex"
+            >
               <img src={feature.img} className="w-32" />
               <p className="text-center text-slate-800 text-3xl font-bold font-['Montserrat'] leading-loose tracking-[0.2px]">
                 {feature.header}
