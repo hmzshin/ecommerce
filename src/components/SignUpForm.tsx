@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AxiosInstance } from "../api/axiosInstance";
+import { toast } from "react-toastify";
 
 type FormData = {
   name: string;
@@ -48,7 +49,9 @@ const SignUpForm = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
+    const loading = toast.loading("Please wait...");
+    setIsLoading(true);
     const submitData: any = {
       name: data.name.trim(),
       email: data.email,
@@ -66,7 +69,27 @@ const SignUpForm = () => {
       submitData.store = storeDetails;
     }
 
+    AxiosInstance.post("signup", submitData)
+      .then(() => {
+        toast.update(loading, {
+          render: `Account successfuly created.You need to click link in email to activate your account!`,
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+          className: "w-[500px]",
+        });
     console.log(data);
+      })
+      .catch((err) => {
+        toast.update(loading, {
+          render: "Your account could not created. Please try again",
+          type: "error",
+          isLoading: false,
+          autoClose: 1000,
+        });
+
+        console.log(err);
+      });
   };
 
   return (
@@ -378,7 +401,10 @@ const SignUpForm = () => {
           </div>
         </div>
 
-        <button className="hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none">
+        <button
+          disabled={isLoading ? true : false}
+          className="hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none"
+        >
           Join Bandage
         </button>
         <p className="mt-3 block text-base text-center font-medium text-[#07074D]">
