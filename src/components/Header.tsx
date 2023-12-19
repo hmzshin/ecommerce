@@ -124,7 +124,9 @@ const Header = () => {
               <img className="w-5 h-5 mr-1" src={user} />
               <p className="hidden md:block">Login</p>
               <p className="hidden md:block">/</p>
-              <p className="hidden md:block">Register</p>
+              <Link to="/signup" className="hidden md:block">
+                Register
+              </Link>
             </div>
             <div className="flex lg:gap-2">
               <img src={search} className="w-5 h-5 mr-10" />

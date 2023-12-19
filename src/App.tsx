@@ -5,6 +5,8 @@ import ProductPage from "./pages/ProductPage.tsx";
 import AboutPage from "./pages/AboutPage.tsx";
 import TeamPage from "./pages/TeamPage.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
+import SignUpPage from "./pages/SignUpPage.tsx";
+import ProtectedPage from "./pages/ProtectedPage.tsx";
 
 function App() {
   return (
@@ -14,8 +16,24 @@ function App() {
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/team" element={<TeamPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route
+          path="/team"
+          element={
+            <ProtectedPage>
+              <TeamPage />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="contact"
+          element={
+            <ProtectedPage>
+              <ContactPage />
+            </ProtectedPage>
+          }
+        />
+
+        <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     </>
   );
