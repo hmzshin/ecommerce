@@ -2,9 +2,9 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { AxiosInstance } from "../api/axiosInstance";
-import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useAxios } from "../hooks/useAxios";
+import { AxiosError, AxiosResponse } from "axios";
 
 type FormData = {
   name: string;
@@ -20,28 +20,43 @@ type FormData = {
   storeBankAccount: string;
 };
 const SignUpForm = () => {
-  const [roles, setRoles]: any = useState();
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
+  const [postData, postRequest, postLoading, postError]: [
+    AxiosResponse<any> | undefined,
+    (payload?: any, toastify?: boolean) => Promise<void>,
+    boolean,
+    AxiosError<any> | undefined
+  ] = useAxios({
+    reqType: "post",
+    endpoint: "signup",
+    navPath: location.state ? location.state.pathname : "/",
+  });
+  type RoleData = {
+    roles: string;
+  };
+  const [getData, getRequest]: [
+    AxiosResponse<RoleData> | undefined,
+    (payload?: any, toastify?: boolean) => Promise<void>,
+    boolean,
+    AxiosError<any> | undefined
+  ] = useAxios({
+    reqType: "get",
+    endpoint: "roles",
+  });
 
   useEffect(() => {
-    console.log("buradan geldik", location.state);
-  }, [location]);
-  const fetchData = async () => {
-    try {
-      const response = await AxiosInstance.get("roles");
-      setRoles([...response.data.roles]);
-    } catch (error) {
-      console.log(errors);
-    }
-  };
-  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await getRequest();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
     fetchData();
   }, []);
 
-  const [hidePassword, setHidePassword] = useState(true);
-  function activateStoreDetails(e: any) {
+  const [hidePassword, setHidePassword] = useState<boolean>(true);
+  function activateStoreDetails(e: React.ChangeEvent<HTMLSelectElement>) {
     const activeElement = document.getElementById("storeDetails");
     const role = e.target.value;
     if (role == "store") {
@@ -57,9 +72,7 @@ const SignUpForm = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const onSubmit = async (data: any) => {
-    const loading = toast.loading("Please wait...");
-    setIsLoading(true);
+  const onSubmit = (data: FormData) => {
     const submitData: any = {
       name: data.name.trim(),
       email: data.email,
@@ -77,36 +90,15 @@ const SignUpForm = () => {
       submitData.store = storeDetails;
     }
 
-    AxiosInstance.post("signup", submitData)
-      .then(() => {
-        toast.update(loading, {
-          render: `Account successfuly created.You need to click link in email to activate your account!`,
-          type: "success",
-          isLoading: false,
-          autoClose: 3000,
-          className: "w-[500px]",
-        });
-        setIsLoading(false);
-        localStorage.setItem("token", "hamza");
-        if (location.state) {
-          navigate(location.state.pathname);
-        } else {
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        toast.update(loading, {
-          render: "Your account could not created. Please try again",
-          type: "error",
-          isLoading: false,
-          autoClose: 1000,
-        });
-
-        console.log(err);
-        setIsLoading(false);
-      });
+    postRequest(submitData, true);
   };
+  useEffect(() => {
+    console.log("postdata", postData);
+  }, [postData]);
 
+  useEffect(() => {
+    console.log("get data", getData);
+  }, [getData]);
   return (
     <section
       id="signup-form"
@@ -170,7 +162,7 @@ const SignUpForm = () => {
           <label className="mb-3 block text-base font-medium text-[#07074D]">
             Password
             <input
-              type={hidePassword ? "password" : "input"}
+              type={hidePassword ? "password" : "text"}
               {...register("password", {
                 required: "Password is required",
                 minLength: {
@@ -280,11 +272,12 @@ const SignUpForm = () => {
             <select
               defaultValue="Customer"
               {...register("role", {
-                onChange: (e) => activateStoreDetails(e),
+                onChange: (e: React.ChangeEvent<HTMLSelectElement>) =>
+                  activateStoreDetails(e),
               })}
               className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
             >
-              {roles?.map((role: any) => (
+              {getData?.roles.map((role: any) => (
                 <option key={role} value={role.toLowerCase()}>
                   {role}
                 </option>
@@ -417,8 +410,10 @@ const SignUpForm = () => {
         </div>
 
         <button
-          disabled={isLoading ? true : false}
-          className="hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none"
+          disabled={postLoading ? true : false}
+          className={`hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none ${
+            postLoading ? "opacity-50" : "opacity-100"
+          }`}
         >
           Join Bandage
         </button>

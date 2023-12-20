@@ -94,7 +94,7 @@ const Header = () => {
         >
           <nav
             ref={menuRef}
-            className={`transition-all h-[100vh] w-1/2 xl:w-auto xl:h-auto duration-700 absolute top-full bg-white xl:bg-none xl:shadow-none xl:static rounded-md shadow-md px-7 py-10 xl:p-4 overscroll-none ${
+            className={`transition-all h-[100vh] w-1/2 sm:w-1/3 xl:w-auto xl:h-auto duration-700 absolute top-full bg-white xl:bg-none xl:shadow-none xl:static rounded-md shadow-md px-7 py-10 xl:p-4 overscroll-none ${
               isVisible ? "active-menu" : "passive-menu"
             }  ${
               isVisible ? "pointer-events-auto" : "pointer-events-none"

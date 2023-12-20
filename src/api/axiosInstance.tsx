@@ -16,4 +16,10 @@ export const axiosInstanceCreator = () => {
       });
 };
 
-export let AxiosInstance = axiosInstanceCreator();
+export let AxiosInstance: any;
+
+export const renewAxiosInstance = () => {
+  AxiosInstance = axiosInstanceCreator();
+};
+
+renewAxiosInstance();
