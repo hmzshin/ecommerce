@@ -62,7 +62,7 @@ export const useAxios = ({
       if (navPath) {
         navigate(navPath);
       }
-    } catch (error) {
+    } catch (err: any) {
       toast.update(toastLoading, {
         render: `Your account could not be created. Please try again.`,
         type: "error",
@@ -70,7 +70,7 @@ export const useAxios = ({
         autoClose: 1000,
       });
 
-      setError(error);
+      setError(err);
       errorCallback && errorCallback();
       throw error;
     } finally {
