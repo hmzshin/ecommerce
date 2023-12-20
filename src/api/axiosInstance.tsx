@@ -5,13 +5,13 @@ export const axiosInstanceCreator = () => {
 
   return token
     ? axios.create({
-        baseURL: `http://localhost:3000/`,
+        baseURL: `https://workintech-fe-ecommerce.onrender.com/`,
         headers: {
           Authorization: token,
         },
       })
     : axios.create({
-        baseURL: `http://localhost:3000/`,
+        baseURL: `https://workintech-fe-ecommerce.onrender.com/`,
         headers: {},
       });
 };
