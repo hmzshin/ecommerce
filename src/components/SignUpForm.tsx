@@ -2,14 +2,13 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import { useAxios } from "../hooks/useAxios";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { useAppSelector } from "../store/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SignUpForm = () => {
   const location = useLocation();
-  const [postData, postRequest, postLoading, postError]: [
-    AxiosResponse<any> | undefined,
+  const [postRequest, postLoading]: [
     (payload?: any, toastify?: boolean) => Promise<void>,
     boolean,
     AxiosError<any> | undefined
