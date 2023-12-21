@@ -7,6 +7,7 @@ import { useAppSelector } from "../store/store";
 import { useEffect, useState } from "react";
 
 const SignUpForm = () => {
+  const [role, setRole] = useState<string>("customer");
   const location = useLocation();
   const [postRequest, postLoading]: [
     (payload?: any, toastify?: boolean) => Promise<void>,
@@ -20,11 +21,16 @@ const SignUpForm = () => {
 
   const rolesArray = useAppSelector((state) => state.global.roles);
 
+  useEffect(() => {
+    console.log("roles array", rolesArray);
+  }, [rolesArray]);
+
   const [hidePassword, setHidePassword] = useState<boolean>(true);
 
   function activateStoreDetails(e: React.ChangeEvent<HTMLSelectElement>) {
     const activeElement = document.getElementById("storeDetails");
     const role = e.target.value;
+    setRole(role);
     if (role == "store") {
       activeElement?.classList.remove("hidden");
     } else {
@@ -69,8 +75,8 @@ const SignUpForm = () => {
 
       submitData.store = storeDetails;
     }
-
-    postRequest(submitData, true);
+    console.log(data);
+    postRequest(data, true);
   };
 
   return (
@@ -244,11 +250,9 @@ const SignUpForm = () => {
           <label className="mb-3 block text-base font-medium text-[#07074D]">
             Role
             <select
-              defaultValue="Customer"
-              {...register("role", {
-                onChange: (e: React.ChangeEvent<HTMLSelectElement>) =>
-                  activateStoreDetails(e),
-              })}
+              value={role}
+              {...register("role")}
+              onChange={(e) => activateStoreDetails(e)}
               className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
             >
               {rolesArray.map((role: any) => (
