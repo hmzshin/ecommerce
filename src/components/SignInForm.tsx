@@ -37,6 +37,13 @@ const SignInForm = () => {
               type="email"
               {...register("email", {
                 required: "Email is required",
+                validate: (val: any) => {
+                  const emailRegex =
+                    /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                  if (!emailRegex.test(val)) {
+                    return "Please enter a valid email address.";
+                  }
+                },
               })}
               placeholder="Enter your email"
               className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
@@ -57,33 +64,9 @@ const SignInForm = () => {
             Password
             <input
               type={hidePassword ? "password" : "text"}
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 8,
-                  message: "At least 8 character required",
-                },
-                validate: (val: any) => {
-                  const numbers = /[0-9]/g;
-                  const upperCaseLetters = /[A-Z]/g;
-                  const lowerCaseLetters = /[a-z]/g;
-                  if (!numbers.test(val)) {
-                    return "At least one number required";
-                  }
-                  if (!upperCaseLetters.test(val)) {
-                    return "At least one uppercase letter required";
-                  }
-                  if (!lowerCaseLetters.test(val)) {
-                    return "At least one lowercase letter required";
-                  }
-                },
-              })}
+              {...register("password")}
               placeholder="Enter Password"
-              className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                errors.password
-                  ? "focus:border-red-400 border-red-400"
-                  : "focus:border-sky-500 border-[#e0e0e0]"
-              } focus:shadow-md `}
+              className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
             />{" "}
             <Icon
               icon={hidePassword ? "octicon:eye-closed-16" : "octicon:eye-16"}
@@ -91,11 +74,6 @@ const SignInForm = () => {
               onClick={() => setHidePassword(!hidePassword)}
             />
           </label>{" "}
-          {errors.password && (
-            <p role="alert" className="text-red-400 absolute top-0 right-0">
-              {errors.password?.message}
-            </p>
-          )}
         </div>
 
         <button
