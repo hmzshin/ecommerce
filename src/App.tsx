@@ -11,6 +11,7 @@ import ProtectedPage from "./pages/ProtectedPage.tsx";
 import { useEffect } from "react";
 import { useAppDispatch } from "./store/store.ts";
 import { fetchGlobalData } from "./store/slices/globalSlice.ts";
+import SignInPage from "./pages/SignInPage.tsx";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -44,6 +45,7 @@ function App() {
         />
 
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<SignInPage />} />
       </Routes>
     </>
   );

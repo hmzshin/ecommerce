@@ -122,7 +122,9 @@ const Header = () => {
           <div className="flex items-center text-center font-bold font-['Montserrat'] tracking-tight ">
             <div className="flex gap-2 mr-10 md:mr-16 ">
               <img className="w-5 h-5 mr-1" src={user} />
-              <p className="hidden md:block">Login</p>
+              <Link to="/login" className="hidden md:block">
+                Login
+              </Link>
               <p className="hidden md:block">/</p>
               <Link to="/signup" className="hidden md:block">
                 Register
