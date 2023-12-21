@@ -8,7 +8,17 @@ import ContactPage from "./pages/ContactPage.tsx";
 import SignUpPage from "./pages/SignUpPage.tsx";
 import ProtectedPage from "./pages/ProtectedPage.tsx";
 
+import { useEffect } from "react";
+import { useAppDispatch } from "./store/store.ts";
+import { fetchGlobalData } from "./store/slices/globalSlice.ts";
+
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchGlobalData());
+  }, []);
+
   return (
     <>
       <Routes>
@@ -25,7 +35,7 @@ function App() {
           }
         />
         <Route
-          path="contact"
+          path="/contact"
           element={
             <ProtectedPage>
               <ContactPage />

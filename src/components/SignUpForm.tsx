@@ -1,28 +1,15 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import { useAxios } from "../hooks/useAxios";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
+import { useAppSelector } from "../store/store";
+import { useEffect, useState } from "react";
 
-type FormData = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phone: number;
-  birthDate: string;
-  role: string;
-  storeName: string;
-  storePhone: string;
-  storeTax: string;
-  storeBankAccount: string;
-};
 const SignUpForm = () => {
+  const [role, setRole] = useState<string>("customer");
   const location = useLocation();
-  const [postData, postRequest, postLoading, postError]: [
-    AxiosResponse<any> | undefined,
+  const [postRequest, postLoading]: [
     (payload?: any, toastify?: boolean) => Promise<void>,
     boolean,
     AxiosError<any> | undefined
@@ -31,40 +18,39 @@ const SignUpForm = () => {
     endpoint: "signup",
     navPath: location.state ? location.state.pathname : "/",
   });
-  type RoleData = {
-    roles: string;
-  };
-  const [getData, getRequest]: [
-    AxiosResponse<RoleData> | undefined,
-    (payload?: any, toastify?: boolean) => Promise<void>,
-    boolean,
-    AxiosError<any> | undefined
-  ] = useAxios({
-    reqType: "get",
-    endpoint: "roles",
-  });
+
+  const rolesArray = useAppSelector((state) => state.global.roles);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getRequest();
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
+    console.log("roles array", rolesArray);
+  }, [rolesArray]);
 
   const [hidePassword, setHidePassword] = useState<boolean>(true);
+
   function activateStoreDetails(e: React.ChangeEvent<HTMLSelectElement>) {
     const activeElement = document.getElementById("storeDetails");
     const role = e.target.value;
+    setRole(role);
     if (role == "store") {
       activeElement?.classList.remove("hidden");
     } else {
       activeElement?.classList.add("hidden");
     }
   }
+
+  type FormData = {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    phone: number;
+    birthDate: string;
+    role: string;
+    storeName: string;
+    storePhone: string;
+    storeTax: string;
+    storeBankAccount: string;
+  };
   const {
     register,
     handleSubmit,
@@ -89,16 +75,10 @@ const SignUpForm = () => {
 
       submitData.store = storeDetails;
     }
-
-    postRequest(submitData, true);
+    console.log(data);
+    postRequest(data, true);
   };
-  useEffect(() => {
-    console.log("postdata", postData);
-  }, [postData]);
 
-  useEffect(() => {
-    console.log("get data", getData);
-  }, [getData]);
   return (
     <section
       id="signup-form"
@@ -270,16 +250,14 @@ const SignUpForm = () => {
           <label className="mb-3 block text-base font-medium text-[#07074D]">
             Role
             <select
-              defaultValue="Customer"
-              {...register("role", {
-                onChange: (e: React.ChangeEvent<HTMLSelectElement>) =>
-                  activateStoreDetails(e),
-              })}
+              value={role}
+              {...register("role")}
+              onChange={(e) => activateStoreDetails(e)}
               className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
             >
-              {getData?.roles.map((role: any) => (
-                <option key={role} value={role.toLowerCase()}>
-                  {role}
+              {rolesArray.map((role: any) => (
+                <option key={role[1]} value={role[1]}>
+                  {role[0]}
                 </option>
               ))}
             </select>

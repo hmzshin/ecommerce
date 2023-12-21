@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AxiosInstance } from "../api/axiosInstance";
@@ -23,12 +23,10 @@ export const useAxios = ({
   errorCallback,
   navPath,
 }: AxiosHookProps): [
-  AxiosResponse<any> | undefined,
   (payload?: any, toastify?: boolean) => Promise<void>,
   boolean,
   AxiosError<any> | undefined
 ] => {
-  const [responseData, setResponseData] = useState<AxiosResponse<any>>();
   const [error, setError] = useState<AxiosError<any>>();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -44,7 +42,7 @@ export const useAxios = ({
         endpoint,
         payload ? payload : config
       );
-      setResponseData(res.data);
+
       successCallback && successCallback();
 
       toast.update(toastLoading, {
@@ -62,6 +60,7 @@ export const useAxios = ({
       if (navPath) {
         navigate(navPath);
       }
+      return res.data;
     } catch (err: any) {
       toast.update(toastLoading, {
         render: `Your account could not be created. Please try again.`,
@@ -78,5 +77,5 @@ export const useAxios = ({
     }
   };
 
-  return [responseData, axiosRequest, loading, error];
+  return [axiosRequest, loading, error];
 };
