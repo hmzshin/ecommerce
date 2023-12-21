@@ -123,6 +123,13 @@ const SignUpForm = () => {
               type="email"
               {...register("email", {
                 required: "Email is required",
+                validate: (val: any) => {
+                  const emailRegex =
+                    /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                  if (!emailRegex.test(val)) {
+                    return "Please enter a valid email address.";
+                  }
+                },
               })}
               placeholder="Enter your email"
               className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
