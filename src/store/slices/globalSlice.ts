@@ -1,4 +1,6 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosInstance } from "../../api/axiosInstance";
+import { AxiosResponse } from "axios";
 
 interface UserData {
   roles: string[];
@@ -13,6 +15,11 @@ const initialState: UserData = {
   language: "tr",
   theme: "light",
 };
+export const fetchGlobalData = createAsyncThunk("fetch/data", async () => {
+  const response: AxiosResponse | undefined = await AxiosInstance.get("roles");
+  console.log("naber", response?.data);
+  return response?.data;
+});
 
 export const globalSlice = createSlice({
   name: "global",
@@ -30,6 +37,13 @@ export const globalSlice = createSlice({
     ): UserData => {
       return { ...state, language: action.payload };
     },
+  },
+
+  extraReducers(builder) {
+    builder.addCase(fetchGlobalData.fulfilled, (state, action: any) => {
+      const roles = action.payload?.map((role: any) => [role.name, role.code]);
+      state.roles = roles;
+    });
   },
 });
 
