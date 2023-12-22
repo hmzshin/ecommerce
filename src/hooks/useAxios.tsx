@@ -3,7 +3,6 @@ import { AxiosError, AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AxiosInstance } from "../api/axiosInstance";
-
 type RequestType = "get" | "post" | "put" | "delete";
 
 interface AxiosHookProps {
@@ -54,7 +53,7 @@ export const useAxios = ({
       });
 
       if (endpoint === "signup") {
-        localStorage.setItem("token", "hamza");
+        localStorage.setItem("token", res.data.token);
       }
 
       if (navPath) {
