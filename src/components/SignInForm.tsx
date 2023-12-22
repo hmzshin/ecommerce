@@ -1,10 +1,16 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
-import { useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect, useState } from "react";
+import { sendLoginInfo } from "../store/slices/userSlice";
+import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SignInForm = () => {
   const [hidePassword, setHidePassword] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   type FormData = {
     email: string;
@@ -17,7 +23,17 @@ const SignInForm = () => {
   } = useForm<FormData>();
 
   const onSubmit = (data: FormData) => {
-    console.log("login info", data);
+    console.log("login info from form", data);
+    dispatch(sendLoginInfo(data))
+      .unwrap()
+      .then(() => {
+        toast.success("succesfully loggedin");
+        navigate(location.state.pathname);
+      })
+      .catch((error) => {
+        toast.error("login failed");
+        console.log(error);
+      });
   };
 
   return (
