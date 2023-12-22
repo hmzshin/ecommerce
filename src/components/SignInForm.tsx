@@ -1,10 +1,10 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { useEffect, useState } from "react";
+import { useAppDispatch } from "../store/store";
+import { useState } from "react";
 import { sendLoginInfo } from "../store/slices/userSlice";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const SignInForm = () => {
   const [hidePassword, setHidePassword] = useState<boolean>(true);
@@ -27,11 +27,11 @@ const SignInForm = () => {
     dispatch(sendLoginInfo(data))
       .unwrap()
       .then(() => {
-        toast.success("succesfully loggedin");
-        navigate(location.state.pathname);
+        toast.success("Succesfully loggedin");
+        location.state ? navigate(location.state.pathname) : navigate("/");
       })
       .catch((error) => {
-        toast.error("login failed");
+        toast.error("Login failed");
         console.log(error);
       });
   };
@@ -40,12 +40,12 @@ const SignInForm = () => {
     <section
       id="signin-form"
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col items-center justify-center gap-16 p-12 "
+      className="flex flex-col items-center justify-center  p-12 "
     >
       <h3 className="text-sky-500  text-4xl font-bold font-['Montserrat']  tracking-tigh">
         Login
       </h3>
-      <form className="mx-auto w-full max-w-xl bg-white">
+      <form className="mx-auto w-full max-w-xl bg-white pt-16 pb-10">
         <div className="mb-5 relative">
           <label className="mb-3 block text-base font-medium text-[#07074D]">
             Email Address
@@ -97,7 +97,13 @@ const SignInForm = () => {
         >
           LOGIN
         </button>
-      </form>
+      </form>{" "}
+      <p>
+        Don't have an account?{" "}
+        <Link to="/signup" className="text-center">
+          <span className="text-sky-500">Sign up</span>
+        </Link>
+      </p>
     </section>
   );
 };
