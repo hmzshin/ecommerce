@@ -3,12 +3,14 @@ import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import { useAxios } from "../hooks/useAxios";
 import { AxiosError } from "axios";
-import { useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect, useState } from "react";
+import { setUser } from "../store/slices/userSlice";
 
 const SignUpForm = () => {
   const [role, setRole] = useState<string>("customer");
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const [postRequest, postLoading]: [
     (payload?: any, toastify?: boolean) => Promise<void>,
     boolean,
@@ -56,7 +58,7 @@ const SignUpForm = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({ defaultValues: { role: "customer" } });
 
   const onSubmit = (data: FormData) => {
     const submitData: any = {
@@ -75,8 +77,11 @@ const SignUpForm = () => {
 
       submitData.store = storeDetails;
     }
-    console.log(data);
-    postRequest(data, true);
+    console.log(submitData);
+    postRequest(submitData, true).then((response) => {
+      console.log("signup response", response);
+      dispatch(setUser(submitData));
+    });
   };
 
   return (
@@ -199,7 +204,7 @@ const SignUpForm = () => {
                 required: true,
                 validate: (val: string) => {
                   if (watch("password") != val) {
-                    return "Your passwords do no match";
+                    return "Password do not match";
                   }
                 },
               })}
@@ -257,8 +262,8 @@ const SignUpForm = () => {
           <label className="mb-3 block text-base font-medium text-[#07074D]">
             Role
             <select
-              value={role}
               {...register("role")}
+              value={role}
               onChange={(e) => activateStoreDetails(e)}
               className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
             >
