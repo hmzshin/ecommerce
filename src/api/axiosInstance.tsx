@@ -1,7 +1,9 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 
-export const axiosInstanceCreator = () => {
-  const token = localStorage.getItem("token");
+type Token = string | null;
+
+export const axiosInstanceCreator = (): AxiosInstance => {
+  const token: Token = localStorage.getItem("token");
 
   return token
     ? axios.create({
@@ -16,10 +18,10 @@ export const axiosInstanceCreator = () => {
       });
 };
 
-export let AxiosInstance: any;
+export let axiosInstance: AxiosInstance;
 
-export const renewAxiosInstance = () => {
-  AxiosInstance = axiosInstanceCreator();
+export const renewAxiosInstance = (): void => {
+  axiosInstance = axiosInstanceCreator();
 };
 
 renewAxiosInstance();

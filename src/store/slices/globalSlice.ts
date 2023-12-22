@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AxiosInstance } from "../../api/axiosInstance";
+import { axiosInstance } from "../../api/axiosInstance";
 import { AxiosResponse } from "axios";
 
 interface UserData {
@@ -16,7 +16,7 @@ const initialState: UserData = {
   theme: "light",
 };
 export const fetchGlobalData = createAsyncThunk("fetch/data", async () => {
-  const response: AxiosResponse | undefined = await AxiosInstance.get("roles");
+  const response: AxiosResponse | undefined = await axiosInstance.get("roles");
   console.log("global slice response data", response?.data);
   return response?.data;
 });

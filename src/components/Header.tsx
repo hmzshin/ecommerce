@@ -24,19 +24,19 @@ const data = [
   },
 ];
 const Header = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [showUserDetails, setShowUserDetails] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [showUserDetails, setShowUserDetails] = useState<boolean>(false);
   const userInfo = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const menuRef = useRef(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef(null);
   const brandRef = useRef(null);
 
-  const w = innerWidth;
+  const w: number = innerWidth;
   useEffect(() => {
-    window.addEventListener("click", (event): any => {
+    window.addEventListener("click", (event: MouseEvent | TouchEvent) => {
       if (
         isVisible &&
         menuRef.current &&
@@ -150,7 +150,7 @@ const Header = () => {
                 Register
               </Link>
             </div>
-            <p
+            <div
               className={`${
                 userInfo.name ? "block" : "hidden"
               } mr-10 md:mr-16 relative cursor-pointer`}
@@ -170,7 +170,7 @@ const Header = () => {
                   </li>
                 </ul>
               </div>
-            </p>
+            </div>
             <div className="flex lg:gap-2">
               <img src={search} className="w-5 h-5 mr-10" />
               <img src={chart} className="w-5 h-5" />

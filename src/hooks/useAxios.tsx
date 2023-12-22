@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { AxiosInstance } from "../api/axiosInstance";
+import { axiosInstance } from "../api/axiosInstance";
 type RequestType = "get" | "post" | "put" | "delete";
 
 interface AxiosHookProps {
@@ -37,7 +37,7 @@ export const useAxios = ({
     const toastLoading = toastify ? toast.loading("Please wait...") : "";
     setLoading(true);
     try {
-      const res = await AxiosInstance[reqType](
+      const res = await axiosInstance[reqType](
         endpoint,
         payload ? payload : config
       );
