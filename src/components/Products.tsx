@@ -32,8 +32,8 @@ const Products = () => {
         </form>
       </div>
       <div className=" flex flex-wrap gap-20 justify-around px-[7%] lg:px-[12%]">
-        {shopProducts.map((product) => (
-          <ProductCard product={product} />
+        {shopProducts.map((product, i) => (
+          <ProductCard key={i} product={product} />
         ))}
       </div>
 

@@ -8,9 +8,11 @@ import user from "../assets/header/user.svg";
 import search from "../assets/header/search.svg";
 import chart from "../assets/header/chart.svg";
 import like from "../assets/header/like.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { setUser } from "../store/slices/userSlice";
 
 const data = [
   { svg: phone, text: "(225) 555-0118" },
@@ -23,6 +25,10 @@ const data = [
 ];
 const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [showUserDetails, setShowUserDetails] = useState(false);
+  const userInfo = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const menuRef = useRef(null);
   const iconRef = useRef(null);
@@ -48,6 +54,12 @@ const Header = () => {
       document.body.style.overflowY = "auto";
     }
   }, [isVisible]);
+
+  function deleteToken(): void {
+    localStorage.removeItem("token");
+    navigate("/");
+    dispatch(setUser({ name: "", email: "", role_id: "" }));
+  }
 
   return (
     <section id="header" className="">
@@ -120,14 +132,45 @@ const Header = () => {
             </ul>
           </nav>
           <div className="flex items-center text-center font-bold font-['Montserrat'] tracking-tight ">
-            <div className="flex gap-2 mr-10 md:mr-16 ">
-              <img className="w-5 h-5 mr-1" src={user} />
-              <p className="hidden md:block">Login</p>
+            <div
+              className={`flex gap-2 mr-10 md:mr-16 ${
+                userInfo.name ? "hidden" : ""
+              }`}
+            >
+              <Link to="/login">
+                {" "}
+                <img className="w-5 h-5 mr-1" src={user} />
+              </Link>
+
+              <Link to="/login" className="hidden md:block">
+                Login
+              </Link>
               <p className="hidden md:block">/</p>
               <Link to="/signup" className="hidden md:block">
                 Register
               </Link>
             </div>
+            <p
+              className={`${
+                userInfo.name ? "block" : "hidden"
+              } mr-10 md:mr-16 relative cursor-pointer`}
+              onClick={() => setShowUserDetails(!showUserDetails)}
+            >
+              <span>{userInfo.name}</span>
+
+              <div
+                className={`absolute top-full pt-2 bg-slate-100 px-10 ${
+                  showUserDetails ? "block" : "hidden"
+                }`}
+              >
+                <ul className="flex flex-col gap-2 items-center whitespace-nowrap">
+                  <li className="cursor-pointer">Account</li>
+                  <li className="cursor-pointer" onClick={deleteToken}>
+                    Sign Out
+                  </li>
+                </ul>
+              </div>
+            </p>
             <div className="flex lg:gap-2">
               <img src={search} className="w-5 h-5 mr-10" />
               <img src={chart} className="w-5 h-5" />

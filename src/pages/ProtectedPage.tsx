@@ -5,7 +5,7 @@ const ProtectedPage = ({ children }: any) => {
   const user = localStorage.getItem("token");
   const location = useLocation();
 
-  return user ? children : <Navigate to={`/signup`} state={location} />;
+  return user ? children : <Navigate to={`/login`} state={location} />;
 };
 
 export default ProtectedPage;
