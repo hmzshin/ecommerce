@@ -3,9 +3,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* @layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+} */
 
 .exploreBtn {
-  @apply w-1/2 py-3.5 rounded border border-white text-white text-base text-center font-bold font-['Montserrat'] leading-snug tracking-tight;
+  @apply py-3.5 px-5 rounded border border-white text-white text-base text-center font-bold font-['Montserrat'] leading-snug tracking-tight;
 }
 
 .swiper-slide {
@@ -26,4 +35,12 @@
 
 .active {
   @apply opacity-100;
+}
+
+.active-menu {
+  @apply -left-0;
+}
+
+.passive-menu {
+  @apply -left-full;
 }

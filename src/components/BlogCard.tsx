@@ -4,11 +4,14 @@ import arrowRight from "../assets/blog/arrowIcon.svg";
 
 const BlogCard = ({ content }: any) => {
   return (
-    <div className="flex relative">
+    <div className="flex flex-wrap mx-10 md:flex-nowrap gap relative">
       <div className="w-14 h-6 px-3 py-1 flex items-center justify-center bg-red-500 rounded-[3px] shadow text-white text-base font-bold font-['Montserrat'] tracking-tight absolute top-6 left-6">
         Sale
       </div>
-      <img src={content.img} className="w-64" />
+      <div className="w-full  h-80 md:w-56 md:h-auto">
+        <img src={content.img} className="default-img" />
+      </div>
+
       <div className="w-96 p-7 flex-col justify-start items-start gap-5 flex">
         <div className="flex justify-between items-center self-stretch">
           <p className="text-sky-500 text-base font-bold font-['Montserrat'] leading-normal tracking-[0.2px]">
