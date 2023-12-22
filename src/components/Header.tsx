@@ -11,6 +11,7 @@ import like from "../assets/header/like.svg";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useRef, useState } from "react";
+import { useAppSelector } from "../store/store";
 
 const data = [
   { svg: phone, text: "(225) 555-0118" },
@@ -23,6 +24,11 @@ const data = [
 ];
 const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const userInfo = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    console.log("header user Info", userInfo);
+  }, [userInfo]);
 
   const menuRef = useRef(null);
   const iconRef = useRef(null);
@@ -120,7 +126,11 @@ const Header = () => {
             </ul>
           </nav>
           <div className="flex items-center text-center font-bold font-['Montserrat'] tracking-tight ">
-            <div className="flex gap-2 mr-10 md:mr-16 ">
+            <div
+              className={`flex gap-2 mr-10 md:mr-16 ${
+                userInfo.name ? "hidden" : ""
+              }`}
+            >
               <img className="w-5 h-5 mr-1" src={user} />
               <Link to="/login" className="hidden md:block">
                 Login
@@ -130,6 +140,13 @@ const Header = () => {
                 Register
               </Link>
             </div>
+            <p
+              className={`${
+                userInfo.name ? "block" : "hidden"
+              } mr-10 md:mr-16 `}
+            >
+              {userInfo.name}
+            </p>
             <div className="flex lg:gap-2">
               <img src={search} className="w-5 h-5 mr-10" />
               <img src={chart} className="w-5 h-5" />
