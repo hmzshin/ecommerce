@@ -17,7 +17,7 @@ const initialState: UserData = {
 };
 export const fetchGlobalData = createAsyncThunk("fetch/data", async () => {
   const response: AxiosResponse | undefined = await AxiosInstance.get("roles");
-  console.log("naber", response?.data);
+  console.log("global slice response data", response?.data);
   return response?.data;
 });
 

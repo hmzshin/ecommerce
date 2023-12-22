@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-
 import { AxiosInstance } from "../../api/axiosInstance";
 
 interface UserData {
