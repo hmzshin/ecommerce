@@ -12,9 +12,26 @@ import { useEffect } from "react";
 import { useAppDispatch } from "./store/store.ts";
 import { fetchGlobalData } from "./store/slices/globalSlice.ts";
 import SignInPage from "./pages/SignInPage.tsx";
+import { AxiosInstance } from "./api/axiosInstance.tsx";
+import { setUser } from "./store/slices/userSlice.ts";
 
 function App() {
   const dispatch = useAppDispatch();
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        const response: any = await AxiosInstance.get("veri fy");
+        console.log("app verify result", response.data);
+        dispatch(setUser(response.data));
+      } catch (error) {
+        localStorage.removeItem("token");
+        dispatch(setUser({ name: "", email: "", role_id: "" }));
+        throw error;
+      }
+    };
+
+    verifyUser();
+  }, []);
 
   useEffect(() => {
     dispatch(fetchGlobalData());
