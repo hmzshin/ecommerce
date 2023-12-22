@@ -3,14 +3,13 @@ import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import { useAxios } from "../hooks/useAxios";
 import { AxiosError } from "axios";
-import { useAppDispatch, useAppSelector } from "../store/store";
+import { useAppSelector } from "../store/store";
 import { useEffect, useState } from "react";
-import { setUser } from "../store/slices/userSlice";
 
 const SignUpForm = () => {
   const [role, setRole] = useState<string>("customer");
   const location = useLocation();
-  const dispatch = useAppDispatch();
+
   const [postRequest, postLoading]: [
     (payload?: any, toastify?: boolean) => Promise<void>,
     boolean,
@@ -80,7 +79,6 @@ const SignUpForm = () => {
     console.log(submitData);
     postRequest(submitData, true).then((response) => {
       console.log("signup response", response);
-      dispatch(setUser(submitData));
     });
   };
 
