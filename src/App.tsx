@@ -10,7 +10,10 @@ import ProtectedPage from "./pages/ProtectedPage.tsx";
 
 import { useEffect } from "react";
 import { useAppDispatch } from "./store/store.ts";
-import { fetchGlobalData } from "./store/slices/globalSlice.ts";
+import {
+  fetchCategories,
+  fetchGlobalData,
+} from "./store/slices/globalSlice.ts";
 import SignInPage from "./pages/SignInPage.tsx";
 import { setUser } from "./store/slices/userSlice.ts";
 import { AxiosResponse } from "axios";
@@ -35,6 +38,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchGlobalData());
+    dispatch(fetchCategories());
   }, []);
 
   return (

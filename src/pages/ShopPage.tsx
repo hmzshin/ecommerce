@@ -2,23 +2,26 @@ import Clients from "../components/Clients";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Products from "../components/Products";
-
-import shop1 from "../assets/shopCards/shop1.svg";
-import shop2 from "../assets/shopCards/shop2.svg";
-import shop3 from "../assets/shopCards/shop3.svg";
-import shop4 from "../assets/shopCards/shop4.svg";
-import shop5 from "../assets/shopCards/shop5.svg";
 import arrowRight from "../assets/shopCards/arrowRight.svg";
-
-const content = [
-  { img: shop1, title: "CLOTHS", item: "5 Items" },
-  { img: shop2, title: "CLOTHS", item: "5 Items" },
-  { img: shop3, title: "CLOTHS", item: "5 Items" },
-  { img: shop4, title: "CLOTHS", item: "5 Items" },
-  { img: shop5, title: "CLOTHS", item: "5 Items" },
-];
+import { useAppSelector } from "../store/store";
 
 const ShopPage = () => {
+  const categories: any = useAppSelector((state) => state.global.categories);
+  const categoriesCopy = [...categories];
+  const len = categoriesCopy.length;
+  for (let i: number = 0; i < len; i++) {
+    for (let j: number = i + 1; j < len; j++) {
+      let first = categoriesCopy[i];
+      let second = categoriesCopy[j];
+      if (second.rating > first.rating) {
+        categoriesCopy[i] = second;
+        categoriesCopy[j] = first;
+      }
+    }
+  }
+  const shoppingCategories = categoriesCopy.slice(0, 5);
+
+  console.log("shopping categories", shoppingCategories);
   return (
     <>
       <Header />
@@ -38,21 +41,22 @@ const ShopPage = () => {
           </div>
         </div>
         <div className="flex flex-wrap justify-center items-center gap-y-10  gap-x-5 xl:pb-20 bg-neutral-50 ">
-          {content.map((cardContent, i) => (
+          {shoppingCategories.map((cardContent: any, i: number) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center w-[350px] h-[382px] lg:w-56 lg:h-[243.3px] relative "
+              className="flex flex-col items-center justify-center w-80 h-96 lg:w-60 lg:h-72 relative "
             >
               <div className="w-full h-full absolute top-0 left-0 bg-neutral-800 bg-opacity-25 z-[1]"></div>
+
               <img
                 src={cardContent.img}
-                className="absolute top-0 left-0 z-[0] w-full"
+                className="absolute top-0 left-0 z-[0] w-full h-full object-cover object-center "
               />
-              <p className="text-center text-white text-lg font-bold font-['Montserrat'] tracking-[0.2px] z-[10]">
+              <p className="text-center text-white text-xl font-bold font-['Montserrat'] tracking-[0.2px] z-[10]">
                 {cardContent.title}
               </p>
-              <p className=" text-white font-bold font-['Montserrat'] tracking-[0.2px] z-[10]">
-                {cardContent.item}
+              <p className=" text-white font-bold text-sm font-['Montserrat'] tracking-[0.2px] z-[10]">
+                {cardContent.gender === "k" ? "Kadın" : "Erkek"}
               </p>
             </div>
           ))}

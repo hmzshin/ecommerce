@@ -17,9 +17,20 @@ const initialState: UserData = {
 };
 export const fetchGlobalData = createAsyncThunk("fetch/data", async () => {
   const response: AxiosResponse | undefined = await axiosInstance.get("roles");
-  console.log("global slice response data", response?.data);
+  console.log("global slice global data:", response?.data);
   return response?.data;
 });
+
+export const fetchCategories = createAsyncThunk(
+  "fetch/categories",
+  async () => {
+    const response: AxiosResponse | undefined = await axiosInstance.get(
+      "categories"
+    );
+    console.log("global slice categories:", response?.data);
+    return response?.data;
+  }
+);
 
 export const globalSlice = createSlice({
   name: "global",
@@ -42,7 +53,11 @@ export const globalSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(fetchGlobalData.fulfilled, (state, action: any) => {
       const roles = action.payload?.map((role: any) => [role.name, role.code]);
-      state.roles = roles;
+      return { ...state, roles: roles };
+    });
+
+    builder.addCase(fetchCategories.fulfilled, (state, action: any) => {
+      return { ...state, categories: action.payload };
     });
   },
 });
