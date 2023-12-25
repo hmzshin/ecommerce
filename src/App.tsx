@@ -46,6 +46,11 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
+        <Route
+          path="/shop/:category_id/:gender/:category"
+          element={<ShopPage />}
+        />
+        <Route path="/shop/:gender" element={<ShopPage />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route
