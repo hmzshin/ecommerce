@@ -32,7 +32,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state: UserData, action: PayloadAction<UserData>): UserData => {
-      console.log("action.payload:", action.payload);
       return {
         ...state,
         email: action.payload.email,

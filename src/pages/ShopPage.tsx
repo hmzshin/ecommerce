@@ -42,7 +42,28 @@ const ShopPage = () => {
   }
   const shoppingCategories = categoriesCopy.slice(0, 5);
 
-  console.log("shopping categories", shoppingCategories);
+  type FormData = {
+    filter: string;
+    sort: string;
+    category: string;
+  };
+  const { register, handleSubmit } = useForm<FormData>();
+
+  const onSubmit = (data: FormData) => {
+    setSpinner(true);
+    dispatch(
+      fetchProducts({
+        params: {
+          ...data,
+          category: routerParams.category_id,
+        },
+      })
+    ).finally(() => {
+      setTimeout(() => {
+        setSpinner(false);
+      }, 500);
+    });
+  };
   return (
     <>
       <Header />
@@ -102,7 +123,32 @@ const ShopPage = () => {
               <Icon icon="icon-park-outline:list" className="w-full h-full" />
             </div>
           </div>
-          ))}
+          <form
+            className="m-auto lg:m-0 flex justify-center gap-2"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <input
+              type="text"
+              {...register("filter")}
+              placeholder={`Search in the ${
+                routerParams.category_id ? "category" : "store"
+              }`}
+              className="w-52 h-14 pl-3 bg-stone-50 rounded-md border border-zinc-300 "
+            />
+            <select
+              {...register("sort")}
+              className="w-fit h-14 px-1 bg-stone-50 rounded-md border border-zinc-300 "
+            >
+              <option value="">Sort by: Featured</option>
+              <option value="price:asc">Price: Low to High</option>
+              <option value="price:desc">Price: High to Low</option>
+              <option value="rating:asc">Rating: Low to High</option>
+              <option value="rating:desc">Rating: High to Low</option>
+            </select>{" "}
+            <button className="text-center text-white text-base font-normal font-['Montserrat'] leading-7 tracking-[0.2px] w-28 h-14 bg-sky-500 rounded-lg  border border-neutral-200">
+              Filter
+            </button>
+          </form>
         </div>
         {spinner ? (
           <Icon icon="svg-spinners:180-ring" className="m-auto w-20 h-20" />
