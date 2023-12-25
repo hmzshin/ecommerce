@@ -4,29 +4,41 @@ import Header from "../components/Header";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchProducts } from "../store/slices/productSlice";
+import { fetchMoreProducts, fetchProducts } from "../store/slices/productSlice";
 import ProductCard from "../components/ProductCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const ShopPage = () => {
   const routerParams = useParams();
-  const [spinner, setSpinner] = useState(false);
+  const [spinner, setSpinner] = useState<boolean>(false);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [params, setParams] = useState<object>();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setParams({
+      category: routerParams.category_id,
+      filter: routerParams.category_id ? "" : routerParams.gender,
+    });
+  }, [routerParams]);
 
   useEffect(() => {
     setSpinner(true);
     dispatch(
-      fetchProducts({ params: { category: routerParams.category_id } })
+      fetchProducts({
+        params,
+      })
     ).finally(() => {
       setTimeout(() => {
         setSpinner(false);
       }, 500);
     });
-  }, [routerParams]);
+  }, [params]);
 
   const categories: any = useAppSelector((state) => state.global.categories);
-  const products: any = useAppSelector((state) => state.product.products);
+  const { products }: any = useAppSelector((state) => state.product);
 
   const categoriesCopy = [...categories];
   const len = categoriesCopy.length;
@@ -41,7 +53,6 @@ const ShopPage = () => {
     }
   }
   const shoppingCategories = categoriesCopy.slice(0, 5);
-
   type FormData = {
     filter: string;
     sort: string;
@@ -50,19 +61,7 @@ const ShopPage = () => {
   const { register, handleSubmit } = useForm<FormData>();
 
   const onSubmit = (data: FormData) => {
-    setSpinner(true);
-    dispatch(
-      fetchProducts({
-        params: {
-          ...data,
-          category: routerParams.category_id,
-        },
-      })
-    ).finally(() => {
-      setTimeout(() => {
-        setSpinner(false);
-      }, 500);
-    });
+    setParams({ ...params, filter: data.filter, sort: data.sort });
   };
   return (
     <>
@@ -157,11 +156,25 @@ const ShopPage = () => {
             Ürün bulunamadı
           </p>
         ) : (
-          <div className=" flex flex-wrap gap-20 justify-around px-[7%] lg:px-[12%]">
-            {products?.map((product: any, i: number) => (
+          <InfiniteScroll
+            dataLength={pageNumber * 25}
+            next={() =>
+              dispatch(
+                fetchMoreProducts({
+                  params: { ...params, offset: 25 },
+                })
+              ).then(() => {
+                setPageNumber(pageNumber + 1);
+              })
+            }
+            hasMore={true}
+            loader={<h4>Loading...</h4>}
+            className="flex flex-wrap gap-20 justify-around px-[7%] lg:px-[12%]"
+          >
+            {products.map((product: any, i: number) => (
               <ProductCard key={i} product={product} />
             ))}
-          </div>
+          </InfiniteScroll>
         )}
 
         <div className="w-80 h-20 bg-white rounded-md shadow border border-stone-300 flex m-auto mt-40">
