@@ -4,10 +4,13 @@ const ProductCard = ({ product }: any) => {
   return (
     <Link
       to={`/product`}
-      className="flex flex-col items-center border gap-7 w-[350px] lg:w-72  hover:shadow-2xl hover:scale-[1.01] transition-all pb-5"
+      className="flex flex-col items-center border gap-5 w-[350px]  lg:w-72  hover:shadow-2xl hover:scale-[1.01] transition-all "
     >
-      <img src={product.img} className="w-[350px] lg:w-72" />
-      <div className="flex flex-col items-center gap-4 pb-3">
+      <img
+        src={product.images[0]["url"]}
+        className="w-full h-full object-cover object-center"
+      />
+      <div className="flex flex-col items-center gap-4 pb-3 px-1">
         <p className="text-center text-slate-800 text-xl font-bold font-['Montserrat'] tracking-[.0.2px]">
           {product.name}
         </p>
@@ -15,11 +18,10 @@ const ProductCard = ({ product }: any) => {
           {product.description}
         </p>
         <p className="text-stone-300 text-xl font-bold font-['Montserrat'] tracking-[0.02px] flex justify-center gap-2">
-          <span>{product.price}</span>
-          <span className="text-teal-700">{product.priceDiscount}</span>
+          <span className="text-teal-700">{product.price}$</span>
         </p>
         <div className="flex justify-start items-center gap-2">
-          {product.colors.map((color: any, i: number) => (
+          {product.colors?.map((color: any, i: number) => (
             <div key={i} className={`w-4 h-4 ${color} rounded-full`} />
           ))}
         </div>
