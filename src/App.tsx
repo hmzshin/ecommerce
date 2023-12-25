@@ -47,6 +47,10 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route
+          path="/shop/:category_id/:gender/:category/:productId/:productName"
+          element={<ProductPage />}
+        />
+        <Route
           path="/shop/:category_id/:gender/:category"
           element={<ShopPage />}
         />

@@ -5,12 +5,21 @@ import ProductDetail from "../components/ProductDetail";
 
 import { productRelatedBestsellers } from "../data";
 import Clients from "../components/Clients";
+import { useAppSelector } from "../store/store";
+import { useParams } from "react-router-dom";
 
 const ProductPage = () => {
+  const routerParams = useParams();
+  const products = useAppSelector((state) => state.product.products);
+  const product = products.filter(
+    (product: any) => product.id == routerParams.productId
+  )[0];
+
+  console.log(product);
   return (
     <>
       <Header />
-      <ProductDetail />
+      <ProductDetail product={product} />
       <section id="bestsellers" className="px-[15%] py-20 bg-neutral-50 ">
         <p className=" text-slate-800 text-2xl font-bold font-['Montserrat'] tracking-tight">
           BESTSELLER PRODUCTS
