@@ -44,3 +44,11 @@
 .passive-menu {
   @apply -left-full;
 }
+
+.activeCategories {
+  @apply left-[calc(14%+125px)];
+}
+
+.passiveCategories {
+  @apply -left-full;
+}

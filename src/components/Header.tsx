@@ -24,36 +24,66 @@ const data = [
   },
 ];
 const Header = () => {
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
   const [showUserDetails, setShowUserDetails] = useState<boolean>(false);
+  const [showCategories, setShowCategories] = useState<boolean>(false);
   const userInfo = useAppSelector((state) => state.user);
+  const categories = useAppSelector((state) => state.global.categories);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const menuRef = useRef<HTMLDivElement>(null);
-  const iconRef = useRef(null);
-  const brandRef = useRef(null);
+  const shopListRef = useRef<HTMLDivElement>(null);
+  const iconRef = useRef<HTMLDivElement>(null);
+  const brandRef = useRef<HTMLDivElement>(null);
+  const arrowIconRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const userNameREf = useRef<HTMLDivElement>(null);
 
+  const women = categories.filter((category: any) => category.gender === "k");
+  const men = categories.filter((category: any) => category.gender === "e");
   const w: number = innerWidth;
   useEffect(() => {
-    window.addEventListener("click", (event: MouseEvent | TouchEvent) => {
+    window.addEventListener("click", (event: any) => {
+      event.stopPropagation();
       if (
-        isVisible &&
+        isMenuVisible &&
         menuRef.current &&
-        event.target !== menuRef.current &&
-        event.target !== iconRef.current &&
-        event.target !== brandRef.current
+        !menuRef.current?.contains(event.target) &&
+        !iconRef.current?.contains(event.target) &&
+        !brandRef.current?.contains(event.target) &&
+        !arrowIconRef.current?.contains(event.target)
       ) {
-        setIsVisible(false);
+        setIsMenuVisible(false);
+        setShowCategories(false);
+      }
+      if (
+        showCategories &&
+        shopListRef.current &&
+        !shopListRef.current?.contains(event.target) &&
+        !arrowIconRef.current?.contains(event.target)
+      ) {
+        setShowCategories(false);
+      }
+      if (
+        showUserDetails &&
+        userMenuRef.current &&
+        !userNameREf.current?.contains(event.target)
+      ) {
+        setShowUserDetails(false);
       }
     });
 
-    if (isVisible && w < 1024) {
+    window.addEventListener("scroll", () => {
+      setShowCategories(false);
+    });
+
+    if (isMenuVisible && w < 1024) {
       document.body.style.overflowY = "hidden";
     } else {
       document.body.style.overflowY = "auto";
     }
-  }, [isVisible]);
+  }, [isMenuVisible, showCategories, showUserDetails]);
 
   function deleteToken(): void {
     localStorage.removeItem("token");
@@ -87,13 +117,15 @@ const Header = () => {
       <div className="my-5 flex justify-between items-center   lg:h-14 pl-[5%] pr-[4%] lg:flex-nowrap xl:gap-20 2xl:gap-40 relative">
         <div
           className="flex items-center"
-          onClick={() => setIsVisible(!isVisible)}
+          onClick={() => setIsMenuVisible(!isMenuVisible)}
         >
-          <Icon
-            ref={iconRef}
-            icon="material-symbols:menu"
-            className="w-10 h-10 xl:hidden "
-          />
+          <div ref={iconRef}>
+            <Icon
+              icon="material-symbols:menu"
+              className="w-10 h-10 xl:hidden "
+            />
+          </div>
+
           <h1
             ref={brandRef}
             className="text-slate-800 text-2xl md:text-3xl font-bold font-['Montserrat'] tracking-tight "
@@ -106,11 +138,11 @@ const Header = () => {
         >
           <nav
             ref={menuRef}
-            className={`transition-all h-[100vh] w-1/2 sm:w-1/3 xl:w-auto xl:h-auto duration-700 absolute top-full bg-white xl:bg-none xl:shadow-none xl:static rounded-md shadow-md px-7 py-10 xl:p-4 overscroll-none ${
-              isVisible ? "active-menu" : "passive-menu"
+            className={`transition-all h-[100vh] px-[7%]  xl:w-auto xl:h-auto duration-500 absolute top-full bg-white xl:bg-none xl:shadow-none xl:static rounded-md shadow-md  py-10 xl:p-4 overscroll-none ${
+              isMenuVisible ? "active-menu" : "passive-menu"
             }  ${
-              isVisible ? "pointer-events-auto" : "pointer-events-none"
-            } lg:pointer-events-auto overflow-y-scroll lg:overflow-auto `}
+              isMenuVisible ? "pointer-events-auto" : "pointer-events-none"
+            } lg:pointer-events-auto overflow-y-auto lg:overflow-auto `}
           >
             <ul className="flex flex-col xl:flex-row gap-10 ">
               {[
@@ -118,19 +150,107 @@ const Header = () => {
                 { path: "/shop", text: "Shop" },
                 { path: "/about", text: "About" },
                 { path: "/contact", text: "Contact" },
-                { path: "/team", text: "Pages" },
-              ].map((link, i) => (
-                <Link
-                  key={i}
-                  to={link.path}
-                  className="text-neutral-500 text-3xl xl:text-base font-bold font-['Montserrat'] leading-normal tracking-tight   "
-                  onClick={() => setIsVisible(false)}
-                >
-                  {link.text}
-                </Link>
-              ))}
+                { path: "/team", text: "Team" },
+              ].map((link, i) =>
+                link.path !== "/shop" ? (
+                  <Link
+                    key={i}
+                    to={link.path}
+                    className={`text-neutral-500 text-3xl xl:text-base font-bold font-['Montserrat'] leading-normal tracking-tight `}
+                    onClick={() => setIsMenuVisible(false)}
+                  >
+                    {link.text}
+                  </Link>
+                ) : (
+                  <div key={i} className={`flex items-center gap-3`}>
+                    <Link
+                      to="/shop"
+                      className={`text-neutral-500 text-3xl xl:text-base font-bold font-['Montserrat'] leading-normal tracking-tight`}
+                      onClick={() => setIsMenuVisible(false)}
+                    >
+                      Shop
+                    </Link>{" "}
+                    <div ref={arrowIconRef}>
+                      {w < 1280 ? (
+                        <Icon
+                          icon={
+                            showCategories
+                              ? "ri:arrow-right-s-line"
+                              : "ri:arrow-left-s-line"
+                          }
+                          className="w-11 h-11 p-2 cursor-pointer self-stretch "
+                          onClick={(): void =>
+                            setShowCategories(!showCategories)
+                          }
+                        />
+                      ) : (
+                        <Icon
+                          icon={
+                            showCategories
+                              ? "ri:arrow-up-s-line"
+                              : "ri:arrow-down-s-line"
+                          }
+                          className="w-6 h-6 cursor-pointer arrowIcon"
+                          onClick={(): void =>
+                            setShowCategories(!showCategories)
+                          }
+                        />
+                      )}
+                    </div>
+                    <div
+                      className={`fixed top-16 w-full h-full overflow-auto  items-center  bg-neutral-800 bg-opacity-25 transition-all duration-500 z-50 xl:top-40 xl:w-full xl:px-20 xl:left-0 ${
+                        showCategories
+                          ? "flex activeCategories"
+                          : "flex xl:hidden passiveCategories"
+                      }`}
+                    >
+                      <div
+                        ref={shopListRef}
+                        className="flex flex-col gap-5 items-start p-10 top-0 bg-white h-full absolute  xl:px-28  xl:top-0 xl:h-auto xl:w-[500px] xl:left-[calc(5%+223px)] 2xl:left-[calc(5%+303px)]"
+                      >
+                        <div className="flex flex-col items-start gap-3">
+                          <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
+                            <Link to="shop/kadın">Kadın</Link>
+                          </h6>
+                          {women.map((category: any, i) => (
+                            <Link
+                              key={i}
+                              to={`/shop/${
+                                category.id
+                              }/kadın/${category.title.toLowerCase()}`}
+                              onClick={() => setShowCategories(false)}
+                            >
+                              <p className="text-neutral-500  text-base font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer hover:text-slate-800">
+                                {category.title}
+                              </p>
+                            </Link>
+                          ))}
+                        </div>
+                        <div className="flex flex-col items-start gap-3">
+                          <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
+                            <Link to="shop/erkek">Erkek</Link>
+                          </h6>
+                          {men.map((category: any, i) => (
+                            <Link
+                              to={`/shop/${
+                                category.id
+                              }/erkek/${category.title.toLowerCase()}`}
+                              key={i}
+                              className="text-neutral-500  text-base font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer hover:text-slate-800"
+                              onClick={() => setShowCategories(false)}
+                            >
+                              {category.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              )}
             </ul>
           </nav>
+
           <div className="flex items-center text-center font-bold font-['Montserrat'] tracking-tight ">
             <div
               className={`flex gap-2 mr-10 md:mr-16 ${
@@ -151,6 +271,7 @@ const Header = () => {
               </Link>
             </div>
             <div
+              ref={userNameREf}
               className={`${
                 userInfo.name ? "block" : "hidden"
               } mr-10 md:mr-16 relative cursor-pointer`}
@@ -159,6 +280,7 @@ const Header = () => {
               <span>{userInfo.name}</span>
 
               <div
+                ref={userMenuRef}
                 className={`absolute top-full pt-2 bg-slate-100 px-10 ${
                   showUserDetails ? "block" : "hidden"
                 }`}
