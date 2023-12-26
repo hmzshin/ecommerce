@@ -13,6 +13,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setUser } from "../store/slices/userSlice";
+import { fetchProducts } from "../store/slices/productSlice";
 
 const data = [
   { svg: phone, text: "(225) 555-0118" },
@@ -27,6 +28,7 @@ const Header = () => {
   const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
   const [showUserDetails, setShowUserDetails] = useState<boolean>(false);
   const [showCategories, setShowCategories] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>();
   const userInfo = useAppSelector((state) => state.user);
   const categories = useAppSelector((state) => state.global.categories);
   const dispatch = useAppDispatch();
@@ -42,6 +44,41 @@ const Header = () => {
 
   const women = categories.filter((category: any) => category.gender === "k");
   const men = categories.filter((category: any) => category.gender === "e");
+
+  function deleteToken(): void {
+    localStorage.removeItem("token");
+    navigate("/");
+    dispatch(setUser({ name: "", email: "", role_id: "" }));
+  }
+  function seachHandler() {
+    if (searchInput) {
+      if (searchInput.split(" ").length > 1) {
+        const gender = searchInput.toLowerCase().includes("kadın")
+          ? "k:"
+          : searchInput.toLowerCase().includes("erkek")
+          ? "e:"
+          : null;
+
+        const title = categories
+          .map((category: any) => category.title.toLowerCase())
+          .find((title) => searchInput.toLowerCase().includes(title));
+
+        const id: any = categories.find(
+          (category: any) => category.code == gender + title
+        );
+        if (id) {
+          navigate(
+            `/shop/${id.id}/${gender == "k:" ? "kadın" : "erkek"}/${title}`
+          );
+        } else {
+          navigate(`/shop/${searchInput}`);
+        }
+      } else {
+        dispatch(fetchProducts({ params: { filter: searchInput } }));
+        navigate(`/shop/${searchInput}`);
+      }
+    }
+  }
   const w: number = innerWidth;
   useEffect(() => {
     window.addEventListener("click", (event: any) => {
@@ -85,12 +122,6 @@ const Header = () => {
     }
   }, [isMenuVisible, showCategories, showUserDetails]);
 
-  function deleteToken(): void {
-    localStorage.removeItem("token");
-    navigate("/");
-    dispatch(setUser({ name: "", email: "", role_id: "" }));
-  }
-
   return (
     <section id="header" className="">
       <div className="h-16 py-3 px-[4%] bg-slate-800 hidden xl:block">
@@ -114,7 +145,7 @@ const Header = () => {
           ))}
         </ul>
       </div>
-      <div className="my-5 flex justify-between items-center   lg:h-14 pl-[5%] pr-[4%] lg:flex-nowrap xl:gap-20 2xl:gap-40 relative">
+      <div className="my-5 flex justify-between items-center   lg:h-14 pl-[5%] pr-[4%] lg:flex-nowrap xl:gap-20  relative">
         <div
           className="flex items-center"
           onClick={() => setIsMenuVisible(!isMenuVisible)}
@@ -134,7 +165,7 @@ const Header = () => {
           </h1>
         </div>
         <div
-          className={`flex flex-wrap xl:w-full justify-between items-center z-10 `}
+          className={`flex flex-wrap sm:w-full justify-between sm:justify-around xl:justify-between xl:flex-nowrap items-center z-10 `}
         >
           <nav
             ref={menuRef}
@@ -250,12 +281,22 @@ const Header = () => {
               )}
             </ul>
           </nav>
-
+          <div className="hidden sm:flex  xl:max-2xl:hidden items-center self-stretch relative ">
+            <input
+              type="text"
+              className="w-52 md:w-full  rounded-md border bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none"
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search in Store"
+            />
+            <img
+              src={search}
+              className="absolute  right-2 w-5 h-5 "
+              onClick={seachHandler}
+            />
+          </div>
           <div className="flex items-center text-center font-bold font-['Montserrat'] tracking-tight ">
             <div
-              className={`flex gap-2 mr-10 md:mr-16 ${
-                userInfo.name ? "hidden" : ""
-              }`}
+              className={`flex gap-2 mr-10  ${userInfo.name ? "hidden" : ""}`}
             >
               <Link to="/login">
                 {" "}
@@ -293,8 +334,8 @@ const Header = () => {
                 </ul>
               </div>
             </div>
-            <div className="flex lg:gap-2">
-              <img src={search} className="w-5 h-5 mr-10" />
+
+            <div className="flex lg:gap-2 relative ">
               <img src={chart} className="w-5 h-5" />
               <span className="hidden lg:inline">1</span>
               <img src={like} className="w-5 h-5 ml-10 hidden lg:block" />{" "}

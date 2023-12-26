@@ -167,7 +167,7 @@ const ProductDetail = ({ product }: any) => {
               the quick fox jumps over{" "}
             </p>
             <div className="flex flex-col gap-3">
-              {[1, 2, 3].map((p, i) => (
+              {[1, 2, 3].map((i) => (
                 <div key={i} className="flex gap-5 items-center">
                   <Icon icon="iconamoon:arrow-right-2-thin" />
                   <p className="text-neutral-500 text-sm font-normal font-['Montserrat']  tracking-tight">

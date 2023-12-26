@@ -1,12 +1,15 @@
-import { Link, useParams } from "react-router-dom";
-
-const ProductCard = ({ product }: any) => {
-  const params = useParams();
+import { Link } from "react-router-dom";
+const ProductCard = ({ product, categories }: any) => {
+  const category: any = categories.filter(
+    (category: any) => category.id === product.category_id
+  )[0];
   return (
     <Link
       to={`/shop/${product.category_id}/${
-        product.gender === "k" ? "kadın" : "erkek"
-      }/${params.category}/${product.id}/${product.name.replaceAll(" ", "+")}`}
+        category.gender === "k" ? "kadın" : "erkek"
+      }/${category.title?.toLowerCase()}/${
+        product.id
+      }/${product.name.replaceAll(" ", "+")}`}
       className="flex flex-col items-center border gap-5 w-[350px]  lg:w-72  hover:shadow-2xl hover:scale-[1.01] transition-all "
     >
       <img

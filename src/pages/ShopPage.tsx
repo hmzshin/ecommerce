@@ -12,31 +12,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const ShopPage = () => {
   const routerParams = useParams();
-  const [spinner, setSpinner] = useState<boolean>(false);
+  const [productsLoading, setProductsLoading] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [params, setParams] = useState<object>();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    setParams({
-      category: routerParams.category_id,
-      filter: routerParams.category_id ? "" : routerParams.gender,
-    });
-  }, [routerParams]);
-
-  useEffect(() => {
-    setSpinner(true);
-    dispatch(
-      fetchProducts({
-        params,
-      })
-    ).finally(() => {
-      setTimeout(() => {
-        setSpinner(false);
-      }, 500);
-    });
-  }, [params]);
-
   const categories: any = useAppSelector((state) => state.global.categories);
   const { products }: any = useAppSelector((state) => state.product);
 
@@ -53,16 +32,45 @@ const ShopPage = () => {
     }
   }
   const shoppingCategories = categoriesCopy.slice(0, 5);
+
   type FormData = {
     filter: string;
     sort: string;
     category: string;
   };
-  const { register, handleSubmit } = useForm<FormData>();
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: { filter: routerParams.gender },
+  });
 
   const onSubmit = (data: FormData) => {
     setParams({ ...params, filter: data.filter, sort: data.sort });
+    fetchProductsHandler({ ...params, filter: data.filter, sort: data.sort });
   };
+
+  const fetchProductsHandler = (params = {}) => {
+    setProductsLoading(true);
+    dispatch(
+      fetchProducts({
+        params,
+      })
+    ).finally(() => {
+      setTimeout(() => {
+        setProductsLoading(false);
+      }, 500);
+    });
+  };
+
+  useEffect(() => {
+    setParams({
+      category: routerParams.category_id,
+      filter: routerParams.category_id ? "" : routerParams.gender,
+    });
+    fetchProductsHandler({
+      category: routerParams.category_id,
+      filter: routerParams.category_id ? "" : routerParams.gender,
+    });
+  }, [routerParams]);
+
   return (
     <>
       <Header />
@@ -129,8 +137,12 @@ const ShopPage = () => {
             <input
               type="text"
               {...register("filter")}
-              placeholder={`Search in the ${
-                routerParams.category_id ? "category" : "store"
+              placeholder={`Search in ${
+                routerParams.category
+                  ? routerParams.gender + " " + routerParams.category
+                  : routerParams.gender
+                  ? routerParams.gender
+                  : "store"
               }`}
               className="w-52 h-14 pl-3 bg-stone-50 rounded-md border border-zinc-300 "
             />
@@ -149,7 +161,7 @@ const ShopPage = () => {
             </button>
           </form>
         </div>
-        {spinner ? (
+        {productsLoading ? (
           <Icon icon="svg-spinners:180-ring" className="m-auto w-20 h-20" />
         ) : products.length === 0 ? (
           <p className="text-center text-rose-500 text-base font-bold font-['Montserrat']  tracking-[0.2px]">
@@ -172,7 +184,7 @@ const ShopPage = () => {
             className="flex flex-wrap gap-20 justify-around px-[7%] lg:px-[12%]"
           >
             {products.map((product: any, i: number) => (
-              <ProductCard key={i} product={product} />
+              <ProductCard key={i} product={product} categories={categories} />
             ))}
           </InfiniteScroll>
         )}
