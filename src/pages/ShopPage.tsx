@@ -43,8 +43,13 @@ const ShopPage = () => {
   });
 
   const onSubmit = (data: FormData) => {
-    setParams({ ...params, filter: data.filter, sort: data.sort });
-    fetchProductsHandler({ ...params, filter: data.filter, sort: data.sort });
+    if (data.filter) {
+      setParams({ ...params, filter: data.filter, sort: data.sort });
+      fetchProductsHandler({ ...params, filter: data.filter, sort: data.sort });
+    } else {
+      setParams({ ...params, sort: data.sort });
+      fetchProductsHandler({ ...params, sort: data.sort });
+    }
   };
 
   const fetchProductsHandler = (params = {}) => {
@@ -180,7 +185,9 @@ const ShopPage = () => {
               })
             }
             hasMore={true}
-            loader={<h4>Loading...</h4>}
+            loader={
+              <Icon icon="svg-spinners:180-ring" className="m-auto w-20 h-20" />
+            }
             className="flex flex-wrap gap-20 justify-around px-[7%] lg:px-[12%]"
           >
             {products.map((product: any, i: number) => (
