@@ -241,7 +241,7 @@ const Header = () => {
                       >
                         <div className="flex flex-col items-start gap-3">
                           <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
-                            <Link to="shop/kadın">Kadın</Link>
+                            <Link to="/shop/kadın">Kadın</Link>
                           </h6>
                           {women.map((category: any, i) => (
                             <Link
@@ -259,7 +259,7 @@ const Header = () => {
                         </div>
                         <div className="flex flex-col items-start gap-3">
                           <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
-                            <Link to="shop/erkek">Erkek</Link>
+                            <Link to="/shop/erkek">Erkek</Link>
                           </h6>
                           {men.map((category: any, i) => (
                             <Link
