@@ -1,15 +1,24 @@
 import { Link } from "react-router-dom";
+import slugify from "slugify";
 const ProductCard = ({ product, categories }: any) => {
   const category: any = categories.filter(
     (category: any) => category.id === product.category_id
   )[0];
+
+  const slug = slugify(product.name, {
+    replacement: "-", // replace spaces with replacement character, defaults to `-`
+    remove: undefined, // remove characters that match regex, defaults to `undefined`
+    lower: true, // convert to lower case, defaults to `false`
+    strict: false, // strip special characters except replacement, defaults to `false`
+    locale: "tr", // language code of the locale to use
+    trim: true, // trim leading and trailing replacement chars, defaults to `true`
+  });
+
   return (
     <Link
       to={`/shop/${product.category_id}/${
         category.gender === "k" ? "kadın" : "erkek"
-      }/${category.title?.toLowerCase()}/${
-        product.id
-      }/${product.name.replaceAll(" ", "+")}`}
+      }/${category.title?.toLowerCase()}/${product.id}/${slug}`}
       className="flex flex-col items-center border gap-5 w-[350px]  lg:w-72  hover:shadow-2xl hover:scale-[1.01] transition-all "
     >
       <img
