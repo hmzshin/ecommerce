@@ -52,3 +52,11 @@
 .passiveCategories {
   @apply -left-full;
 }
+
+.activeChart {
+  @apply opacity-100 max-h-screen;
+}
+
+.passiveChart {
+  @apply opacity-0 max-h-0 overflow-hidden;
+}

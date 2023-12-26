@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setUser } from "../store/slices/userSlice";
 import { fetchProducts } from "../store/slices/productSlice";
+import ChartCard from "./ChartCard";
 
 const data = [
   { svg: phone, text: "(225) 555-0118" },
@@ -29,6 +30,7 @@ const Header = () => {
   const [showUserDetails, setShowUserDetails] = useState<boolean>(false);
   const [showCategories, setShowCategories] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>();
+  const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
   const userInfo = useAppSelector((state) => state.user);
   const categories = useAppSelector((state) => state.global.categories);
   const dispatch = useAppDispatch();
@@ -336,10 +338,17 @@ const Header = () => {
             </div>
 
             <div className="flex lg:gap-2 relative ">
-              <img src={chart} className="w-5 h-5" />
+              <img
+                src={chart}
+                className="w-5 h-5"
+                onClick={() => {
+                  setIsChartVisible(!isChartVisible);
+                }}
+              />
               <span className="hidden lg:inline">1</span>
               <img src={like} className="w-5 h-5 ml-10 hidden lg:block" />{" "}
               <span className="hidden lg:inline">1</span>
+              <ChartCard isChartVisible={isChartVisible} />
             </div>
           </div>
         </div>
