@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import slugify from "slugify";
 import { useAppDispatch } from "../store/store";
-import { addProduct } from "../store/slices/shoppingCardSlice";
+import { addProduct, deleteProduct } from "../store/slices/shoppingCardSlice";
 import { Icon } from "@iconify/react/dist/iconify.js";
 const ProductCard = ({ product, categories, shoppingCart }: any) => {
   const category: any = categories.filter(
@@ -26,7 +26,11 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
   return (
     <div className="border hover:shadow-2xl hover:scale-[1.01]  transition-all flex flex-col items-center justify-between pb-3 relative">
       {productInCart && (
-        <>
+        <div
+          onClick={() => {
+            dispatch(deleteProduct(productInCart));
+          }}
+        >
           <Icon
             icon="material-symbols-light:shopping-cart-outline"
             className="w-12 h-12 absolute top-2 left-0 text-black"
@@ -34,7 +38,7 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
           <span className="absolute top-2 left-[14px] w-5 h-5 text-xs rounded-full bg-rose-400 flex items-center justify-center">
             {productInCart?.numberOfItem}
           </span>
-        </>
+        </div>
       )}
       <Link
         to={`/shop/${product.category_id}/${
