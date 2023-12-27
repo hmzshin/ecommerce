@@ -35,9 +35,9 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
           <div className="relative">
             <Icon
               icon="material-symbols-light:shopping-cart-outline"
-              className="w-12 h-12 text-black absolute"
+              className="w-12 h-12 text-black absolute z-10"
             />
-            <span className="absolute w-5 h-5 left-[14px] -top-1 text-xs rounded-full bg-rose-400 flex items-center justify-center">
+            <span className="absolute w-5 h-5 left-[14px] -top-[6px] text-xs rounded-full bg-rose-200 flex items-center justify-center">
               {productInCart?.numberOfItem}
             </span>
           </div>

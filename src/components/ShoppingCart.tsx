@@ -59,7 +59,7 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
               <img
                 src={item.product.images[0]["url"]}
                 alt="product-image"
-                className="w-[90px] rounded-lg sm:w-32 h-full"
+                className="w-[90px] rounded-lg sm:w-32 h-28 object-center object-cover "
               />
               <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between sm:gap-2">
                 <div className="mt-1 sm:mt-0">
