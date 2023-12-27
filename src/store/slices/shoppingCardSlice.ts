@@ -9,6 +9,9 @@ interface UserData {
   payment: number;
   address: string;
 }
+interface Images {
+  url: string;
+}
 interface PayloadData {
   id: number;
   name: string;
@@ -19,7 +22,7 @@ interface PayloadData {
   category_id: number;
   rating: number;
   sell_count: number;
-  images: string;
+  images: Images[];
 }
 
 const initialState: UserData = {

@@ -55,7 +55,6 @@ function App() {
           element={<ShopPage />}
         />
         <Route path="/shop/:gender" element={<ShopPage />} />
-        <Route path="/product" element={<ProductPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route
           path="/team"

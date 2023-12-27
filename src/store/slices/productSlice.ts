@@ -2,8 +2,20 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import { axiosInstance } from "../../api/axiosInstance";
 
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  store_id: number;
+  category_id: number;
+  rating: number;
+  sell_count: number;
+  images: string;
+}
 interface UserData {
-  products: string[];
+  products: Product[];
   total: number;
   pageCount: number;
   activePage: number;

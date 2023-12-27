@@ -54,8 +54,11 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
       <h1 className="py-3 sm:py-5 text-center text-xl font-bold">Cart Items</h1>
       <div className="justify-center gap-3  items-start flex flex-wrap md:flex-nowrap">
         <div className="rounded-lg md:w-2/3 flex flex-col  gap-2 max-h-72 md:max-h-96  items-center overflow-auto self-stretch">
-          {shoppingCart.map((item: CardData) => (
-            <div className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-between items-center gap-3">
+          {shoppingCart.map((item: CardData, i: number) => (
+            <div
+              key={i}
+              className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-between items-center gap-3"
+            >
               <img
                 src={item.product.images[0]["url"]}
                 alt="product-image"
@@ -95,14 +98,14 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
-                      stroke-width="1.5"
+                      strokeWidth="1.5"
                       stroke="currentColor"
                       className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
                       onClick={() => dispatch(deleteProduct(item))}
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         d="M6 18L18 6M6 6l12 12"
                       />
                     </svg>

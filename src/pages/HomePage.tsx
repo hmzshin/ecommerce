@@ -5,11 +5,9 @@ import Featured from "../components/Featured.tsx";
 import Footer from "../components/Footer.tsx";
 import Header from "../components/Header.tsx";
 import Hero from "../components/Hero.tsx";
-import BestSellerProductCard from "../components/BestsellerProductCard.tsx";
 import Swiper from "../components/Swiper.tsx";
 import contentImg1 from "../assets/content/contentImg1.svg";
 import contentImg2 from "../assets/content/contentImg2.svg";
-import { homeBestsellers } from "../data.js";
 
 import {
   Navigation,
@@ -18,8 +16,25 @@ import {
   A11y,
   Mousewheel,
 } from "swiper/modules";
+import { useAppDispatch, useAppSelector } from "../store/store.ts";
+import ProductCard from "../components/ProductCard.tsx";
+import { useEffect } from "react";
+import { fetchBestseller } from "../store/slices/bestsellerSlice.ts";
 
 const HomePage = () => {
+  const shoppingCart = useAppSelector((store) => store.shoppingCard.card);
+  const categories = useAppSelector((store) => store.global.categories);
+  const productBestsellers = useAppSelector(
+    (state) => state.bestseller.products
+  );
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(
+      fetchBestseller({
+        params: { sort: "rating:desc", limit: 24 },
+      })
+    );
+  }, []);
   return (
     <>
       <Header />
@@ -49,11 +64,12 @@ const HomePage = () => {
           </div>
 
           <div className=" flex flex-wrap gap-10 justify-around">
-            {homeBestsellers.map((product, i) => (
-              <BestSellerProductCard
+            {productBestsellers.map((product, i) => (
+              <ProductCard
                 key={i}
-                bsProduct={product}
-                style={"w-80 sm:w-56"}
+                product={product}
+                categories={categories}
+                shoppingCart={shoppingCart}
               />
             ))}
           </div>

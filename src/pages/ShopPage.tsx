@@ -35,7 +35,7 @@ const ShopPage = () => {
   const dispatch = useAppDispatch();
   const categories: any = useAppSelector((state) => state.global.categories);
   const shoppingCart = useAppSelector((state) => state.shoppingCard.card);
-  const { products, total }: any = useAppSelector((state) => state.product);
+  const { products, total } = useAppSelector((state) => state.product);
 
   const categoriesCopy = [...categories];
   const len = categoriesCopy.length;

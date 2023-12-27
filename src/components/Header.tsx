@@ -350,7 +350,9 @@ const Header = () => {
                   setIsChartVisible(!isChartVisible);
                 }}
               />
-              <span className="hidden lg:inline">{numberOfItemsInCart}</span>
+              <span className="hidden lg:inline w-3">
+                {numberOfItemsInCart}
+              </span>
               <img src={like} className="w-5 h-5 ml-10 hidden lg:block" />{" "}
               <span className="hidden lg:inline">1</span>
               <ShoppingCart isChartVisible={isChartVisible} />
