@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setUser } from "../store/slices/userSlice";
 import { fetchProducts } from "../store/slices/productSlice";
-import ChartCard from "./ChartCard";
+import ShoppingCart from "./ShoppingCart";
 
 const data = [
   { svg: phone, text: "(225) 555-0118" },
@@ -25,6 +25,7 @@ const data = [
     socialMedia: [instagram, youtube, facebook, twitter],
   },
 ];
+
 const Header = () => {
   const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
   const [showUserDetails, setShowUserDetails] = useState<boolean>(false);
@@ -33,6 +34,7 @@ const Header = () => {
   const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
   const userInfo = useAppSelector((state) => state.user);
   const categories = useAppSelector((state) => state.global.categories);
+  const shoppingCart = useAppSelector((state) => state.shoppingCard.card);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -46,6 +48,10 @@ const Header = () => {
 
   const women = categories.filter((category: any) => category.gender === "k");
   const men = categories.filter((category: any) => category.gender === "e");
+  const numberOfItemsInCart = shoppingCart.reduce(
+    (sum: number, item) => sum + item.numberOfItem,
+    0
+  );
 
   function deleteToken(): void {
     localStorage.removeItem("token");
@@ -345,10 +351,10 @@ const Header = () => {
                   setIsChartVisible(!isChartVisible);
                 }}
               />
-              <span className="hidden lg:inline">1</span>
+              <span className="hidden lg:inline">{numberOfItemsInCart}</span>
               <img src={like} className="w-5 h-5 ml-10 hidden lg:block" />{" "}
               <span className="hidden lg:inline">1</span>
-              <ChartCard isChartVisible={isChartVisible} />
+              <ShoppingCart isChartVisible={isChartVisible} />
             </div>
           </div>
         </div>

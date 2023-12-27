@@ -17,6 +17,7 @@ const ShopPage = () => {
   const [params, setParams] = useState<object>();
   const dispatch = useAppDispatch();
   const categories: any = useAppSelector((state) => state.global.categories);
+  const shoppingCart = useAppSelector((state) => state.shoppingCard.card);
   const { products }: any = useAppSelector((state) => state.product);
 
   const categoriesCopy = [...categories];
@@ -191,7 +192,12 @@ const ShopPage = () => {
             className="flex flex-wrap gap-20 justify-around px-[7%] lg:px-[12%]"
           >
             {products.map((product: any, i: number) => (
-              <ProductCard key={i} product={product} categories={categories} />
+              <ProductCard
+                key={i}
+                product={product}
+                categories={categories}
+                shoppingCart={shoppingCart}
+              />
             ))}
           </InfiniteScroll>
         )}
