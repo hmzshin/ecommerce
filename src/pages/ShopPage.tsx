@@ -9,12 +9,23 @@ import ProductCard from "../components/ProductCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
 import InfiniteScroll from "react-infinite-scroll-component";
-
+interface Params {
+  category?: string;
+  filter?: string;
+  sort?: string;
+}
+type RouterParams = {
+  category_id?: string | undefined;
+  gender?: string | undefined;
+  category?: string | undefined;
+  productId?: string | undefined;
+  productName?: string | undefined;
+};
 const ShopPage = () => {
-  const routerParams = useParams();
+  const routerParams = useParams<RouterParams>();
   const [productsLoading, setProductsLoading] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [params, setParams] = useState<object>();
+  const [params, setParams] = useState<Params>();
   const dispatch = useAppDispatch();
   const categories: any = useAppSelector((state) => state.global.categories);
   const shoppingCart = useAppSelector((state) => state.shoppingCard.card);
@@ -35,9 +46,8 @@ const ShopPage = () => {
   const shoppingCategories = categoriesCopy.slice(0, 5);
 
   type FormData = {
-    filter: string;
-    sort: string;
-    category: string;
+    filter?: string;
+    sort?: string;
   };
   const { register, handleSubmit } = useForm<FormData>({
     defaultValues: { filter: routerParams.gender },
@@ -45,7 +55,11 @@ const ShopPage = () => {
 
   const onSubmit = (data: FormData) => {
     if (data.filter) {
-      setParams({ ...params, filter: data.filter, sort: data.sort });
+      setParams({
+        ...params,
+        filter: data.filter,
+        sort: data.sort,
+      });
       fetchProductsHandler({ ...params, filter: data.filter, sort: data.sort });
     } else {
       setParams({ ...params, sort: data.sort });
