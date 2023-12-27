@@ -62,29 +62,25 @@ const Header = () => {
     if (searchInput) {
       if (searchInput.split(" ").length > 1) {
         const gender = searchInput.toLowerCase().includes("kadın")
-          ? "k:"
+          ? "k"
           : searchInput.toLowerCase().includes("erkek")
-          ? "e:"
+          ? "e"
           : null;
 
-        const title = categories.find((category: any) =>
+        const title = categories.filter((category) =>
           searchInput.toLowerCase().includes(category.title.toLowerCase())
         );
-
         console.log(title);
 
-        const id: any = categories.find(
-          (category: any) => category.code == gender + title
-        );
+        const id = title.find((category) => category.gender === gender);
         if (id) {
           navigate(
-            `/shop/${id.id}/${gender == "k:" ? "kadın" : "erkek"}/${title}`
+            `/shop/${id.id}/${gender == "k" ? "kadın" : "erkek"}/${id.title}`
           );
         } else {
           navigate(`/shop/${searchInput}`);
         }
       } else {
-        dispatch(fetchProducts({ params: { filter: searchInput } }));
         navigate(`/shop/${searchInput}`);
       }
     }
@@ -296,6 +292,7 @@ const Header = () => {
               type="text"
               className="w-52 lg:w-full  rounded-md border bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none"
               onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => (e.key === "Enter" ? seachHandler() : () => {})}
               placeholder="Search in Store"
             />
             <img
