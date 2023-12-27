@@ -46,11 +46,11 @@
 }
 
 .activeCategories {
-  @apply left-[calc(14%+125px)];
+  @apply left-[calc(14%+125px)] xl:opacity-100 xl:max-h-screen;
 }
 
 .passiveCategories {
-  @apply -left-full;
+  @apply -left-full xl:opacity-0 xl:max-h-0 xl:overflow-hidden;
 }
 
 .activeChart {

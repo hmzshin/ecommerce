@@ -67,9 +67,11 @@ const Header = () => {
           ? "e:"
           : null;
 
-        const title = categories
-          .map((category: any) => category.title.toLowerCase())
-          .find((title) => searchInput.toLowerCase().includes(title));
+        const title = categories.find((category: any) =>
+          searchInput.toLowerCase().includes(category.title.toLowerCase())
+        );
+
+        console.log(title);
 
         const id: any = categories.find(
           (category: any) => category.code == gender + title
@@ -240,7 +242,7 @@ const Header = () => {
                       className={`fixed top-16 w-full h-full overflow-auto  items-center  bg-neutral-800 bg-opacity-25 transition-all duration-500 z-50 xl:top-40 xl:w-full xl:px-20 xl:left-0 ${
                         showCategories
                           ? "flex activeCategories"
-                          : "flex xl:hidden passiveCategories"
+                          : "flex  passiveCategories"
                       }`}
                     >
                       <div
@@ -292,7 +294,7 @@ const Header = () => {
           <div className="hidden sm:flex  xl:max-2xl:hidden items-center self-stretch relative ">
             <input
               type="text"
-              className="w-52 md:w-full  rounded-md border bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none"
+              className="w-52 lg:w-full  rounded-md border bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none"
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search in Store"
             />
