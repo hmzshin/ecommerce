@@ -137,7 +137,7 @@ const ShopPage = () => {
         </div>
       </section>
       <section id="products">
-        <div className="flex flex-wrap justify-center gap-5 md:justify-between items-center px-[12%] py-20">
+        <div className="flex flex-wrap justify-center gap-5 xl:justify-between items-center px-[12%] py-20">
           <p className="text-neutral-500 text-base font-bold font-['Montserrat']  tracking-[0.2px]">
             {`Showing all ${products.length} results`}
           </p>
@@ -153,7 +153,7 @@ const ShopPage = () => {
             </div>
           </div>
           <form
-            className="m-auto lg:m-0 flex justify-center gap-2"
+            className="m-auto lg:m-0 flex justify-center flex-wrap gap-2"
             onSubmit={handleSubmit(onSubmit)}
           >
             <input
@@ -166,11 +166,11 @@ const ShopPage = () => {
                   ? routerParams.gender
                   : "store"
               }`}
-              className="w-52 h-14 pl-3 bg-stone-50 rounded-md border border-zinc-300 "
+              className="w-full sm:w-44 h-14 pl-3 bg-stone-50 rounded-md border border-zinc-300 "
             />
             <select
               {...register("sort")}
-              className="w-fit h-14 px-1 bg-stone-50 rounded-md border border-zinc-300 "
+              className="w-full sm:w-fit h-14 px-1 bg-stone-50 rounded-md border border-zinc-300 "
             >
               <option value="">Sort by: Featured</option>
               <option value="price:asc">Price: Low to High</option>
