@@ -27,17 +27,20 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
     <div className="border hover:shadow-2xl hover:scale-[1.01]  transition-all flex flex-col items-center justify-between pb-3 relative">
       {productInCart && (
         <div
+          className="absolute top-3 left-0 cursor-pointer"
           onClick={() => {
             dispatch(deleteProduct(productInCart));
           }}
         >
-          <Icon
-            icon="material-symbols-light:shopping-cart-outline"
-            className="w-12 h-12 absolute top-2 left-0 text-black"
-          />
-          <span className="absolute top-2 left-[14px] w-5 h-5 text-xs rounded-full bg-rose-400 flex items-center justify-center">
-            {productInCart?.numberOfItem}
-          </span>
+          <div className="relative">
+            <Icon
+              icon="material-symbols-light:shopping-cart-outline"
+              className="w-12 h-12 text-black absolute"
+            />
+            <span className="absolute w-5 h-5 left-[14px] -top-1 text-xs rounded-full bg-rose-400 flex items-center justify-center">
+              {productInCart?.numberOfItem}
+            </span>
+          </div>
         </div>
       )}
       <Link
@@ -48,7 +51,7 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
       >
         <img
           src={product.images[0]["url"]}
-          className="w-full h-full object-cover object-center"
+          className="w-full h-80 object-cover object-center"
         />
         <div className="flex flex-col items-center gap-4 pb-3 px-1">
           <p className="text-center text-slate-800 text-xl font-bold font-['Montserrat'] tracking-[.0.2px]">
