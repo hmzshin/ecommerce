@@ -14,6 +14,7 @@ const ShoppingCartPage = () => {
   const [totalPrice, setTotalPrice] = useState<number>();
   const shoppingCart = useAppSelector((store) => store.shoppingCard.card);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const total: number = shoppingCart.reduce(
       (sum, item) => sum + item.numberOfItem * item.product.price,
@@ -42,29 +43,24 @@ const ShoppingCartPage = () => {
         <tr className="py-3 sm:py-5 text-center text-xl font-bold">
           Cart Items
         </tr>
-        <tr className="justify-center gap-3  items-start flex flex-wrap lg:px-[12%] md:flex-nowrap">
+        <tbody className="justify-center gap-3  items-start flex flex-wrap lg:px-[12%] md:flex-nowrap">
           <td className="rounded-lg w-full md:w-2/3 flex flex-col  gap-2  items-center  self-stretch">
             {shoppingCart.map((item, i) => (
-              <table className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full">
-                <tr className=" w-full border rounded-md">
-                  <p className="text-left font-bold p-1 text-sky-100 font-['Montserrat'] bg-[#176B87]  ">
+              <tr className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full">
+                <td className="w-full">
+                  <p className="text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-t-md">
                     {`Seller: ${item.product.store_id}`}
                   </p>
-                  {item.shipping === 0 ? (
-                    <p className="text-center p-1 font-bold font-['Montserrat'] bg-sky-100">
-                      Free Shipping
-                    </p>
-                  ) : (
-                    <p className="text-center p-1 font-bold font-['Montserrat'] bg-sky-100">
-                      {`Shipping:  ${item.shipping} $`}
-                    </p>
-                  )}
-                </tr>
-                <tr
+                  <p className="text-center p-1 font-bold rounded-b-md font-['Montserrat'] bg-sky-100">
+                    {item.shipping === 0
+                      ? ` Free Shipping`
+                      : `Shipping:  ${item.shipping} $`}
+                  </p>
+                </td>
+                <td
                   key={i}
                   className="rounded-lg bg-white p-1 sm:p-3  flex justify-between items-center gap-3 w-full"
                 >
-                  <p></p>
                   <img
                     src={item.product.images[0]["url"]}
                     alt="product-image"
@@ -123,12 +119,12 @@ const ShoppingCartPage = () => {
                       </div>
                     </div>
                   </div>
-                </tr>
-              </table>
+                </td>
+              </tr>
             ))}
           </td>
 
-          <td className="h-full w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
+          <td className="sticky top-12 h-full w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
             <div className="mb-2 flex justify-between">
               <p className="text-gray-700">Subtotal</p>
               <p className="text-gray-700">{subTotal} $</p>
@@ -149,7 +145,7 @@ const ShoppingCartPage = () => {
               Proceed to checkout
             </button>
           </td>
-        </tr>
+        </tbody>
       </table>
       <Footer />
     </>

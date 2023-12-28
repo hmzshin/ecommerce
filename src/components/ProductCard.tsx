@@ -22,6 +22,9 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
     locale: "tr", // language code of the locale to use
     trim: true, // trim leading and trailing replacement chars, defaults to `true`
   });
+  function addToChart(product: any) {
+    dispatch(addProduct(product));
+  }
 
   return (
     <div className="border hover:shadow-2xl hover:scale-[1.01]  transition-all flex flex-col items-center justify-between pb-3 relative">
@@ -45,8 +48,8 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
       )}
       <Link
         to={`/shop/${product.category_id}/${
-          category.gender === "k" ? "kadın" : "erkek"
-        }/${category.title?.toLowerCase()}/${product.id}/${slug}`}
+          category?.gender === "k" ? "kadın" : "erkek"
+        }/${category?.title?.toLowerCase()}/${product.id}/${slug}`}
         className="flex flex-col items-center gap-5 w-[350px] lg:w-72   "
       >
         <img
@@ -71,7 +74,7 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
         </div>
       </Link>
       <button
-        onClick={() => dispatch(addProduct(product))}
+        onClick={() => addToChart(product)}
         className="blueBtn active:bg-sky-600"
       >
         <span>Add to Cart</span>

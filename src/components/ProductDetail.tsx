@@ -1,5 +1,4 @@
 import { Icon } from "@iconify/react";
-
 import detailImg from "../assets/productDetail/detailImage.jpeg";
 import Thumb from "./Thumb";
 import { useNavigate } from "react-router-dom";
