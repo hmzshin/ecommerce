@@ -49,17 +49,17 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
   return (
     <div
       id="shoppingChart"
-      className={`absolute top-[calc(100%+35px)] right-0 lg:right-20 w-[350px] sm:w-[500px] md:w-[700px] bg-gray-100 px-3 pb-3 border shadow-2xl rounded-md ${
+      className={`absolute top-[calc(100%+35px)] right-0 lg:right-20 w-[400px] sm:w-[500px]  bg-gray-100 px-3 pb-3 border shadow-2xl rounded-md ${
         isChartVisible ? "activeChart" : "passiveChart"
       } transition-all duration-500 overflow-hidden`}
     >
       <h1 className="py-3 sm:py-5 text-center text-xl font-bold">Cart Items</h1>
-      <div className="justify-center gap-3  items-start flex flex-wrap md:flex-nowrap">
-        <div className="rounded-lg md:w-2/3 flex flex-col  gap-2 max-h-72 md:max-h-96  items-center overflow-auto self-stretch">
+      <div className="justify-center gap-3 w-full  items-start flex flex-wrap ">
+        <div className="rounded-lg  flex flex-col  gap-2 max-h-72 md:max-h-96  items-center overflow-y-auto self-stretch w-full">
           {shoppingCart.map((item: CardData, i: number) => (
             <div
               key={i}
-              className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-between items-center gap-3"
+              className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-start items-center gap-3 w-full"
             >
               <img
                 src={item.product.images[0]["url"]}
@@ -68,7 +68,7 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
               />
               <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between sm:gap-2">
                 <div className="mt-1 sm:mt-0">
-                  <h2 className="text-lg font-bold text-gray-900">
+                  <h2 className="text-lg font-bold text-gray-900 text-left">
                     {item.product.name}
                   </h2>
                 </div>
@@ -118,29 +118,9 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
           ))}
         </div>
 
-        <div className="h-full w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
-          <div className="mb-2 flex justify-between">
-            <p className="text-gray-700">Subtotal</p>
-            <p className="text-gray-700">{subTotal} $</p>
-          </div>
-          <div className="flex justify-between">
-            <p className="text-gray-700">Shipping</p>
-            <p className="text-gray-700">{shipping} $</p>
-          </div>
-          <hr className="my-4" />
-          <div className="flex justify-between">
-            <p className="text-lg font-bold">Total</p>
-            <div className="">
-              <p className="mb-1 text-lg font-bold">{totalPrice}</p>
-            </div>
-          </div>
-          <button
-            className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400"
-            onClick={() => navigate("/cart")}
-          >
-            Go to Cart
-          </button>
-        </div>
+        <button className="blueBtn w-full" onClick={() => navigate("/cart")}>
+          Go to Cart
+        </button>
       </div>
     </div>
   );
