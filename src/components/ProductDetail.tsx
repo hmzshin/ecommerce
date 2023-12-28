@@ -3,8 +3,11 @@ import { Icon } from "@iconify/react";
 import detailImg from "../assets/productDetail/detailImage.jpeg";
 import Thumb from "./Thumb";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../store/store";
+import { addProduct } from "../store/slices/shoppingCardSlice";
 
 const ProductDetail = ({ product }: any) => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const ratingArray: number[] = [];
   const int = parseInt(product?.rating);
@@ -98,8 +101,11 @@ const ProductDetail = ({ product }: any) => {
           </div>
 
           <div className="flex gap-3 md:gap-5 pt-10">
-            <div className="px-5 py-2.5 bg-sky-500 rounded-md text-sm text-center text-white  font-bold font-['Montserrat'] tracking-tight whitespace-nowrap md:text-base ">
-              Select Options
+            <div
+              className="blueBtn"
+              onClick={() => dispatch(addProduct(product))}
+            >
+              Add to Cart
             </div>{" "}
             {[
               "mdi:heart-outline",
