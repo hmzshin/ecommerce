@@ -3,6 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 interface CardData {
   product: PayloadData;
   numberOfItem: number;
+  shipping: number;
 }
 interface UserData {
   card: CardData[];
@@ -48,14 +49,24 @@ export const shoppingCardSlice = createSlice({
           ...state,
           card: state.card.map((item) =>
             item.product.id === action.payload.id
-              ? { ...item, numberOfItem: item.numberOfItem + 1 }
+              ? {
+                  ...item,
+                  numberOfItem: item.numberOfItem + 1,
+                  shipping:
+                    item.numberOfItem + 1 > 3
+                      ? 0
+                      : (item.numberOfItem + 1) * 15,
+                }
               : item
           ),
         };
       } else {
         return {
           ...state,
-          card: [...state.card, { product: action.payload, numberOfItem: 1 }],
+          card: [
+            ...state.card,
+            { product: action.payload, numberOfItem: 1, shipping: 15 },
+          ],
         };
       }
     },
@@ -81,7 +92,14 @@ export const shoppingCardSlice = createSlice({
           ...state,
           card: state.card.map((item) =>
             item.product.id === action.payload.product.id
-              ? { ...item, numberOfItem: item.numberOfItem - 1 }
+              ? {
+                  ...item,
+                  numberOfItem: item.numberOfItem - 1,
+                  shipping:
+                    item.numberOfItem - 1 < 4
+                      ? (item.numberOfItem - 1) * 15
+                      : 0,
+                }
               : item
           ),
         };

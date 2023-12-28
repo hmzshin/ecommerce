@@ -5,6 +5,7 @@ import {
   decreaseNumberOfItems,
   deleteProduct,
 } from "../store/slices/shoppingCardSlice";
+import { useNavigate } from "react-router-dom";
 
 interface CardProps {
   isChartVisible: boolean;
@@ -30,6 +31,7 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
   const [subTotal, setSubtotal] = useState<number>(0);
   const [shipping, setShipping] = useState<number>(15);
   const [totalPrice, setTotalPrice] = useState<number>();
+  const navigate = useNavigate();
   const shoppingCart = useAppSelector((store) => store.shoppingCard.card);
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -91,7 +93,7 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <p className="text-sm">
+                    <p className="text-sm whitespace-nowrap w-20">
                       {(item.numberOfItem * item.product.price).toFixed(2)} $
                     </p>
                     <svg
@@ -130,11 +132,13 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
             <p className="text-lg font-bold">Total</p>
             <div className="">
               <p className="mb-1 text-lg font-bold">{totalPrice}</p>
-              <p className="text-sm text-gray-700">including VAT</p>
             </div>
           </div>
-          <button className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400">
-            Check out
+          <button
+            className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400"
+            onClick={() => navigate("/cart")}
+          >
+            Go to Cart
           </button>
         </div>
       </div>
