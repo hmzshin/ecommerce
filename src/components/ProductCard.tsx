@@ -70,7 +70,10 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
           </div>
         </div>
       </Link>
-      <button onClick={() => dispatch(addProduct(product))} className="blueBtn">
+      <button
+        onClick={() => dispatch(addProduct(product))}
+        className="blueBtn active:bg-sky-600"
+      >
         <span>Add to Cart</span>
       </button>
     </div>

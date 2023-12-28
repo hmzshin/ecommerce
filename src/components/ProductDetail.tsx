@@ -102,7 +102,7 @@ const ProductDetail = ({ product }: any) => {
 
           <div className="flex gap-3 md:gap-5 pt-10">
             <div
-              className="blueBtn"
+              className="blueBtn cursor-pointer active:bg-sky-600"
               onClick={() => dispatch(addProduct(product))}
             >
               Add to Cart
