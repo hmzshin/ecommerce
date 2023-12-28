@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   addProduct,
@@ -11,40 +10,10 @@ interface CardProps {
   isChartVisible: boolean;
 }
 
-interface ProductData {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  store_id: number;
-  category_id: number;
-  rating: number;
-  sell_count: number;
-  images: any;
-}
-interface CardData {
-  product: ProductData;
-  numberOfItem: number;
-}
 const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
-  const [subTotal, setSubtotal] = useState<number>(0);
-  const [shipping, setShipping] = useState<number>(15);
-  const [totalPrice, setTotalPrice] = useState<number>();
   const navigate = useNavigate();
   const shoppingCart = useAppSelector((store) => store.shoppingCard.card);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    const total: number = shoppingCart.reduce(
-      (sum, item) => sum + item.numberOfItem * item.product.price,
-      0
-    );
-    setSubtotal(Number(total.toFixed(2)));
-  }, [shoppingCart]);
-
-  useEffect(() => {
-    setTotalPrice(Number((subTotal + shipping).toFixed(2)));
-  }, [subTotal, shipping]);
 
   return (
     <div
@@ -56,7 +25,7 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
       <h1 className="py-3 sm:py-5 text-center text-xl font-bold">Cart Items</h1>
       <div className="justify-center gap-3 w-full  items-start flex flex-wrap ">
         <div className="rounded-lg  flex flex-col  gap-2 max-h-72 md:max-h-96  items-center overflow-y-auto self-stretch w-full">
-          {shoppingCart.map((item: CardData, i: number) => (
+          {shoppingCart.map((item, i) => (
             <div
               key={i}
               className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-start items-center gap-3 w-full"
