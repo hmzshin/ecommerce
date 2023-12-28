@@ -2,14 +2,28 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../api/axiosInstance";
 import { AxiosResponse } from "axios";
 
-interface UserData {
-  roles: string[];
-  categories: string[];
+interface Category {
+  id: number;
+  code: string;
+  gender: string;
+  title: string;
+  rating: number;
+  img: string;
+}
+interface Role {
+  id: number;
+  name: string;
+  code: string;
+}
+
+interface GlobalData {
+  roles: Role[];
+  categories: Category[];
   language: string;
   theme: string;
 }
 
-const initialState: UserData = {
+const initialState: GlobalData = {
   roles: [],
   categories: [],
   language: "tr",
@@ -37,15 +51,15 @@ export const globalSlice = createSlice({
   initialState,
   reducers: {
     setGlobalData: (
-      state: UserData,
-      action: PayloadAction<UserData>
-    ): UserData => {
+      state: GlobalData,
+      action: PayloadAction<GlobalData>
+    ): GlobalData => {
       return { ...state, ...action.payload };
     },
     updateLanguage: (
-      state: UserData,
+      state: GlobalData,
       action: PayloadAction<string>
-    ): UserData => {
+    ): GlobalData => {
       return { ...state, language: action.payload };
     },
   },

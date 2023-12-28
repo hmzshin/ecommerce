@@ -9,15 +9,33 @@ import ProductCard from "../components/ProductCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
 import InfiniteScroll from "react-infinite-scroll-component";
+interface Params {
+  category?: string;
+  filter?: string;
+  sort?: string;
+}
+type RouterParams = {
+  category_id?: string | undefined;
+  gender?: string | undefined;
+  category?: string | undefined;
+  productId?: string | undefined;
+  productName?: string | undefined;
+};
 
+type FormData = {
+  filter?: string;
+  sort?: string;
+};
 const ShopPage = () => {
-  const routerParams = useParams();
+  const routerParams = useParams<RouterParams>();
   const [productsLoading, setProductsLoading] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [params, setParams] = useState<object>();
+  const [params, setParams] = useState<Params>();
+
   const dispatch = useAppDispatch();
   const categories: any = useAppSelector((state) => state.global.categories);
-  const { products }: any = useAppSelector((state) => state.product);
+  const shoppingCart = useAppSelector((state) => state.shoppingCard.card);
+  const { products, total } = useAppSelector((state) => state.product);
 
   const categoriesCopy = [...categories];
   const len = categoriesCopy.length;
@@ -33,24 +51,9 @@ const ShopPage = () => {
   }
   const shoppingCategories = categoriesCopy.slice(0, 5);
 
-  type FormData = {
-    filter: string;
-    sort: string;
-    category: string;
-  };
   const { register, handleSubmit } = useForm<FormData>({
     defaultValues: { filter: routerParams.gender },
   });
-
-  const onSubmit = (data: FormData) => {
-    if (data.filter) {
-      setParams({ ...params, filter: data.filter, sort: data.sort });
-      fetchProductsHandler({ ...params, filter: data.filter, sort: data.sort });
-    } else {
-      setParams({ ...params, sort: data.sort });
-      fetchProductsHandler({ ...params, sort: data.sort });
-    }
-  };
 
   const fetchProductsHandler = (params = {}) => {
     setProductsLoading(true);
@@ -63,6 +66,20 @@ const ShopPage = () => {
         setProductsLoading(false);
       }, 500);
     });
+  };
+  console.log(total);
+  const onSubmit = (data: FormData) => {
+    if (data.filter) {
+      setParams({
+        ...params,
+        filter: data.filter,
+        sort: data.sort,
+      });
+      fetchProductsHandler({ ...params, filter: data.filter, sort: data.sort });
+    } else {
+      setParams({ ...params, sort: data.sort });
+      fetchProductsHandler({ ...params, sort: data.sort });
+    }
   };
 
   useEffect(() => {
@@ -120,7 +137,7 @@ const ShopPage = () => {
         </div>
       </section>
       <section id="products">
-        <div className="flex flex-wrap justify-center gap-5 md:justify-between items-center px-[12%] py-20">
+        <div className="flex flex-wrap justify-center gap-5 xl:justify-between items-center px-[12%] py-20">
           <p className="text-neutral-500 text-base font-bold font-['Montserrat']  tracking-[0.2px]">
             {`Showing all ${products.length} results`}
           </p>
@@ -136,7 +153,7 @@ const ShopPage = () => {
             </div>
           </div>
           <form
-            className="m-auto lg:m-0 flex justify-center gap-2"
+            className="m-auto lg:m-0 flex justify-center flex-wrap gap-2"
             onSubmit={handleSubmit(onSubmit)}
           >
             <input
@@ -149,11 +166,11 @@ const ShopPage = () => {
                   ? routerParams.gender
                   : "store"
               }`}
-              className="w-52 h-14 pl-3 bg-stone-50 rounded-md border border-zinc-300 "
+              className="w-full sm:w-44 h-14 pl-3 bg-stone-50 rounded-md border border-zinc-300 "
             />
             <select
               {...register("sort")}
-              className="w-fit h-14 px-1 bg-stone-50 rounded-md border border-zinc-300 "
+              className="w-full sm:w-fit h-14 px-1 bg-stone-50 rounded-md border border-zinc-300 "
             >
               <option value="">Sort by: Featured</option>
               <option value="price:asc">Price: Low to High</option>
@@ -184,36 +201,22 @@ const ShopPage = () => {
                 setPageNumber(pageNumber + 1);
               })
             }
-            hasMore={true}
+            hasMore={pageNumber * 25 < total ? true : false}
             loader={
               <Icon icon="svg-spinners:180-ring" className="m-auto w-20 h-20" />
             }
-            className="flex flex-wrap gap-20 justify-around px-[7%] lg:px-[12%]"
+            className="flex flex-wrap gap-20 justify-around px-[7%] pb-20 lg:px-[12%]"
           >
             {products.map((product: any, i: number) => (
-              <ProductCard key={i} product={product} categories={categories} />
+              <ProductCard
+                key={i}
+                product={product}
+                categories={categories}
+                shoppingCart={shoppingCart}
+              />
             ))}
           </InfiniteScroll>
         )}
-
-        <div className="w-80 h-20 bg-white rounded-md shadow border border-stone-300 flex m-auto mt-40">
-          <p className="p-7 bg-zinc-100 border border-stone-300 text-stone-300 text-base font-bold font-['Montserrat']  tracking-[0.2px]">
-            First
-          </p>
-
-          {[1, 2, 3].map((number, i) => (
-            <p
-              key={i}
-              className="py-7 w-20 bg-white border border-gray-200  text-center text-sky-500 text-base font-bold font-['Montserrat'] tracking-[0.2px] hover:text-white hover:bg-sky-500"
-            >
-              {number}
-            </p>
-          ))}
-
-          <p className="p-6 bg-white border border-gray-200 text-sky-500 text-base font-bold font-['Montserrat'] tracking-[0.2px]">
-            Next
-          </p>
-        </div>
       </section>
       <Clients />
       <Footer />

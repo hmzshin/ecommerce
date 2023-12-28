@@ -13,7 +13,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setUser } from "../store/slices/userSlice";
-import { fetchProducts } from "../store/slices/productSlice";
+import ShoppingCart from "./ShoppingCart";
 
 const data = [
   { svg: phone, text: "(225) 555-0118" },
@@ -24,13 +24,16 @@ const data = [
     socialMedia: [instagram, youtube, facebook, twitter],
   },
 ];
+
 const Header = () => {
   const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
   const [showUserDetails, setShowUserDetails] = useState<boolean>(false);
   const [showCategories, setShowCategories] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>();
+  const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
   const userInfo = useAppSelector((state) => state.user);
   const categories = useAppSelector((state) => state.global.categories);
+  const shoppingCart = useAppSelector((state) => state.shoppingCard.card);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -44,6 +47,10 @@ const Header = () => {
 
   const women = categories.filter((category: any) => category.gender === "k");
   const men = categories.filter((category: any) => category.gender === "e");
+  const numberOfItemsInCart = shoppingCart.reduce(
+    (sum: number, item) => sum + item.numberOfItem,
+    0
+  );
 
   function deleteToken(): void {
     localStorage.removeItem("token");
@@ -54,27 +61,25 @@ const Header = () => {
     if (searchInput) {
       if (searchInput.split(" ").length > 1) {
         const gender = searchInput.toLowerCase().includes("kadın")
-          ? "k:"
+          ? "k"
           : searchInput.toLowerCase().includes("erkek")
-          ? "e:"
+          ? "e"
           : null;
 
-        const title = categories
-          .map((category: any) => category.title.toLowerCase())
-          .find((title) => searchInput.toLowerCase().includes(title));
-
-        const id: any = categories.find(
-          (category: any) => category.code == gender + title
+        const title = categories.filter((category) =>
+          searchInput.toLowerCase().includes(category.title.toLowerCase())
         );
+        console.log(title);
+
+        const id = title.find((category) => category.gender === gender);
         if (id) {
           navigate(
-            `/shop/${id.id}/${gender == "k:" ? "kadın" : "erkek"}/${title}`
+            `/shop/${id.id}/${gender == "k" ? "kadın" : "erkek"}/${id.title}`
           );
         } else {
           navigate(`/shop/${searchInput}`);
         }
       } else {
-        dispatch(fetchProducts({ params: { filter: searchInput } }));
         navigate(`/shop/${searchInput}`);
       }
     }
@@ -232,7 +237,7 @@ const Header = () => {
                       className={`fixed top-16 w-full h-full overflow-auto  items-center  bg-neutral-800 bg-opacity-25 transition-all duration-500 z-50 xl:top-40 xl:w-full xl:px-20 xl:left-0 ${
                         showCategories
                           ? "flex activeCategories"
-                          : "flex xl:hidden passiveCategories"
+                          : "flex  passiveCategories"
                       }`}
                     >
                       <div
@@ -284,8 +289,9 @@ const Header = () => {
           <div className="hidden sm:flex  xl:max-2xl:hidden items-center self-stretch relative ">
             <input
               type="text"
-              className="w-52 md:w-full  rounded-md border bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none"
+              className="w-52 lg:w-full  rounded-md border bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none"
               onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => (e.key === "Enter" ? seachHandler() : () => {})}
               placeholder="Search in Store"
             />
             <img
@@ -336,10 +342,19 @@ const Header = () => {
             </div>
 
             <div className="flex lg:gap-2 relative ">
-              <img src={chart} className="w-5 h-5" />
-              <span className="hidden lg:inline">1</span>
+              <img
+                src={chart}
+                className="w-5 h-5"
+                onClick={() => {
+                  setIsChartVisible(!isChartVisible);
+                }}
+              />
+              <span className="hidden lg:inline w-3">
+                {numberOfItemsInCart}
+              </span>
               <img src={like} className="w-5 h-5 ml-10 hidden lg:block" />{" "}
               <span className="hidden lg:inline">1</span>
+              <ShoppingCart isChartVisible={isChartVisible} />
             </div>
           </div>
         </div>

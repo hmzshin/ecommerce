@@ -101,7 +101,7 @@ const SignUpForm = () => {
                 required: "Name is required",
                 minLength: {
                   value: 3,
-                  message: "Name should be at least three character",
+                  message: "The name must be at least three characters.",
                 },
               })}
               placeholder="Enter your name"
@@ -113,7 +113,10 @@ const SignUpForm = () => {
             />
           </label>
           {errors.name && (
-            <p role="alert" className="text-red-400 absolute top-0 right-0">
+            <p
+              role="alert"
+              className="text-red-400 absolute top-0 right-0 text-sm sm:text-base"
+            >
               {errors.name.message}
             </p>
           )}
@@ -130,7 +133,7 @@ const SignUpForm = () => {
                   const emailRegex =
                     /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
                   if (!emailRegex.test(val)) {
-                    return "Please enter a valid email address.";
+                    return "Enter a valid email address.";
                   }
                 },
               })}
@@ -167,10 +170,10 @@ const SignUpForm = () => {
                     return "At least one number required";
                   }
                   if (!upperCaseLetters.test(val)) {
-                    return "At least one uppercase letter required";
+                    return "At least one capital letter needed";
                   }
                   if (!lowerCaseLetters.test(val)) {
-                    return "At least one lowercase letter required";
+                    return "At least one lowercase letter needed";
                   }
                 },
               })}
@@ -229,7 +232,7 @@ const SignUpForm = () => {
               {...register("phone", {
                 pattern: {
                   value: /^(\+90|90|)?\d{10}$/,
-                  message: "Please enter a valid number",
+                  message: "Enter a valid number",
                 },
               })}
               placeholder="Enter your phone number"
@@ -280,7 +283,7 @@ const SignUpForm = () => {
           </label>
           <div className="mb-5 relative">
             <label className="mb-3 block text-base font-medium text-[#07074D]">
-              Store Name
+              Name
               <input
                 type="text"
                 {...register("storeName", {
@@ -290,12 +293,12 @@ const SignUpForm = () => {
                         return "Store name is required";
                       }
                       if (val.length <= 3) {
-                        return "Store name should be at least three characters";
+                        return "Enter a valid name";
                       }
                     }
                   },
                 })}
-                placeholder="Please enter your store's name"
+                placeholder="Enter your store's name"
                 className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
                   errors.storeName
                     ? "focus:border-red-400 border-red-400"
@@ -312,15 +315,16 @@ const SignUpForm = () => {
 
           <div className="mb-5 relative">
             <label className="mb-3 block text-base font-medium text-[#07074D]">
-              Store Phone Number
+              Phone Number
               <input
                 type="tel"
                 {...register("storePhone", {
+                  required: "Phone number is required",
                   validate: (val: any) => {
                     if (watch("role") === "store") {
                       const tr = /^(\+90|90|)?\d{10}$/;
                       if (!tr.test(val)) {
-                        return "Please enter a valid phone number";
+                        return "Enter a valid phone number";
                       }
                     }
                   },
@@ -341,14 +345,15 @@ const SignUpForm = () => {
           </div>
           <div className="mb-5 relative">
             <label className="mb-3 block text-base font-medium text-[#07074D]">
-              Store Tax ID
+              Tax ID
               <input
                 type="text"
                 {...register("storeTax", {
+                  required: "Tax number is required",
                   validate: (val: any) => {
                     if (watch("role") === "store") {
                       if (!/T\d{4}V\d{6}/.test(val)) {
-                        return "Please enter a valid tax number";
+                        return "Enter a valid tax number.";
                       }
                     }
                   },
@@ -369,14 +374,15 @@ const SignUpForm = () => {
           </div>
           <div className="mb-5 relative">
             <label className="mb-3 block text-base font-medium text-[#07074D]">
-              Store Bank Account
+              Bank Account
               <input
                 type="text"
                 {...register("storeBankAccount", {
+                  required: "IBAN Number is required",
                   validate: (val: any) => {
                     if (watch("role") === "store") {
                       if (!/TR\d{24}/.test(val)) {
-                        return "Please enter a valid IBAN Number";
+                        return "Enter a valid IBAN Number";
                       }
                     }
                   },
@@ -408,7 +414,7 @@ const SignUpForm = () => {
         <p className="mt-3 block text-base text-center font-medium text-[#07074D]">
           By clicking "Join Bandage" you agree to our{" "}
           <a href="#" className="text-rose-500 hover:text-rose-400">
-            Terms of Service
+            Terms of Service.
           </a>
         </p>
       </form>

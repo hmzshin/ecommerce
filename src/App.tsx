@@ -18,6 +18,7 @@ import SignInPage from "./pages/SignInPage.tsx";
 import { setUser } from "./store/slices/userSlice.ts";
 import { AxiosResponse } from "axios";
 import { axiosInstance } from "./api/axiosInstance.tsx";
+import ShoppingCartPage from "./pages/ShoppingCartPage.tsx";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -55,24 +56,17 @@ function App() {
           element={<ShopPage />}
         />
         <Route path="/shop/:gender" element={<ShopPage />} />
-        <Route path="/product" element={<ProductPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route
-          path="/team"
+          path="/cart"
           element={
             <ProtectedPage>
-              <TeamPage />
+              <ShoppingCartPage />
             </ProtectedPage>
           }
         />
-        <Route
-          path="/contact"
-          element={
-            <ProtectedPage>
-              <ContactPage />
-            </ProtectedPage>
-          }
-        />
+        <Route path="/team" element={<TeamPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<SignInPage />} />

@@ -1,21 +1,42 @@
-import BestSellerProductCard from "../components/BestsellerProductCard";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ProductDetail from "../components/ProductDetail";
 
-import { productRelatedBestsellers } from "../data";
 import Clients from "../components/Clients";
-import { useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchBestseller } from "../store/slices/bestsellerSlice";
+import ProductCard from "../components/ProductCard";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const ProductPage = () => {
+  const [productsLoading, setProductsLoading] = useState<boolean>(false);
   const routerParams = useParams();
   const products = useAppSelector((state) => state.product.products);
-  const product = products.filter(
-    (product: any) => product.id == routerParams.productId
+  const shoppingCart = useAppSelector((store) => store.shoppingCard.card);
+  const categories = useAppSelector((store) => store.global.categories);
+  const productRelatedBestsellers = useAppSelector(
+    (state) => state.bestseller.products
+  );
+  const dispatch = useAppDispatch();
+  const product = [...products, ...productRelatedBestsellers].filter(
+    (product) => product.id === Number(routerParams.productId)
   )[0];
 
-  console.log(product);
+  useEffect(() => {
+    setProductsLoading(true);
+    dispatch(
+      fetchBestseller({
+        params: {
+          category: product.category_id,
+          sort: "rating:desc",
+          limit: 24,
+        },
+      })
+    ).finally(() => setProductsLoading(false));
+  }, []);
+
   return (
     <>
       <Header />
@@ -25,15 +46,20 @@ const ProductPage = () => {
           BESTSELLER PRODUCTS
         </p>
         <div className=" flex flex-col items-center gap-20 pt-20">
-          <div className=" flex flex-wrap gap-10 justify-around">
-            {productRelatedBestsellers.map((bsProduct, i) => (
-              <BestSellerProductCard
-                key={i}
-                bsProduct={bsProduct}
-                style={"w-72"}
-              />
-            ))}
-          </div>
+          {productsLoading ? (
+            <Icon icon="svg-spinners:180-ring" className="m-auto w-20 h-20" />
+          ) : (
+            <div className=" flex flex-wrap gap-10 justify-around">
+              {productRelatedBestsellers.map((bsProduct, i) => (
+                <ProductCard
+                  key={i}
+                  product={bsProduct}
+                  categories={categories}
+                  shoppingCart={shoppingCart}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
       <Clients bgColor={"bg-neutral-50"} />
