@@ -2,8 +2,10 @@ import { Icon } from "@iconify/react";
 
 import detailImg from "../assets/productDetail/detailImage.jpeg";
 import Thumb from "./Thumb";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetail = ({ product }: any) => {
+  const navigate = useNavigate();
   const ratingArray: number[] = [];
   const int = parseInt(product?.rating);
   for (let i = 1; i < 6; i++) {
@@ -16,11 +18,15 @@ const ProductDetail = ({ product }: any) => {
     }
   }
 
-  console.log(ratingArray);
   return (
     <section id="productDatails " className="pb-20">
       <section className="bg-neutral-50 flex justify-between items-center py-10 px-[15%]">
         <div className="flex gap-5 items-center">
+          <Icon
+            icon="mdi:arrow-left"
+            className="w-7 h-7 text-balck-400 font-bold"
+            onClick={() => navigate(-1)}
+          />
           <p className="text-center text-slate-800 text-lg font-bold font-['Montserrat'] tracking-[0.2px]">
             Home
           </p>

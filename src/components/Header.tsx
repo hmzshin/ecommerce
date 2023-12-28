@@ -13,7 +13,6 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setUser } from "../store/slices/userSlice";
-import { fetchProducts } from "../store/slices/productSlice";
 import ShoppingCart from "./ShoppingCart";
 
 const data = [
