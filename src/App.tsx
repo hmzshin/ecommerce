@@ -19,6 +19,7 @@ import { setUser } from "./store/slices/userSlice.ts";
 import { AxiosResponse } from "axios";
 import { axiosInstance } from "./api/axiosInstance.tsx";
 import ShoppingCartPage from "./pages/ShoppingCartPage.tsx";
+import OrderPage from "./pages/OrderPage.tsx";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -65,6 +66,7 @@ function App() {
             </ProtectedPage>
           }
         />
+        <Route path="/order" element={<OrderPage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/contact" element={<ContactPage />} />
 

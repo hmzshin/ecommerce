@@ -7,6 +7,7 @@ import {
   decreaseNumberOfItems,
   deleteProduct,
 } from "../store/slices/shoppingCardSlice";
+import { useNavigate } from "react-router-dom";
 
 const ShoppingCartPage = () => {
   const [subTotal, setSubtotal] = useState<number>(0);
@@ -14,6 +15,7 @@ const ShoppingCartPage = () => {
   const [totalPrice, setTotalPrice] = useState<number>();
   const shoppingCart = useAppSelector((store) => store.shoppingCard.card);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const total: number = shoppingCart.reduce(
@@ -124,7 +126,7 @@ const ShoppingCartPage = () => {
             ))}
           </td>
 
-          <td className="sticky top-12 h-full w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
+          <td className="sticky top-0 h-full w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
             <div className="mb-2 flex justify-between">
               <p className="text-gray-700">Subtotal</p>
               <p className="text-gray-700">{subTotal} $</p>
@@ -141,7 +143,10 @@ const ShoppingCartPage = () => {
                 <p className="text-sm text-gray-700">including VAT</p>
               </div>
             </div>
-            <button className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400">
+            <button
+              className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400"
+              onClick={() => navigate("/order")}
+            >
               Proceed to checkout
             </button>
           </td>
