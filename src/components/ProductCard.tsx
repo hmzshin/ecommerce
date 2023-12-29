@@ -36,11 +36,12 @@ const ProductCard = ({ product, categories, shoppingCart }: any) => {
           }}
         >
           <div className="relative">
+            <div className="w-12 h-12 rounded-full border bg-white absolute -top-1 left-2 "></div>
             <Icon
               icon="material-symbols-light:shopping-cart-outline"
-              className="w-12 h-12 text-black absolute z-10"
+              className="w-8 h-8 text-black-500 font-bold absolute z-10 left-4 top-2"
             />
-            <span className="absolute w-5 h-5 left-[14px] -top-[6px] text-xs rounded-full bg-rose-200 flex items-center justify-center">
+            <span className="absolute w-4 h-4 left-[24px] -top-[0px] text-xs rounded-full bg-rose-200 flex items-center justify-center">
               {productInCart?.numberOfItem}
             </span>
           </div>
