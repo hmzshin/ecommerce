@@ -32,16 +32,16 @@ const OrderPage = () => {
                 </td>
               </tr>
 
-              {[1, 2, 3].map((item, i) => (
-                <tr className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full">
+              {[1, 2, 3].map((item) => (
+                <tr
+                  key={item}
+                  className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full"
+                >
                   <td className="w-full">
                     <p className="text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-t-md"></p>
                     <p className="text-center p-1 font-bold rounded-b-md font-['Montserrat'] bg-sky-100"></p>
                   </td>
-                  <td
-                    key={i}
-                    className="rounded-lg bg-white p-1 sm:p-3  flex justify-between items-center gap-3 w-full"
-                  >
+                  <td className="rounded-lg bg-white p-1 sm:p-3  flex justify-between items-center gap-3 w-full">
                     <div className="ml-4  flex flex-col lg:flex-row gap-5 w-full  justify-between">
                       <div className="mt-1 sm:mt-0">
                         <h2 className="text-lg font-bold text-gray-900">{}</h2>
