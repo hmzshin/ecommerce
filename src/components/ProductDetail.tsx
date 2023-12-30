@@ -1,13 +1,34 @@
 import { Icon } from "@iconify/react";
-
 import detailImg from "../assets/productDetail/detailImage.jpeg";
 import Thumb from "./Thumb";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../store/store";
+import { addProduct } from "../store/slices/shoppingCardSlice";
 
-const ProductDetail = () => {
+const ProductDetail = ({ product }: any) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const ratingArray: number[] = [];
+  const int = parseInt(product?.rating);
+  for (let i = 1; i < 6; i++) {
+    if (i <= product.rating) {
+      ratingArray.push(i);
+    } else if (i - 1 < product.rating) {
+      ratingArray.push(product.rating % int);
+    } else {
+      ratingArray.push(0);
+    }
+  }
+
   return (
     <section id="productDatails " className="pb-20">
       <section className="bg-neutral-50 flex justify-between items-center py-10 px-[15%]">
         <div className="flex gap-5 items-center">
+          <Icon
+            icon="mdi:arrow-left"
+            className="w-7 h-7 text-balck-400 font-bold"
+            onClick={() => navigate(-1)}
+          />
           <p className="text-center text-slate-800 text-lg font-bold font-['Montserrat'] tracking-[0.2px]">
             Home
           </p>
@@ -22,14 +43,20 @@ const ProductDetail = () => {
       </section>
 
       <section className="flex flex-wrap justify-around gap-20 bg-neutral-50 px-[5%] pb-20 2xl:justify-center">
-        <Thumb />
+        <Thumb images={product.images} />
         <div className="max-w-lg flex flex-col items-start ">
           <p className="text-slate-800 text-2xl font-normal font-['Montserrat']  tracking-[0.2px]">
-            Floating Phone
+            {product.name}
           </p>
           <div className="flex items-center py-5 ">
-            {[1, 2, 3, 4, 5].map((i) =>
-              i == 5 ? (
+            {ratingArray.map((int, i) =>
+              int >= 1 ? (
+                <Icon
+                  key={i}
+                  className="text-[#F3CD03] w-6 h-6"
+                  icon="mdi:star"
+                />
+              ) : int == 0 ? (
                 <Icon
                   key={i}
                   className="text-[#F3CD03] w-6 h-6"
@@ -39,7 +66,7 @@ const ProductDetail = () => {
                 <Icon
                   key={i}
                   className="text-[#F3CD03] w-6 h-6"
-                  icon="mdi:star"
+                  icon="mdi:star-half-full"
                 />
               )
             )}
@@ -49,15 +76,16 @@ const ProductDetail = () => {
             </p>
           </div>
           <p className="text-center text-slate-800 text-2xl font-bold font-['Montserrat']  tracking-tight">
-            $1,139.33
+            {product.price} $
           </p>
           <p className="text-neutral-500 text-base font-bold font-['Montserrat']  tracking-tight pt-3">
-            Availability : <span className="text-sky-500 ">In Stock </span>
+            Availability :{" "}
+            <span className="text-sky-500 ">
+              {product.stock === 0 ? "Not in Stock" : "In Stock"}{" "}
+            </span>
           </p>
           <p className="text-zinc-500 text-base font-normal font-['Montserrat']  tracking-tight pt-10">
-            Met minim Mollie non desert Alamo est sit cliquey dolor do met sent.
-            RELIT official consequent door ENIM RELIT Mollie. Excitation venial
-            consequent sent nostrum met.
+            {product.description}
           </p>
           <hr className="w-full border border-stone-300 my-5" />
           <div className="flex justify-start items-center gap-2">
@@ -72,8 +100,11 @@ const ProductDetail = () => {
           </div>
 
           <div className="flex gap-3 md:gap-5 pt-10">
-            <div className="px-5 py-2.5 bg-sky-500 rounded-md text-sm text-center text-white  font-bold font-['Montserrat'] tracking-tight whitespace-nowrap md:text-base ">
-              Select Options
+            <div
+              className="blueBtn cursor-pointer active:bg-sky-600"
+              onClick={() => dispatch(addProduct(product))}
+            >
+              Add to Cart
             </div>{" "}
             {[
               "mdi:heart-outline",
@@ -147,7 +178,7 @@ const ProductDetail = () => {
               the quick fox jumps over{" "}
             </p>
             <div className="flex flex-col gap-3">
-              {[1, 2, 3].map((p, i) => (
+              {[1, 2, 3].map((i) => (
                 <div key={i} className="flex gap-5 items-center">
                   <Icon icon="iconamoon:arrow-right-2-thin" />
                   <p className="text-neutral-500 text-sm font-normal font-['Montserrat']  tracking-tight">

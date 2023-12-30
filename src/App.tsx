@@ -10,18 +10,23 @@ import ProtectedPage from "./pages/ProtectedPage.tsx";
 
 import { useEffect } from "react";
 import { useAppDispatch } from "./store/store.ts";
-import { fetchGlobalData } from "./store/slices/globalSlice.ts";
+import {
+  fetchCategories,
+  fetchGlobalData,
+} from "./store/slices/globalSlice.ts";
 import SignInPage from "./pages/SignInPage.tsx";
-import { AxiosInstance } from "./api/axiosInstance.tsx";
 import { setUser } from "./store/slices/userSlice.ts";
 import { AxiosResponse } from "axios";
+import { axiosInstance } from "./api/axiosInstance.tsx";
+import ShoppingCartPage from "./pages/ShoppingCartPage.tsx";
+import OrderPage from "./pages/OrderPage.tsx";
 
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const verifyUser = async (): Promise<void> => {
       try {
-        const response: AxiosResponse = await AxiosInstance.get("verify");
+        const response: AxiosResponse = await axiosInstance.get("verify");
         console.log("app verify result", response.data);
         dispatch(setUser(response.data));
       } catch (error) {
@@ -35,6 +40,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchGlobalData());
+    dispatch(fetchCategories());
   }, []);
 
   return (
@@ -42,24 +48,27 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
-        <Route path="/product" element={<ProductPage />} />
+        <Route
+          path="/shop/:category_id/:gender/:category/:productId/:productName"
+          element={<ProductPage />}
+        />
+        <Route
+          path="/shop/:category_id/:gender/:category"
+          element={<ShopPage />}
+        />
+        <Route path="/shop/:search" element={<ShopPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route
-          path="/team"
+          path="/cart"
           element={
             <ProtectedPage>
-              <TeamPage />
+              <ShoppingCartPage />
             </ProtectedPage>
           }
         />
-        <Route
-          path="/contact"
-          element={
-            <ProtectedPage>
-              <ContactPage />
-            </ProtectedPage>
-          }
-        />
+        <Route path="/order" element={<OrderPage />} />
+        <Route path="/team" element={<TeamPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<SignInPage />} />
