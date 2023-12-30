@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 interface CardData {
   product: PayloadData;
@@ -43,7 +44,7 @@ export const shoppingCardSlice = createSlice({
       const existingProduct = state.card.find(
         (item) => item.product.id === action.payload.id
       );
-
+      toast.success("Product succesfully added to cart.");
       if (existingProduct) {
         return {
           ...state,
@@ -75,6 +76,7 @@ export const shoppingCardSlice = createSlice({
       state: UserData,
       action: PayloadAction<CardData>
     ): UserData => {
+      toast.warn("Product succesfully removed.");
       return {
         ...state,
         card: state.card.filter(
@@ -87,6 +89,7 @@ export const shoppingCardSlice = createSlice({
       state: UserData,
       action: PayloadAction<CardData>
     ): UserData => {
+      toast.warn("Product succesfully deleted.");
       if (action.payload.numberOfItem > 1) {
         return {
           ...state,

@@ -59,29 +59,7 @@ const Header = () => {
   }
   function seachHandler() {
     if (searchInput) {
-      if (searchInput.split(" ").length > 1) {
-        const gender = searchInput.toLowerCase().includes("kadın")
-          ? "k"
-          : searchInput.toLowerCase().includes("erkek")
-          ? "e"
-          : null;
-
-        const title = categories.filter((category) =>
-          searchInput.toLowerCase().includes(category.title.toLowerCase())
-        );
-        console.log(title);
-
-        const id = title.find((category) => category.gender === gender);
-        if (id) {
-          navigate(
-            `/shop/${id.id}/${gender == "k" ? "kadın" : "erkek"}/${id.title}`
-          );
-        } else {
-          navigate(`/shop/${searchInput}`);
-        }
-      } else {
-        navigate(`/shop/${searchInput}`);
-      }
+      navigate(`/shop/s?filter=${searchInput.replaceAll(" ", "+")}`);
     }
   }
   const w: number = innerWidth;
@@ -246,7 +224,7 @@ const Header = () => {
                       >
                         <div className="flex flex-col items-start gap-3">
                           <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
-                            <Link to="/shop/kadın">Kadın</Link>
+                            <Link to="/shop?filter=kadın">Kadın</Link>
                           </h6>
                           {women.map((category: any, i) => (
                             <Link
@@ -264,7 +242,7 @@ const Header = () => {
                         </div>
                         <div className="flex flex-col items-start gap-3">
                           <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
-                            <Link to="/shop/erkek">Erkek</Link>
+                            <Link to="/shop/s?filter=erkek">Erkek</Link>
                           </h6>
                           {men.map((category: any, i) => (
                             <Link
