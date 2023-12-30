@@ -25,7 +25,7 @@ const initialState: UserData = {
   products: [],
   total: 0,
   pageCount: 0,
-  activePage: 0,
+  activePage: 1,
 };
 
 export const fetchProducts = createAsyncThunk(
@@ -49,7 +49,7 @@ export const fetchMoreProducts = createAsyncThunk(
       "products",
       param
     );
-    console.log("product response data", response?.data);
+    console.log("product fetch more data response data", response?.data);
     return response?.data;
   }
 );
@@ -71,6 +71,7 @@ export const productSlice = createSlice({
         ...state,
         products: [...action.payload.products],
         total: action.payload.total,
+        activePage: 1,
       };
     });
     builder.addCase(
@@ -79,6 +80,7 @@ export const productSlice = createSlice({
         return {
           ...state,
           products: [...state.products, ...action.payload.products],
+          activePage: state.activePage + 1,
         };
       }
     );

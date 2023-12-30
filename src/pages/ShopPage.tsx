@@ -2,7 +2,7 @@ import Clients from "../components/Clients";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchMoreProducts, fetchProducts } from "../store/slices/productSlice";
 import ProductCard from "../components/ProductCard";
@@ -13,29 +13,34 @@ interface Params {
   category?: string;
   filter?: string;
   sort?: string;
+  offset?: number;
 }
+
 type RouterParams = {
   category_id?: string | undefined;
   gender?: string | undefined;
   category?: string | undefined;
   productId?: string | undefined;
   productName?: string | undefined;
+  search?: string | undefined;
 };
 
 type FormData = {
-  filter?: string;
-  sort?: string;
+  filter?: string | undefined;
+  sort?: string | undefined;
 };
+
 const ShopPage = () => {
   const routerParams = useParams<RouterParams>();
   const [productsLoading, setProductsLoading] = useState<boolean>(false);
-  const [pageNumber, setPageNumber] = useState<number>(1);
   const [params, setParams] = useState<Params>();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const categories: any = useAppSelector((state) => state.global.categories);
   const shoppingCart = useAppSelector((state) => state.shoppingCard.card);
-  const { products, total } = useAppSelector((state) => state.product);
+  const { products, total, activePage } = useAppSelector(
+    (state) => state.product
+  );
 
   const categoriesCopy = [...categories];
   const len = categoriesCopy.length;
@@ -51,11 +56,9 @@ const ShopPage = () => {
   }
   const shoppingCategories = categoriesCopy.slice(0, 5);
 
-  const { register, handleSubmit } = useForm<FormData>({
-    defaultValues: { filter: routerParams.gender },
-  });
+  const { register, handleSubmit } = useForm<FormData>();
 
-  const fetchProductsHandler = (params = {}) => {
+  const fetchProductsHandler = (params: Params) => {
     setProductsLoading(true);
     dispatch(
       fetchProducts({
@@ -67,30 +70,54 @@ const ShopPage = () => {
       }, 500);
     });
   };
-  console.log(total);
+
   const onSubmit = (data: FormData) => {
-    if (data.filter) {
-      setParams({
-        ...params,
-        filter: data.filter,
-        sort: data.sort,
-      });
-      fetchProductsHandler({ ...params, filter: data.filter, sort: data.sort });
+    if (data.filter && data.sort) {
+      setSearchParams({ filter: data.filter, sort: data.sort });
+    } else if (data.filter) {
+      setSearchParams({ filter: data.filter });
+    } else if (data.sort) {
+      setSearchParams({ sort: data.sort });
     } else {
-      setParams({ ...params, sort: data.sort });
-      fetchProductsHandler({ ...params, sort: data.sort });
     }
   };
 
   useEffect(() => {
-    setParams({
-      category: routerParams.category_id,
-      filter: routerParams.category_id ? "" : routerParams.gender,
-    });
-    fetchProductsHandler({
-      category: routerParams.category_id,
-      filter: routerParams.category_id ? "" : routerParams.gender,
-    });
+    const urlParams: any = {};
+    for (const entry of searchParams.entries()) {
+      urlParams[entry[0]] = entry[1];
+    }
+
+    if (routerParams.search) {
+      if (urlParams.p) {
+      } else {
+        fetchProductsHandler({
+          ...urlParams,
+        });
+        setParams({
+          ...urlParams,
+        });
+      }
+    } else {
+      if (routerParams.category_id) {
+        if (urlParams.p) {
+        } else {
+          fetchProductsHandler({
+            ...urlParams,
+            category: routerParams.category_id,
+          });
+          setParams({
+            ...urlParams,
+            category: routerParams.category_id,
+          });
+        }
+      } else {
+        if (urlParams.p) {
+        } else {
+          fetchProductsHandler({});
+        }
+      }
+    }
   }, [routerParams]);
 
   return (
@@ -191,17 +218,24 @@ const ShopPage = () => {
           </p>
         ) : (
           <InfiniteScroll
-            dataLength={pageNumber * 25}
-            next={() =>
+            dataLength={activePage * 25}
+            next={() => {
               dispatch(
                 fetchMoreProducts({
                   params: { ...params, offset: 25 },
                 })
-              ).then(() => {
-                setPageNumber(pageNumber + 1);
-              })
-            }
-            hasMore={pageNumber * 25 < total ? true : false}
+              );
+              const urlParams: any = {};
+              for (const entry of searchParams.entries()) {
+                urlParams[entry[0]] = entry[1];
+              }
+
+              setSearchParams({
+                ...urlParams,
+                p: String(activePage + 1),
+              });
+            }}
+            hasMore={activePage * 25 < total ? true : false}
             loader={
               <Icon icon="svg-spinners:180-ring" className="m-auto w-20 h-20" />
             }

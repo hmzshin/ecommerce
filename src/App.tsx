@@ -56,7 +56,7 @@ function App() {
           path="/shop/:category_id/:gender/:category"
           element={<ShopPage />}
         />
-        <Route path="/shop/:gender" element={<ShopPage />} />
+        <Route path="/shop/:search" element={<ShopPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route
           path="/cart"
