@@ -4,11 +4,8 @@ import Header from "../components/Header";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
-import {
-  addAddress,
-  fetchAddress,
-  saveAddress,
-} from "../store/slices/addressSlice";
+import { fetchAddress, saveAddress } from "../store/slices/addressSlice";
+import { axiosInstance } from "../api/axiosInstance";
 
 type FormData = {
   name: string;
@@ -18,11 +15,16 @@ type FormData = {
   district: string;
   neighborhood: string;
   address: string;
+  title: string;
 };
 
 const OrderPage = () => {
   const [firstStep, setFirstStep] = useState<boolean>(true);
   const [isNewAddress, setIsNewAddress] = useState<boolean>(false);
+  const [provinceData, setProvinceData] = useState<any[]>();
+  const [provinces, setProvinces] = useState<string[]>();
+  const [districts, setDistricts] = useState<string[]>([]);
+  const [city, setCity] = useState<string>();
   const formRef = useRef<HTMLFormElement>(null);
   const dispatch = useAppDispatch();
   const addresses = useAppSelector((state) => state.address.address);
@@ -41,8 +43,31 @@ const OrderPage = () => {
     setIsNewAddress(false);
     dispatch(saveAddress(data));
   };
+
+  const fetchProvinces = async () => {
+    try {
+      const response = await axiosInstance.get(
+        "https://turkiyeapi.dev/api/v1/provinces"
+      );
+      const provinces = response.data.data.map(
+        (province: any) => province.name
+      );
+      setProvinceData(response.data.data);
+      setProvinces(provinces);
+      console.log("async ", response.data.data);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const province = provinceData?.find((province) => province.name === city);
+    const districts = province?.districts.map((district: any) => district.name);
+    setDistricts(districts);
+  }, [city]);
   useEffect(() => {
     dispatch(fetchAddress());
+    fetchProvinces();
   }, []);
   return (
     <>
@@ -89,7 +114,7 @@ const OrderPage = () => {
                   >
                     <div className="w-full">
                       <p className="text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-t-md">
-                        {address.id}
+                        {address.title}
                       </p>
                       <p className="text-center p-1 font-bold rounded-b-md font-['Montserrat'] bg-sky-100">
                         {address.user_id}
@@ -142,7 +167,7 @@ const OrderPage = () => {
         </div>
 
         {isNewAddress && (
-          <div className="fixed top-0 left-0 w-screen h-screen bg-neutral-800 bg-opacity-25 z-10 flex items-center justify-center">
+          <div className="fixed top-0 left-0 w-screen h-screen bg-neutral-800 bg-opacity-25 z-10 flex items-center justify-center ">
             <form
               ref={formRef}
               className="mx-auto w-full max-w-xl bg-white p-10  border shadow-lg rounded-xl"
@@ -168,6 +193,14 @@ const OrderPage = () => {
                     } focus:shadow-md `}
                   />
                 </label>
+                {errors.name && (
+                  <p
+                    role="alert"
+                    className="text-red-400 absolute top-0 right-0"
+                  >
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
               <div className="mb-5 relative">
                 <label className="mb-3 block text-base font-medium text-[#07074D]">
@@ -189,11 +222,19 @@ const OrderPage = () => {
                     } focus:shadow-md `}
                   />
                 </label>
+                {errors.surname && (
+                  <p
+                    role="alert"
+                    className="text-red-400 absolute top-0 right-0"
+                  >
+                    {errors.surname.message}
+                  </p>
+                )}
               </div>
 
               <div className="mb-5 relative">
                 <label className="mb-3 block text-base font-medium text-[#07074D]">
-                  Phone Number <span className="text-sm">(Optional)</span>
+                  Phone Number
                   <input
                     type="tel"
                     {...register("phone", {
@@ -222,20 +263,36 @@ const OrderPage = () => {
               <div className="mb-5">
                 <label className="mb-3 block text-base font-medium text-[#07074D]">
                   City <span className="text-sm">(Optional)</span>
-                  <input
-                    type="text"
+                  <select
                     {...register("city")}
                     className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 focus:shadow-md"
-                  />{" "}
+                    onChange={(e) => {
+                      setCity(e.target.value);
+                    }}
+                  >
+                    <option value="">Chose a City</option>
+                    {provinces?.map((city, i) => (
+                      <option key={i} value={city}>
+                        {" "}
+                        {city}
+                      </option>
+                    ))}
+                  </select>
                 </label>
               </div>
               <div className="mb-5">
                 <label className="mb-3 block text-base font-medium text-[#07074D]">
                   District
-                  <input
+                  <select
                     {...register("district")}
                     className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
-                  ></input>
+                  >
+                    {districts?.map((district, i) => (
+                      <option key={i} value={district}>
+                        {district}
+                      </option>
+                    ))}
+                  </select>
                 </label>
               </div>
               <div className="mb-5">
@@ -259,7 +316,27 @@ const OrderPage = () => {
                   />
                 </label>
               </div>
-
+              <div className="mb-5 relative">
+                <label className="mb-3 block text-base font-medium text-[#07074D]">
+                  Address Title
+                  <input
+                    type="text"
+                    {...register("title", {
+                      required: "Name is required",
+                      minLength: {
+                        value: 3,
+                        message: "The name must be at least three characters.",
+                      },
+                    })}
+                    placeholder="Enter your name"
+                    className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
+                      errors.name
+                        ? "focus:border-red-400 border-red-400"
+                        : "focus:border-sky-500 border-[#e0e0e0]"
+                    } focus:shadow-md `}
+                  />
+                </label>
+              </div>
               <button
                 className={`hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none `}
               >

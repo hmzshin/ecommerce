@@ -46,7 +46,10 @@ const ShoppingCartPage = () => {
         <div className="justify-center gap-3  items-start flex flex-wrap lg:px-[12%] md:flex-nowrap">
           <div className="rounded-lg w-full md:w-2/3 flex flex-col  gap-2  items-center  self-stretch">
             {shoppingCart.map((item, i) => (
-              <div className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full">
+              <div
+                key={i}
+                className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full"
+              >
                 <div className="w-full">
                   <p className="text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-t-md">
                     {`Seller: ${item.product.store_id}`}
@@ -57,10 +60,7 @@ const ShoppingCartPage = () => {
                       : `Shipping:  ${item.shipping} $`}
                   </p>
                 </div>
-                <div
-                  key={i}
-                  className="rounded-lg bg-white p-1 sm:p-3  flex justify-between items-center gap-3 w-full"
-                >
+                <div className="rounded-lg bg-white p-1 sm:p-3  flex justify-between items-center gap-3 w-full">
                   <img
                     src={item.product.images[0]["url"]}
                     alt="product-image"
