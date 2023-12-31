@@ -38,18 +38,16 @@ const ShoppingCartPage = () => {
   return (
     <>
       <Header />
-      <table
+      <section
         id="shoppingChart"
         className={`bg-gray-100 px-3 pb-3 border shadow-2xl rounded-md flex flex-col `}
       >
-        <tr className="py-3 sm:py-5 text-center text-xl font-bold">
-          Cart Items
-        </tr>
-        <tbody className="justify-center gap-3  items-start flex flex-wrap lg:px-[12%] md:flex-nowrap">
-          <td className="rounded-lg w-full md:w-2/3 flex flex-col  gap-2  items-center  self-stretch">
+        <p className="py-3 sm:py-5 text-center text-xl font-bold">Cart Items</p>
+        <div className="justify-center gap-3  items-start flex flex-wrap lg:px-[12%] md:flex-nowrap">
+          <div className="rounded-lg w-full md:w-2/3 flex flex-col  gap-2  items-center  self-stretch">
             {shoppingCart.map((item, i) => (
-              <tr className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full">
-                <td className="w-full">
+              <div className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full">
+                <div className="w-full">
                   <p className="text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-t-md">
                     {`Seller: ${item.product.store_id}`}
                   </p>
@@ -58,8 +56,8 @@ const ShoppingCartPage = () => {
                       ? ` Free Shipping`
                       : `Shipping:  ${item.shipping} $`}
                   </p>
-                </td>
-                <td
+                </div>
+                <div
                   key={i}
                   className="rounded-lg bg-white p-1 sm:p-3  flex justify-between items-center gap-3 w-full"
                 >
@@ -121,12 +119,12 @@ const ShoppingCartPage = () => {
                       </div>
                     </div>
                   </div>
-                </td>
-              </tr>
+                </div>
+              </div>
             ))}
-          </td>
+          </div>
 
-          <td className="sticky top-0 h-full w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
+          <div className="sticky top-0 h-full w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
             <div className="mb-2 flex justify-between">
               <p className="text-gray-700">Subtotal</p>
               <p className="text-gray-700">{subTotal} $</p>
@@ -149,9 +147,9 @@ const ShoppingCartPage = () => {
             >
               Proceed to checkout
             </button>
-          </td>
-        </tbody>
-      </table>
+          </div>
+        </div>
+      </section>
       <Footer />
     </>
   );
