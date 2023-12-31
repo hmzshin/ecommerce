@@ -6,6 +6,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
 import { fetchAddress, saveAddress } from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
+import { toast } from "react-toastify";
 
 type FormData = {
   name: string;
@@ -56,6 +57,7 @@ const OrderPage = () => {
       setProvinces(provinces);
       console.log("async ", response.data.data);
     } catch (error) {
+      toast.error("Can not download city information");
       throw error;
     }
   };
@@ -65,6 +67,7 @@ const OrderPage = () => {
     const districts = province?.districts.map((district: any) => district.name);
     setDistricts(districts);
   }, [city]);
+
   useEffect(() => {
     dispatch(fetchAddress());
     fetchProvinces();
@@ -85,7 +88,7 @@ const OrderPage = () => {
                     firstStep ? " shadow-sky-300" : "shadow-neutral-300"
                   }`}
                 >
-                  adres bilgileri
+                  Address Information
                 </div>
                 <div
                   className={`w-1/2 h-20 text-left border shadow-[0px_5px_0px_0px]  ${
@@ -93,10 +96,10 @@ const OrderPage = () => {
                   }`}
                 >
                   {" "}
-                  ödeme seçenekleri
+                  Payment Options
                 </div>
               </div>
-              <p>Teslimat adresi</p>
+              <p>Delivery Address</p>
               <div className="flex flex-wrap w-full gap-y-2 justify-between ">
                 <div
                   className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] h-32 flex-wrap cursor-pointer"
@@ -104,7 +107,7 @@ const OrderPage = () => {
                 >
                   <Icon icon="material-symbols:add" />
                   <p className="text-center font-bold p-1 font-['Montserrat'] rounded-t-md ">
-                    Adres Ekle
+                    Add New Address
                   </p>
                 </div>
                 {addresses.map((address, i: number) => (
