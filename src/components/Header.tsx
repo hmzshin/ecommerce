@@ -57,7 +57,7 @@ const Header = () => {
     navigate("/");
     dispatch(setUser({ name: "", email: "", role_id: "" }));
   }
-  function seachHandler() {
+  function searchHandler() {
     if (searchInput) {
       navigate(`/shop/s?filter=${searchInput.replaceAll(" ", "+")}`);
     }
@@ -269,13 +269,15 @@ const Header = () => {
               type="text"
               className="w-52 lg:w-full  rounded-md border bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none"
               onChange={(e) => setSearchInput(e.target.value)}
-              onKeyDown={(e) => (e.key === "Enter" ? seachHandler() : () => {})}
+              onKeyDown={(e) =>
+                e.key === "Enter" ? searchHandler() : () => {}
+              }
               placeholder="Search in Store"
             />
             <img
               src={search}
               className="absolute  right-2 w-5 h-5 "
-              onClick={seachHandler}
+              onClick={searchHandler}
             />
           </div>
           <div className="flex items-center text-center font-bold font-['Montserrat'] tracking-tight ">

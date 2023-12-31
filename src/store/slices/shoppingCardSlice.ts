@@ -44,7 +44,7 @@ export const shoppingCardSlice = createSlice({
       const existingProduct = state.card.find(
         (item) => item.product.id === action.payload.id
       );
-      toast.success("Product succesfully added to cart.");
+      toast.success("Product successfully added to cart.");
       if (existingProduct) {
         return {
           ...state,
@@ -76,7 +76,7 @@ export const shoppingCardSlice = createSlice({
       state: UserData,
       action: PayloadAction<CardData>
     ): UserData => {
-      toast.warn("Product succesfully removed.");
+      toast.warn("Product successfully removed.");
       return {
         ...state,
         card: state.card.filter(
@@ -89,7 +89,7 @@ export const shoppingCardSlice = createSlice({
       state: UserData,
       action: PayloadAction<CardData>
     ): UserData => {
-      toast.warn("Product succesfully deleted.");
+      toast.warn("Product successfully deleted.");
       if (action.payload.numberOfItem > 1) {
         return {
           ...state,

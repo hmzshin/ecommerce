@@ -85,13 +85,15 @@ const SignUpForm = () => {
   return (
     <section
       id="signup-form"
-      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col items-center justify-center gap-20 p-12 "
     >
-      <h3 className="text-sky-500  text-2xl font-bold font-['Montserrat']  tracking-tigh">
+      <h3 className="text-sky-500  text-2xl font-bold font-['Montserrat']  tracking-tight">
         Create a Bandage Account
       </h3>{" "}
-      <form className="mx-auto w-full max-w-xl bg-white">
+      <form
+        className="mx-auto w-full max-w-xl bg-white"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="mb-5 relative">
           <label className="mb-3 block text-base font-medium text-[#07074D]">
             Full Name
@@ -249,7 +251,7 @@ const SignUpForm = () => {
             </p>
           )}
         </div>
-        <div id="birthdate" className="mb-5">
+        <div id="birthday" className="mb-5">
           <label className="mb-3 block text-base font-medium text-[#07074D]">
             Date of Birth <span className="text-sm">(Optional)</span>
             <input

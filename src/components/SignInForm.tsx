@@ -27,7 +27,7 @@ const SignInForm = () => {
     dispatch(sendLoginInfo(data))
       .unwrap()
       .then(() => {
-        toast.success("Succesfully loggedin");
+        toast.success("Successfully logged in");
         location.state ? navigate(location.state.pathname) : navigate("/");
       })
       .catch((error) => {
@@ -38,11 +38,11 @@ const SignInForm = () => {
 
   return (
     <section
-      id="signin-form"
+      id="singin-form"
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col items-center justify-center  p-12 "
     >
-      <h3 className="text-sky-500  text-4xl font-bold font-['Montserrat']  tracking-tigh">
+      <h3 className="text-sky-500  text-4xl font-bold font-['Montserrat']  tracking-tight">
         Login
       </h3>
       <form className="mx-auto w-full max-w-xl bg-white pt-16 pb-10">
