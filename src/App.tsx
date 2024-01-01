@@ -58,15 +58,15 @@ function App() {
         />
         <Route path="/shop/:search" element={<ShopPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/cart" element={<ShoppingCartPage />} />
         <Route
-          path="/cart"
+          path="/order"
           element={
             <ProtectedPage>
-              <ShoppingCartPage />
+              <OrderPage />
             </ProtectedPage>
           }
         />
-        <Route path="/order" element={<OrderPage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/contact" element={<ContactPage />} />
 
