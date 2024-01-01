@@ -6,16 +6,28 @@ import {
   addProduct,
   decreaseNumberOfItems,
   deleteProduct,
+  setPriceInfo,
 } from "../store/slices/shoppingCardSlice";
 import { useNavigate } from "react-router-dom";
 
 const ShoppingCartPage = () => {
   const [subTotal, setSubtotal] = useState<number>(0);
-  const [shipping, setShipping] = useState<number>(15);
-  const [totalPrice, setTotalPrice] = useState<number>();
+  const [shipping, setShipping] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
   const shoppingCart = useAppSelector((store) => store.shoppingCard.card);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  function handleCheckout() {
+    dispatch(
+      setPriceInfo({
+        subtotal: subTotal,
+        shipping: shipping,
+        total: totalPrice,
+      })
+    );
+    navigate("/order");
+  }
 
   useEffect(() => {
     const total: number = shoppingCart.reduce(
@@ -143,7 +155,7 @@ const ShoppingCartPage = () => {
             </div>
             <button
               className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400"
-              onClick={() => navigate("/order")}
+              onClick={handleCheckout}
             >
               Proceed to checkout
             </button>

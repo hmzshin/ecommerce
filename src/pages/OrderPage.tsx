@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { fetchAddress, saveAddress } from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
+import { setAddressInfo } from "../store/slices/shoppingCardSlice";
 
 type FormData = {
   name: string;
@@ -32,6 +33,10 @@ const OrderPage = () => {
   const addRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const addresses = useAppSelector((state) => state.address.address);
+  const payment = useAppSelector((state) => state.shoppingCard.payment);
+  const shippingAddress = useAppSelector(
+    (state) => state.shoppingCard.address.shipping
+  );
 
   const {
     register,
@@ -80,10 +85,17 @@ const OrderPage = () => {
   function stepHandler() {
     if (firstStep && activeAddress && activeBillingAddress) {
       setFirstStep(false);
+      const shipping = addresses.find(
+        (address) => address.title == activeAddress
+      );
+      const billing = addresses.find(
+        (address) => address.title == activeBillingAddress
+      );
+      if (shipping && billing) {
+        dispatch(setAddressInfo({ shipping: shipping, billing: billing }));
+      }
     } else if (firstStep) {
       toast.warn("Please choose an address");
-    } else {
-      setFirstStep(true);
     }
   }
 
@@ -124,24 +136,61 @@ const OrderPage = () => {
   return (
     <>
       <Header />
-      <section id="orderDetails" className="flex lg:px-[7%] py-5">
+      <section id="orderDetails" className="flex xl:px-[5%] py-5">
         <div
           id="shoppingChart"
-          className={`bg-neutral-50 py-10 border rounded-md flex flex-col w-full`}
+          className={`bg-neutral-50 py-10 pr-3 border rounded-md flex flex-col w-full`}
         >
-          <div className="justify-center gap-3  items-start flex flex-wrap  md:flex-nowrap ">
-            <div className="rounded-lg w-full md:w-2/3 ml-3 flex flex-col gap-2 items-center  self-stretch border shadow-sm">
-              <div className="text-center text-xl font-bold flex w-full">
-                <p
-                  className={`w-1/2 h-20 pl-3 flex items-center justify-start border shadow-[0px_5px_0px_0px] ${
-                    firstStep ? " shadow-[#176B87]" : "shadow-neutral-300"
+          <div className="flex flex-wrap justify-center gap-3 items-start md:flex-nowrap ">
+            <div className="rounded-lg w-full md:w-2/3 ml-3 flex flex-col gap-2 items-center  self-stretch shadow-sm xl:border">
+              <div className="text-center text-xl flex w-full ">
+                <div
+                  className={`w-full xl:w-1/2 min-h-[100px] xl:min-h-[185px]  flex flex-col items-start justify-start border shadow-[0px_5px_0px_0px] ${
+                    firstStep
+                      ? " shadow-[#176B87]"
+                      : "shadow-neutral-300 hidden xl:flex"
                   }`}
                 >
-                  Address Information
-                </p>
+                  <p className="text-lg px-5 pt-5 font-bold w-full flex flex-wrap items-center justify-between">
+                    Address Information
+                    {!firstStep && (
+                      <span
+                        className="text-sm text-[#176B87] cursor-pointer"
+                        onClick={() => setFirstStep(true)}
+                      >
+                        Change Address
+                      </span>
+                    )}
+                  </p>
+
+                  {!firstStep && (
+                    <div className="rounded-lg bg-neutral-50 p-1 sm:p-3 flex flex-col justify-between items-center w-full  font-['Montserrat']">
+                      <div className="w-full pb-2">
+                        <p className="flex gap-5 text-left pl-2 text-sm font-['Montserrat'] rounded-md">
+                          {shippingAddress.title}
+                        </p>
+                      </div>
+                      <div className="rounded-lg bg-neutral-50 pl-2 flex flex-col justify-between items-center  w-full">
+                        <div className="flex flex-col items-start w-full ">
+                          <p className=" mr-2 font-['Montserrat'] text-sm">
+                            <span>{shippingAddress.neighborhood}</span>{" "}
+                            <span>{shippingAddress.address}</span>{" "}
+                          </p>
+                          <p className=" mr-2 self-end font-['Montserrat'] text-sm">
+                            <span>{shippingAddress.district}</span>
+                            <span>/</span>
+                            <span>{shippingAddress.city}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <p
-                  className={`w-1/2 h-20 pl-3 flex items-center justify-start border shadow-[0px_5px_0px_0px]  ${
-                    firstStep ? "shadow-neutral-300" : " shadow-[#176B87]"
+                  className={`w-full xl:w-1/2 h-20 pl-3 text-lg flex flex-col items-start justify-start border shadow-[0px_5px_0px_0px] min-h-[100px] xl:min-h-[185px] pt-5 font-bold ${
+                    firstStep
+                      ? "shadow-neutral-300 hidden xl:flex"
+                      : " shadow-[#176B87]"
                   }`}
                 >
                   {" "}
@@ -150,7 +199,7 @@ const OrderPage = () => {
               </div>
               {firstStep ? (
                 <>
-                  <div className="text-center font-bold p-1 font-['Montserrat'] rounded -md flex flex-wrap gap-3  items-center justify-between w-full px-10 py-5 border ">
+                  <div className="text-center font-bold p-5 font-['Montserrat'] border rounded-md flex flex-wrap gap-3 items-center justify-between w-full">
                     <p> Delivery Address</p>
                     <p>
                       Billing Address:
@@ -158,7 +207,7 @@ const OrderPage = () => {
                         name="billingAddress"
                         id="billingAddress"
                         value={activeBillingAddress}
-                        className="text-[#176B87] ml-5 bg-neutral-50"
+                        className="text-[#176B87] ml-1 bg-neutral-50"
                         onChange={(e) => addressChangeHandler(e)}
                       >
                         {addresses.map((address, i: number) => (
@@ -171,7 +220,7 @@ const OrderPage = () => {
                   </div>
                   <div className="flex flex-wrap w-full gap-y-2 justify-between ">
                     <div
-                      className="rounded-lg bg-white p-1 sm:p-3 min-h-[200px] shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
+                      className="rounded-lg bg-white p-1 sm:p-3 min-h-[150px] shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
                       onClick={() => setIsNewAddress(true)}
                       ref={addRef}
                     >
@@ -237,24 +286,24 @@ const OrderPage = () => {
                   </div>{" "}
                 </>
               ) : (
-                <div></div>
+                <div>naber</div>
               )}
             </div>
 
             <div className=" w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
               <div className="mb-2 flex justify-between">
                 <p className="text-gray-700">Subtotal</p>
-                <p className="text-gray-700">{} $</p>
+                <p className="text-gray-700">{payment.subtotal} $</p>
               </div>
               <div className="flex justify-between">
                 <p className="text-gray-700">Shipping</p>
-                <p className="text-gray-700">{} $</p>
+                <p className="text-gray-700">{payment.shipping} $</p>
               </div>
               <hr className="my-4" />
               <div className="flex justify-between">
                 <p className="text-lg font-bold">Total</p>
                 <div className="">
-                  <p className="mb-1 text-lg font-bold">{} $</p>
+                  <p className="mb-1 text-lg font-bold">{payment.total} $</p>
                   <p className="text-sm text-gray-700">including VAT</p>
                 </div>
               </div>
@@ -262,7 +311,7 @@ const OrderPage = () => {
                 className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400"
                 onClick={stepHandler}
               >
-                {firstStep ? "Save and Continue" : "Change Address"}
+                {firstStep ? "Save and Continue" : "Make Payment"}
               </button>
             </div>
           </div>
