@@ -25,14 +25,13 @@ const OrderPage = () => {
   const [provinceData, setProvinceData] = useState<any[]>();
   const [provinces, setProvinces] = useState<string[]>();
   const [districts, setDistricts] = useState<string[]>([]);
+  const [activeAddress, setActiveAddress] = useState<string>();
+  const [activeBillingAddress, setActiveBillingAddress] = useState<string>();
   const [city, setCity] = useState<string>("default");
   const formRef = useRef<HTMLFormElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const addresses = useAppSelector((state) => state.address.address);
-  useEffect(() => {
-    console.log("user address ", addresses);
-  }, [addresses]);
 
   const {
     register,
@@ -41,18 +40,18 @@ const OrderPage = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  function handleCityChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const selectedCity = e.target.value;
     setCity(selectedCity);
     setValue("city", selectedCity, { shouldValidate: true });
-  };
-  const onSubmit = (data: FormData) => {
+  }
+  function onSubmit(data: FormData) {
     console.log("form data", data);
     setIsNewAddress(false);
     dispatch(saveAddress(data));
-  };
+  }
 
-  const fetchProvinces = async () => {
+  async function fetchProvinces() {
     try {
       const response = await axiosInstance.get(
         "https://turkiyeapi.dev/api/v1/provinces"
@@ -67,11 +66,27 @@ const OrderPage = () => {
       toast.error("Can not download city information");
       throw error;
     }
-  };
+  }
+
+  function addressChangeHandler(e: any) {
+    if (e.target.name === "activeAddress") {
+      setActiveAddress(e.target.value);
+      setActiveBillingAddress(e.target.value);
+    } else {
+      setActiveBillingAddress(e.target.value);
+    }
+  }
+
+  function stepHandler() {
+    if (firstStep && activeAddress && activeBillingAddress) {
+      setFirstStep(false);
+    } else {
+      setFirstStep(true);
+    }
+  }
 
   useEffect(() => {
     const handleClick = (event: any) => {
-      console.log(event.target);
       if (
         addRef.current &&
         formRef.current &&
@@ -96,7 +111,12 @@ const OrderPage = () => {
   }, [city]);
 
   useEffect(() => {
-    dispatch(fetchAddress());
+    dispatch(fetchAddress())
+      .unwrap()
+      .catch((error) => {
+        console.log(error);
+        toast.error("Saved addresses could not loaded, Please refresh page.");
+      });
     fetchProvinces();
   }, []);
   return (
@@ -107,70 +127,119 @@ const OrderPage = () => {
           id="shoppingChart"
           className={`bg-neutral-50 py-10 border rounded-md flex flex-col w-full`}
         >
-          <div className="justify-center gap-3  items-start flex flex-wrap  md:flex-nowrap">
-            <div className="rounded-lg w-full md:w-2/3 pl-3 flex flex-col gap-2 items-center  self-stretch">
+          <div className="justify-center gap-3  items-start flex flex-wrap  md:flex-nowrap ">
+            <div className="rounded-lg w-full md:w-2/3 ml-3 flex flex-col gap-2 items-center  self-stretch border shadow-sm">
               <div className="text-center text-xl font-bold flex w-full">
-                <div
-                  className={`w-1/2 h-20 text-left border shadow-[0px_5px_0px_0px] ${
-                    firstStep ? " shadow-sky-300" : "shadow-neutral-300"
+                <p
+                  className={`w-1/2 h-20 pl-3 flex items-center justify-start border shadow-[0px_5px_0px_0px] ${
+                    firstStep ? " shadow-[#176B87]" : "shadow-neutral-300"
                   }`}
                 >
                   Address Information
-                </div>
-                <div
-                  className={`w-1/2 h-20 text-left border shadow-[0px_5px_0px_0px]  ${
-                    firstStep ? "shadow-neutral-300" : " shadow-sky-300"
+                </p>
+                <p
+                  className={`w-1/2 h-20 pl-3 flex items-center justify-start border shadow-[0px_5px_0px_0px]  ${
+                    firstStep ? "shadow-neutral-300" : " shadow-[#176B87]"
                   }`}
                 >
                   {" "}
                   Payment Options
-                </div>
+                </p>
               </div>
-              <p>Delivery Address</p>
-              <div className="flex flex-wrap w-full gap-y-2 justify-between ">
-                <div
-                  className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] h-32 flex-wrap cursor-pointer"
-                  onClick={() => setIsNewAddress(true)}
-                  ref={addRef}
-                >
-                  <Icon icon="material-symbols:add" />
-                  <p className="text-center font-bold p-1 font-['Montserrat'] rounded-t-md ">
-                    Add New Address
-                  </p>
-                </div>
-                {addresses.map((address, i: number) => (
-                  <div
-                    key={i}
-                    className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex flex-col justify-between items-center gap-3 w-full xl:w-[calc(50%-5px)]"
-                  >
-                    <div className="w-full">
-                      <p className="text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-t-md">
-                        {address.title}
-                      </p>
-                      <p className="text-center p-1 font-bold rounded-b-md font-['Montserrat'] bg-sky-100">
-                        {address.user_id}
-                      </p>
-                    </div>
-                    <div className="rounded-lg bg-white p-1 sm:p-3  flex justify-between items-center gap-3 w-full">
-                      <div className="ml-4  flex flex-col lg:flex-row gap-5 w-full  justify-between">
-                        <div className="mt-1 sm:mt-0">
-                          <h2 className="text-lg font-bold text-gray-900">
-                            {}
-                          </h2>
-                          <p className="text-lg h-14 test-sm overflow-hidden text-gray-700">
-                            {address.name}
-                          </p>
-                        </div>
-
-                        <div className="mt-4 flex flex-wrap justify-between lg:justify-end gap-3 xl:space-y-6 xl:mt-0 xl:block "></div>
-                      </div>
-                    </div>
+              {firstStep ? (
+                <>
+                  <div className="text-center font-bold p-1 font-['Montserrat'] rounded -md flex flex-wrap gap-3  items-center justify-between w-full px-10 py-5 border ">
+                    <p> Delivery Address</p>
+                    <p>
+                      Billing Address:
+                      <select
+                        name="billingAddress"
+                        id="billingAddress"
+                        value={activeBillingAddress}
+                        className="text-[#176B87] ml-5 bg-neutral-50"
+                        onChange={(e) => addressChangeHandler(e)}
+                      >
+                        {addresses.map((address, i: number) => (
+                          <option key={i} value={address.title}>
+                            {address.title}
+                          </option>
+                        ))}
+                      </select>
+                    </p>
                   </div>
-                ))}
-              </div>
+                  <div className="flex flex-wrap w-full gap-y-2 justify-between ">
+                    <div
+                      className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
+                      onClick={() => setIsNewAddress(true)}
+                      ref={addRef}
+                    >
+                      <Icon icon="material-symbols:add" className="w-5 h-5" />
+                      <p className="text-center font-bold p-1 font-['Montserrat']">
+                        Add New Address
+                      </p>
+                    </div>
+                    {!addresses ? (
+                      <Icon
+                        icon="svg-spinners:180-ring"
+                        className="m-auto w-20 h-20"
+                      />
+                    ) : (
+                      addresses.map((address, i: number) => (
+                        <div
+                          key={i}
+                          className="rounded-lg bg-white p-1 sm:p-3 shadow-md border flex flex-col justify-between items-center w-full xl:w-[calc(50%-5px)]"
+                        >
+                          <div className="w-full">
+                            <label className="flex gap-5 text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-md">
+                              <input
+                                type="radio"
+                                name="activeAddress"
+                                value={address.title}
+                                className="bg-gray-100 border-gray-300 focus:ring-red-500"
+                                onChange={(e) => addressChangeHandler(e)}
+                              />
+                              {address.title}
+                            </label>
+                          </div>
+                          <div className="rounded-lg bg-white p-1 sm:p-3 flex flex-col justify-between items-center  w-full">
+                            <div className=" w-full flex gap-2 justify-between items-center font-['Montserrat']  pb-5">
+                              <div className="flex items-center">
+                                <Icon
+                                  icon="material-symbols:person"
+                                  className="w-6 h-6 mr-3"
+                                />
+                                <p className="text-lg  text-gray-900 mr-2 font-['Montserrat']">
+                                  {address.name}
+                                </p>
+                                <p className="text-lg   text-gray-700 font-['Montserrat']">
+                                  {address.surname}
+                                </p>
+                              </div>
+                              <p>{address.phone}</p>
+                            </div>
+                            <div className="flex flex-col items-start w-full ">
+                              <p className=" text-gray-900 mr-2 font-['Montserrat']">
+                                <span>{address.neighborhood}</span>{" "}
+                                <span>{address.address}</span>{" "}
+                              </p>
+                              <p className=" text-gray-900 mr-2 self-end font-['Montserrat']">
+                                <span>{address.district}</span>
+                                <span>/</span>
+                                <span>{address.city}</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>{" "}
+                </>
+              ) : (
+                <div></div>
+              )}
             </div>
 
-            <div className="h-full w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
+            <div className=" w-full rounded-lg border max-h-[500px] bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
               <div className="mb-2 flex justify-between">
                 <p className="text-gray-700">Subtotal</p>
                 <p className="text-gray-700">{} $</p>
@@ -189,9 +258,9 @@ const OrderPage = () => {
               </div>
               <button
                 className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400"
-                onClick={() => setFirstStep(!firstStep)}
+                onClick={stepHandler}
               >
-                Proceed to checkout
+                {firstStep ? "Save and Continue" : "Change Address"}
               </button>
             </div>
           </div>
