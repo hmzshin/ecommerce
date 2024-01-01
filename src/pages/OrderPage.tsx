@@ -25,7 +25,7 @@ const OrderPage = () => {
   const [provinceData, setProvinceData] = useState<any[]>();
   const [provinces, setProvinces] = useState<string[]>();
   const [districts, setDistricts] = useState<string[]>([]);
-  const [city, setCity] = useState<string>();
+  const [city, setCity] = useState<string>("default");
   const formRef = useRef<HTMLFormElement>(null);
   const dispatch = useAppDispatch();
   const addresses = useAppSelector((state) => state.address.address);
@@ -177,7 +177,7 @@ const OrderPage = () => {
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="mb-5 relative">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
+                <label className="inputLabel">
                   Name
                   <input
                     type="text"
@@ -189,24 +189,19 @@ const OrderPage = () => {
                       },
                     })}
                     placeholder="Enter your name"
-                    className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                      errors.name
-                        ? "focus:border-red-400 border-red-400"
-                        : "focus:border-sky-500 border-[#e0e0e0]"
-                    } focus:shadow-md `}
+                    className={`defaultInput ${
+                      errors.name ? "inputWithError" : ""
+                    }  `}
                   />
                 </label>
                 {errors.name && (
-                  <p
-                    role="alert"
-                    className="text-red-400 absolute top-0 right-0"
-                  >
+                  <p role="alert" className="formErrorMessage">
                     {errors.name.message}
                   </p>
                 )}
               </div>
               <div className="mb-5 relative">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
+                <label className="inputLabel">
                   Surname
                   <input
                     type="text"
@@ -217,63 +212,63 @@ const OrderPage = () => {
                         message: "The name must be at least three characters.",
                       },
                     })}
-                    placeholder="Enter your name"
-                    className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                      errors.name
-                        ? "focus:border-red-400 border-red-400"
-                        : "focus:border-sky-500 border-[#e0e0e0]"
-                    } focus:shadow-md `}
+                    placeholder="Enter your surname"
+                    className={`defaultInput ${
+                      errors.name ? "inputWithError" : ""
+                    }  `}
                   />
                 </label>
                 {errors.surname && (
-                  <p
-                    role="alert"
-                    className="text-red-400 absolute top-0 right-0"
-                  >
+                  <p role="alert" className="formErrorMessage">
                     {errors.surname.message}
                   </p>
                 )}
               </div>
 
               <div className="mb-5 relative">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
+                <label className="inputLabel">
                   Phone Number
                   <input
                     type="tel"
                     {...register("phone", {
+                      required: "Phone number is required",
                       pattern: {
                         value: /^(\+90|90|)?\d{10}$/,
                         message: "Enter a valid number",
                       },
                     })}
                     placeholder="Enter your phone number"
-                    className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                      errors.phone
-                        ? "focus:border-red-400 border-red-400"
-                        : "focus:border-sky-500 border-[#e0e0e0]"
-                    } focus:shadow-md `}
+                    className={`defaultInput ${
+                      errors.phone ? "inputWithError" : ""
+                    }  `}
                   />
                 </label>
                 {errors.phone && (
-                  <p
-                    role="alert"
-                    className="text-red-400 absolute top-0 right-0"
-                  >
+                  <p role="alert" className="formErrorMessage">
                     {errors.phone.message}
                   </p>
                 )}
               </div>
-              <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
-                  City <span className="text-sm">(Optional)</span>
+              <div className="mb-5 relative">
+                <label className="inputLabel">
+                  City
                   <select
-                    {...register("city")}
-                    className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 focus:shadow-md"
-                    onChange={(e) => {
-                      setCity(e.target.value);
-                    }}
+                    {...register("city", {
+                      validate: (val: string) => {
+                        if (val == "default") {
+                          return "Choose a city";
+                        }
+                      },
+                    })}
+                    className={`defaultInput ${
+                      errors.city ? "inputWithError" : ""
+                    }`}
+                    value={city}
+                    onChange={(e) => handleCityChange(e)}
                   >
-                    <option value="">Chose a City</option>
+                    <option value="default" disabled>
+                      Chose a City
+                    </option>
                     {provinces?.map((city, i) => (
                       <option key={i} value={city}>
                         {" "}
@@ -282,14 +277,31 @@ const OrderPage = () => {
                     ))}
                   </select>
                 </label>
+                {errors.city && (
+                  <p role="alert" className="formErrorMessage">
+                    {errors.city.message}
+                  </p>
+                )}
               </div>
-              <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
+              <div className="mb-5 relative">
+                <label className="inputLabel">
                   District
                   <select
-                    {...register("district")}
-                    className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
+                    {...register("district", {
+                      validate: (val: string) => {
+                        if (val === "default") {
+                          return "Choose a district";
+                        }
+                      },
+                    })}
+                    className={`defaultInput ${
+                      errors.district ? "inputWithError" : ""
+                    }`}
+                    defaultValue="default"
                   >
+                    <option value="default" disabled>
+                      Choose a district
+                    </option>
                     {districts?.map((district, i) => (
                       <option key={i} value={district}>
                         {district}
@@ -297,48 +309,70 @@ const OrderPage = () => {
                     ))}
                   </select>
                 </label>
+                {errors.district && (
+                  <p role="alert" className="formErrorMessage">
+                    {errors.district.message}
+                  </p>
+                )}
               </div>
-              <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
+              <div className="mb-5 relative">
+                <label className="inputLabel">
                   Neighborhood
                   <input
                     type="text"
-                    {...register("neighborhood")}
-                    className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 focus:shadow-md"
+                    {...register("neighborhood", {
+                      required: "Neighborhood is required",
+                    })}
+                    className={`defaultInput ${
+                      errors.neighborhood ? "inputWithError" : ""
+                    }`}
                   />{" "}
                 </label>
+                {errors.neighborhood && (
+                  <p role="alert" className="formErrorMessage">
+                    {errors.neighborhood.message}
+                  </p>
+                )}
               </div>
 
-              <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
+              <div className="mb-5 relative">
+                <label className="inputLabel">
                   Address
                   <input
                     type="text"
-                    {...register("address")}
-                    className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 focus:shadow-md"
+                    {...register("address", {
+                      required: "Detail of address is required",
+                    })}
+                    className={`defaultInput   ${
+                      errors.address ? "inputWithError" : ""
+                    }`}
                   />
                 </label>
+                {errors.address && (
+                  <p role="alert" className="formErrorMessage">
+                    {errors.address.message}
+                  </p>
+                )}
               </div>
               <div className="mb-5 relative">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
+                <label className="inputLabel">
                   Address Title
                   <input
                     type="text"
                     {...register("title", {
-                      required: "Name is required",
-                      minLength: {
-                        value: 3,
-                        message: "The name must be at least three characters.",
-                      },
+                      required: "Address title is required",
                     })}
-                    placeholder="Enter your name"
-                    className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                      errors.name
-                        ? "focus:border-red-400 border-red-400"
-                        : "focus:border-sky-500 border-[#e0e0e0]"
-                    } focus:shadow-md `}
+                    placeholder="Address title"
+                    className={`defaultInput ${
+                      errors.title ? "inputWithError" : ""
+                    }  `}
                   />
                 </label>
+                {errors.title && (
+                  <p role="alert" className="formErrorMessage">
+                    {errors.title.message}
+                  </p>
+                )}
               </div>
               <button
                 className={`hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none `}

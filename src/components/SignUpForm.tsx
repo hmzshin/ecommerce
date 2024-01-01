@@ -78,13 +78,13 @@ const SignUpForm = () => {
     }
     console.log(submitData);
     postRequest(submitData, true).then((response) => {
-      console.log("signup response", response);
+      console.log("sign up response", response);
     });
   };
 
   return (
     <section
-      id="signup-form"
+      id="sign-up-form"
       className="flex flex-col items-center justify-center gap-20 p-12 "
     >
       <h3 className="text-sky-500  text-2xl font-bold font-['Montserrat']  tracking-tight">
@@ -95,7 +95,7 @@ const SignUpForm = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="mb-5 relative">
-          <label className="mb-3 block text-base font-medium text-[#07074D]">
+          <label className="inputLabel">
             Full Name
             <input
               type="text"
@@ -107,25 +107,18 @@ const SignUpForm = () => {
                 },
               })}
               placeholder="Enter your name"
-              className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                errors.name
-                  ? "focus:border-red-400 border-red-400"
-                  : "focus:border-sky-500 border-[#e0e0e0]"
-              } focus:shadow-md `}
+              className={`defaultInput ${errors.name ? "inputWithError" : ""}`}
             />
           </label>
           {errors.name && (
-            <p
-              role="alert"
-              className="text-red-400 absolute top-0 right-0 text-sm sm:text-base"
-            >
+            <p role="alert" className="formErrorMessage text-sm sm:text-base">
               {errors.name.message}
             </p>
           )}
         </div>
 
         <div className="mb-5 relative">
-          <label className="mb-3 block text-base font-medium text-[#07074D]">
+          <label className="inputLabel">
             Email Address
             <input
               type="email"
@@ -140,21 +133,17 @@ const SignUpForm = () => {
                 },
               })}
               placeholder="Enter your email"
-              className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                errors.email
-                  ? "focus:border-red-400 border-red-400"
-                  : "focus:border-sky-500 border-[#e0e0e0]"
-              } focus:shadow-md `}
+              className={`defaultInput ${errors.email ? "inputWithError" : ""}`}
             />
           </label>
           {errors.email && (
-            <p role="alert" className="text-red-400 absolute top-0 right-0">
+            <p role="alert" className="formErrorMessage">
               {errors.email.message}
             </p>
           )}
         </div>
         <div className="mb-5 relative">
-          <label className="mb-3 block text-base font-medium text-[#07074D]">
+          <label className="inputLabel">
             Password
             <input
               type={hidePassword ? "password" : "text"}
@@ -180,11 +169,9 @@ const SignUpForm = () => {
                 },
               })}
               placeholder="Enter Password"
-              className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                errors.password
-                  ? "focus:border-red-400 border-red-400"
-                  : "focus:border-sky-500 border-[#e0e0e0]"
-              } focus:shadow-md `}
+              className={`defaultInput ${
+                errors.password ? "inputWithError" : ""
+              }`}
             />{" "}
             <Icon
               icon={hidePassword ? "octicon:eye-closed-16" : "octicon:eye-16"}
@@ -193,13 +180,13 @@ const SignUpForm = () => {
             />
           </label>{" "}
           {errors.password && (
-            <p role="alert" className="text-red-400 absolute top-0 right-0">
+            <p role="alert" className="formErrorMessage">
               {errors.password?.message}
             </p>
           )}
         </div>
         <div className="mb-5 relative">
-          <label className="mb-3 block text-base font-medium text-[#07074D]">
+          <label className="inputLabel">
             Confirm Password
             <input
               type="password"
@@ -212,22 +199,20 @@ const SignUpForm = () => {
                 },
               })}
               placeholder="Confirm Password"
-              className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                errors.confirmPassword
-                  ? "focus:border-red-400 border-red-400"
-                  : "focus:border-sky-500 border-[#e0e0e0]"
-              } focus:shadow-md `}
+              className={`defaultInput ${
+                errors.confirmPassword ? "inputWithError" : ""
+              }`}
             />
           </label>
           {errors.confirmPassword && (
-            <p role="alert" className="text-red-400 absolute top-0 right-0">
+            <p role="alert" className="formErrorMessage">
               {errors.confirmPassword.message}
             </p>
           )}
         </div>
 
         <div className="mb-5 relative">
-          <label className="mb-3 block text-base font-medium text-[#07074D]">
+          <label className="inputLabel">
             Phone Number <span className="text-sm">(Optional)</span>
             <input
               type="tel"
@@ -238,37 +223,33 @@ const SignUpForm = () => {
                 },
               })}
               placeholder="Enter your phone number"
-              className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                errors.phone
-                  ? "focus:border-red-400 border-red-400"
-                  : "focus:border-sky-500 border-[#e0e0e0]"
-              } focus:shadow-md `}
+              className={`defaultInput ${errors.phone ? "inputWithError" : ""}`}
             />
           </label>
           {errors.phone && (
-            <p role="alert" className="text-red-400 absolute top-0 right-0">
+            <p role="alert" className="formErrorMessage">
               {errors.phone.message}
             </p>
           )}
         </div>
         <div id="birthday" className="mb-5">
-          <label className="mb-3 block text-base font-medium text-[#07074D]">
+          <label className="inputLabel">
             Date of Birth <span className="text-sm">(Optional)</span>
             <input
               type="date"
               {...register("birthDate")}
-              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 focus:shadow-md"
+              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 "
             />{" "}
           </label>
         </div>
         <div className="mb-5">
-          <label className="mb-3 block text-base font-medium text-[#07074D]">
+          <label className="inputLabel">
             Role
             <select
               {...register("role")}
               value={role}
               onChange={(e) => activateStoreDetails(e)}
-              className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none focus:border-sky-500 border-[#e0e0e0] focus:shadow-md `}
+              className={`defaultInput `}
             >
               {rolesArray.map((role: any) => (
                 <option key={role[1]} value={role[1]}>
@@ -284,7 +265,7 @@ const SignUpForm = () => {
             Store Details
           </label>
           <div className="mb-5 relative">
-            <label className="mb-3 block text-base font-medium text-[#07074D]">
+            <label className="inputLabel">
               Name
               <input
                 type="text"
@@ -301,22 +282,20 @@ const SignUpForm = () => {
                   },
                 })}
                 placeholder="Enter your store's name"
-                className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                  errors.storeName
-                    ? "focus:border-red-400 border-red-400"
-                    : "focus:border-sky-500 border-[#e0e0e0]"
-                } focus:shadow-md `}
+                className={`defaultInput ${
+                  errors.storeName ? "inputWithError" : ""
+                }`}
               />
             </label>
             {errors.storeName && (
-              <p role="alert" className="text-red-400 absolute top-0 right-0">
+              <p role="alert" className="formErrorMessage">
                 {errors.storeName.message}
               </p>
             )}
           </div>
 
           <div className="mb-5 relative">
-            <label className="mb-3 block text-base font-medium text-[#07074D]">
+            <label className="inputLabel">
               Phone Number
               <input
                 type="tel"
@@ -332,21 +311,19 @@ const SignUpForm = () => {
                   },
                 })}
                 placeholder="e.g. +90XXXXXXXXXX"
-                className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                  errors.storePhone
-                    ? "focus:border-red-400 border-red-400"
-                    : "focus:border-sky-500 border-[#e0e0e0]"
-                } focus:shadow-md `}
+                className={`defaultInput ${
+                  errors.storePhone ? "inputWithError" : ""
+                }`}
               />
             </label>
             {errors.storePhone && (
-              <p role="alert" className="text-red-400 absolute top-0 right-0">
+              <p role="alert" className="formErrorMessage">
                 {errors.storePhone.message}
               </p>
             )}
           </div>
           <div className="mb-5 relative">
-            <label className="mb-3 block text-base font-medium text-[#07074D]">
+            <label className="inputLabel">
               Tax ID
               <input
                 type="text"
@@ -361,21 +338,19 @@ const SignUpForm = () => {
                   },
                 })}
                 placeholder="TXXXXVXXXXXX"
-                className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                  errors.storeTax
-                    ? "focus:border-red-400 border-red-400"
-                    : "focus:border-sky-500 border-[#e0e0e0]"
-                } focus:shadow-md `}
+                className={`defaultInput ${
+                  errors.storeTax ? "inputWithError" : ""
+                }`}
               />
             </label>
             {errors.storeTax && (
-              <p role="alert" className="text-red-400 absolute top-0 right-0">
+              <p role="alert" className="formErrorMessage">
                 {errors.storeTax.message}
               </p>
             )}
           </div>
           <div className="mb-5 relative">
-            <label className="mb-3 block text-base font-medium text-[#07074D]">
+            <label className="inputLabel">
               Bank Account
               <input
                 type="text"
@@ -390,15 +365,13 @@ const SignUpForm = () => {
                   },
                 })}
                 placeholder="IBAN Number"
-                className={`w-full rounded-md border  bg-white py-3 px-6 mt-2 text-base font-medium text-[#6B7280] outline-none ${
-                  errors.storeBankAccount
-                    ? "focus:border-red-400 border-red-400"
-                    : "focus:border-sky-500 border-[#e0e0e0]"
-                } focus:shadow-md `}
+                className={`defaultInput ${
+                  errors.storeBankAccount ? "inputWithError" : ""
+                }`}
               />
             </label>
             {errors.storeBankAccount && (
-              <p role="alert" className="text-red-400 absolute top-0 right-0">
+              <p role="alert" className="formErrorMessage">
                 {errors.storeBankAccount.message}
               </p>
             )}
