@@ -8,8 +8,9 @@ import { fetchAddress, saveAddress } from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import { setAddressInfo } from "../store/slices/shoppingCardSlice";
+import { fetchCards, saveCard } from "../store/slices/paymentSlice";
 
-type FormData = {
+type FormDataAddress = {
   name: string;
   surname: string;
   phone: number;
@@ -19,10 +20,16 @@ type FormData = {
   address: string;
   title: string;
 };
+type FormDataCard = {
+  card_no: number;
+  ccv: number;
+  exp_date: string;
+};
 
 const OrderPage = () => {
   const [firstStep, setFirstStep] = useState<boolean>(true);
   const [isNewAddress, setIsNewAddress] = useState<boolean>(false);
+  const [addNewCard, setAddNewCard] = useState<boolean>(false);
   const [provinceData, setProvinceData] = useState<any[]>();
   const [provinces, setProvinces] = useState<string[]>();
   const [districts, setDistricts] = useState<string[]>([]);
@@ -30,9 +37,12 @@ const OrderPage = () => {
   const [activeBillingAddress, setActiveBillingAddress] = useState<string>();
   const [city, setCity] = useState<string>("default");
   const formRef = useRef<HTMLFormElement>(null);
+  const cardFormRef = useRef<HTMLFormElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
+  const addCardRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const addresses = useAppSelector((state) => state.address.address);
+  const cards = useAppSelector((state) => state.payment.cards);
   const payment = useAppSelector((state) => state.shoppingCard.payment);
   const shippingAddress = useAppSelector(
     (state) => state.shoppingCard.address.shipping
@@ -43,17 +53,33 @@ const OrderPage = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormDataAddress>();
+  const {
+    register: registerCard,
+    handleSubmit: handleSubmitCard,
+    formState: { errors: errorsCard },
+  } = useForm<FormDataCard>();
 
   function handleCityChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const selectedCity = e.target.value;
     setCity(selectedCity);
     setValue("city", selectedCity, { shouldValidate: true });
   }
-  function onSubmit(data: FormData) {
+  function onSubmit(data: FormDataAddress) {
     console.log("form data", data);
     setIsNewAddress(false);
     dispatch(saveAddress(data));
+  }
+
+  function onSubmitCard(data: FormDataCard) {
+    console.log("form data", data);
+    setAddNewCard(false);
+    const exp_month = data.exp_date.split("-")[0];
+    const exp_year = data.exp_date.split("-")[1];
+
+    dispatch(
+      saveCard({ card_no: data.card_no, exp_month, exp_year, ccv: data.ccv })
+    );
   }
 
   async function fetchProvinces() {
@@ -66,7 +92,6 @@ const OrderPage = () => {
       );
       setProvinceData(response.data.data);
       setProvinces(provinces);
-      console.log("async ", response.data.data);
     } catch (error) {
       toast.error("Can not download city information");
       throw error;
@@ -81,6 +106,8 @@ const OrderPage = () => {
       setActiveBillingAddress(e.target.value);
     }
   }
+
+  function cardChangeHandler(e: any) {}
 
   function stepHandler() {
     if (firstStep && activeAddress && activeBillingAddress) {
@@ -110,13 +137,24 @@ const OrderPage = () => {
         setIsNewAddress(false);
       }
     };
+    const handleClickCard = (event: any) => {
+      if (
+        addCardRef.current &&
+        cardFormRef.current &&
+        !cardFormRef.current?.contains(event.target) &&
+        !addCardRef.current?.contains(event.target)
+      ) {
+        setAddNewCard(false);
+      }
+    };
     window.addEventListener("click", handleClick);
-    console.log(isNewAddress);
+    window.addEventListener("click", handleClickCard);
 
     return () => {
       window.removeEventListener("click", handleClick);
+      window.removeEventListener("click", handleClickCard);
     };
-  }, [isNewAddress]);
+  }, [isNewAddress, addNewCard]);
 
   useEffect(() => {
     const province = provinceData?.find((province) => province.name === city);
@@ -132,6 +170,12 @@ const OrderPage = () => {
         toast.error("Saved addresses could not loaded, Please refresh page.");
       });
     fetchProvinces();
+    dispatch(fetchCards())
+      .unwrap()
+      .catch((error) => {
+        toast.error("Saved cards could not loaded, Please refresh page.");
+        throw error;
+      });
   }, []);
   return (
     <>
@@ -286,7 +330,55 @@ const OrderPage = () => {
                   </div>{" "}
                 </>
               ) : (
-                <div>naber</div>
+                <div className="flex flex-wrap w-full gap-y-2 justify-between ">
+                  <div
+                    className="rounded-lg bg-white p-1 sm:p-3 min-h-[150px] shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
+                    onClick={() => setAddNewCard(true)}
+                    ref={addCardRef}
+                  >
+                    <Icon icon="material-symbols:add" className="w-5 h-5" />
+                    <p className="text-center font-bold p-1 font-['Montserrat']">
+                      Add New Card
+                    </p>
+                  </div>
+                  {!cards ? (
+                    <Icon
+                      icon="svg-spinners:180-ring"
+                      className="m-auto w-20 h-20"
+                    />
+                  ) : (
+                    cards.map((card, i: number) => (
+                      <div
+                        key={i}
+                        className="rounded-lg bg-white p-1 sm:p-3 shadow-md border flex flex-col justify-between items-center w-full xl:w-[calc(50%-5px)]"
+                      >
+                        <div className="w-full">
+                          <label className="flex gap-5 text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-md">
+                            <input
+                              type="radio"
+                              name="activeCard"
+                              value={card.card_no}
+                              className="bg-gray-100 border-gray-300 focus:ring-red-500"
+                              onChange={(e) => cardChangeHandler(e)}
+                            />
+                            {card.card_no}
+
+                            <Icon
+                              icon="material-symbols:person"
+                              className="w-6 h-6 mr-3"
+                            />
+                            <p className="text-lg  text-gray-900 mr-2 font-['Montserrat']">
+                              {card.exp_date}
+                            </p>
+                            <p className="text-lg   text-gray-700 font-['Montserrat']">
+                              {card.ccv}
+                            </p>
+                          </label>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               )}
             </div>
 
@@ -526,6 +618,77 @@ const OrderPage = () => {
                 className={`hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none `}
               >
                 Add Address
+              </button>
+            </form>
+          </div>
+        )}
+
+        {addNewCard && (
+          <div className="fixed top-0 left-0 w-screen h-screen bg-neutral-800 bg-opacity-25 z-10 flex items-center justify-center ">
+            <form
+              ref={cardFormRef}
+              className="mx-auto w-full max-w-xl bg-white p-10  border shadow-lg rounded-xl"
+              onSubmit={handleSubmitCard(onSubmitCard)}
+            >
+              <div className="mb-5 relative">
+                <label className="inputLabel">
+                  Card Number
+                  <input
+                    type="text"
+                    {...registerCard("card_no", {
+                      required: "Card no is required",
+                      minLength: {
+                        value: 16,
+                        message: "Enter a valid card number",
+                      },
+                    })}
+                    placeholder="**** **** **** ****"
+                    className={`defaultInput ${
+                      errorsCard.card_no ? "inputWithError" : ""
+                    }  `}
+                  />
+                </label>
+                {errorsCard.card_no && (
+                  <p role="alert" className="formErrorMessage">
+                    {errorsCard.card_no.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-5 relative">
+                <label className="inputLabel">
+                  Exp Date
+                  <input
+                    type="month"
+                    {...registerCard("exp_date", {
+                      required: true,
+                    })}
+                    placeholder="Month"
+                    className={`defaultInput ${
+                      errorsCard.exp_date ? "inputWithError" : ""
+                    }  `}
+                  />
+                </label>
+              </div>
+
+              <div className="mb-5 relative">
+                <label className="inputLabel">
+                  CCV
+                  <input
+                    type="text"
+                    {...registerCard("ccv", {
+                      required: true,
+                    })}
+                    className={`defaultInput ${
+                      errorsCard.ccv ? "inputWithError" : ""
+                    }`}
+                  />
+                </label>
+              </div>
+
+              <button
+                className={`hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none `}
+              >
+                Add Card
               </button>
             </form>
           </div>

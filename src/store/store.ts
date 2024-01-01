@@ -8,6 +8,7 @@ import { shoppingCardSlice } from "./slices/shoppingCardSlice";
 import { storeSlice } from "./slices/storeSlice";
 import { bestsellerSlice } from "./slices/bestsellerSlice";
 import { addressSlice } from "./slices/addressSlice";
+import { paymentSlice } from "./slices/paymentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     store: storeSlice.reducer,
     bestseller: bestsellerSlice.reducer,
     address: addressSlice.reducer,
+    payment: paymentSlice.reducer,
   },
 });
 
