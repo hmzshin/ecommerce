@@ -80,6 +80,8 @@ const OrderPage = () => {
   function stepHandler() {
     if (firstStep && activeAddress && activeBillingAddress) {
       setFirstStep(false);
+    } else if (firstStep) {
+      toast.warn("Please choose an address");
     } else {
       setFirstStep(true);
     }
@@ -169,7 +171,7 @@ const OrderPage = () => {
                   </div>
                   <div className="flex flex-wrap w-full gap-y-2 justify-between ">
                     <div
-                      className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
+                      className="rounded-lg bg-white p-1 sm:p-3 min-h-[200px] shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
                       onClick={() => setIsNewAddress(true)}
                       ref={addRef}
                     >
