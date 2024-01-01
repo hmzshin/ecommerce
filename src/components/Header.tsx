@@ -64,7 +64,7 @@ const Header = () => {
   }
   const w: number = innerWidth;
   useEffect(() => {
-    window.addEventListener("click", (event: any) => {
+    const handleClick = (event: any) => {
       event.stopPropagation();
       if (
         isMenuVisible &&
@@ -92,7 +92,8 @@ const Header = () => {
       ) {
         setShowUserDetails(false);
       }
-    });
+    };
+    window.addEventListener("click", handleClick);
 
     window.addEventListener("scroll", () => {
       setShowCategories(false);
@@ -103,6 +104,10 @@ const Header = () => {
     } else {
       document.body.style.overflowY = "auto";
     }
+
+    return () => {
+      window.removeEventListener("click", handleClick);
+    };
   }, [isMenuVisible, showCategories, showUserDetails]);
 
   return (

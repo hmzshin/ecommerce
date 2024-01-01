@@ -27,6 +27,7 @@ const OrderPage = () => {
   const [districts, setDistricts] = useState<string[]>([]);
   const [city, setCity] = useState<string>("default");
   const formRef = useRef<HTMLFormElement>(null);
+  const addRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const addresses = useAppSelector((state) => state.address.address);
   useEffect(() => {
@@ -36,11 +37,17 @@ const OrderPage = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormData>();
 
+  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCity = e.target.value;
+    setCity(selectedCity);
+    setValue("city", selectedCity, { shouldValidate: true });
+  };
   const onSubmit = (data: FormData) => {
-    console.log(data);
+    console.log("form data", data);
     setIsNewAddress(false);
     dispatch(saveAddress(data));
   };
@@ -61,6 +68,26 @@ const OrderPage = () => {
       throw error;
     }
   };
+
+  useEffect(() => {
+    const handleClick = (event: any) => {
+      console.log(event.target);
+      if (
+        addRef.current &&
+        formRef.current &&
+        !formRef.current?.contains(event.target) &&
+        !addRef.current?.contains(event.target)
+      ) {
+        setIsNewAddress(false);
+      }
+    };
+    window.addEventListener("click", handleClick);
+    console.log(isNewAddress);
+
+    return () => {
+      window.removeEventListener("click", handleClick);
+    };
+  }, [isNewAddress]);
 
   useEffect(() => {
     const province = provinceData?.find((province) => province.name === city);
@@ -104,6 +131,7 @@ const OrderPage = () => {
                 <div
                   className="rounded-lg bg-white p-1 sm:p-3 shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] h-32 flex-wrap cursor-pointer"
                   onClick={() => setIsNewAddress(true)}
+                  ref={addRef}
                 >
                   <Icon icon="material-symbols:add" />
                   <p className="text-center font-bold p-1 font-['Montserrat'] rounded-t-md ">
