@@ -4,7 +4,9 @@ import { axiosInstance } from "../../api/axiosInstance";
 interface CardInfo {
   card_no: number;
   ccv: number;
-  exp_date: string;
+  exp_month: string;
+  exp_year: string;
+  name: string;
 }
 
 interface UserData {
@@ -57,7 +59,7 @@ export const paymentSlice = createSlice({
     builder.addCase(
       saveCard.fulfilled,
       (state: UserData, action: PayloadAction<any>): UserData => {
-        return { ...state, cards: [...state.cards, action.payload] };
+        return { ...state, cards: [...state.cards, action.payload[0]] };
       }
     );
   },

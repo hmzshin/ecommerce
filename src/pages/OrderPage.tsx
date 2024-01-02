@@ -8,7 +8,7 @@ import { fetchAddress, saveAddress } from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import { setAddressInfo } from "../store/slices/shoppingCardSlice";
-import { fetchCards, saveCard } from "../store/slices/paymentSlice";
+import { addCard, fetchCards } from "../store/slices/paymentSlice";
 
 type FormDataAddress = {
   name: string;
@@ -24,6 +24,7 @@ type FormDataCard = {
   card_no: number;
   ccv: number;
   exp_date: string;
+  name: string;
 };
 
 const OrderPage = () => {
@@ -39,7 +40,7 @@ const OrderPage = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const cardFormRef = useRef<HTMLFormElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
-  const addCardRef = useRef<HTMLDivElement>(null);
+  const addCardRef = useRef<HTMLLIElement>(null);
   const dispatch = useAppDispatch();
   const addresses = useAppSelector((state) => state.address.address);
   const cards = useAppSelector((state) => state.payment.cards);
@@ -78,7 +79,13 @@ const OrderPage = () => {
     const exp_year = data.exp_date.split("-")[1];
 
     dispatch(
-      saveCard({ card_no: data.card_no, exp_month, exp_year, ccv: data.ccv })
+      addCard({
+        card_no: data.card_no,
+        exp_month,
+        exp_year,
+        ccv: data.ccv,
+        name: data.name,
+      })
     );
   }
 
@@ -107,7 +114,9 @@ const OrderPage = () => {
     }
   }
 
-  function cardChangeHandler(e: any) {}
+  function cardChangeHandler(e: any) {
+    console.log(e.target.value);
+  }
 
   function stepHandler() {
     if (firstStep && activeAddress && activeBillingAddress) {
@@ -330,8 +339,8 @@ const OrderPage = () => {
                   </div>{" "}
                 </>
               ) : (
-                <div className="flex flex-wrap w-full gap-y-2 justify-between ">
-                  <div
+                <ul className="flex flex-wrap w-full gap-y-2 justify-between ">
+                  <li
                     className="rounded-lg bg-white p-1 sm:p-3 min-h-[150px] shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
                     onClick={() => setAddNewCard(true)}
                     ref={addCardRef}
@@ -340,7 +349,7 @@ const OrderPage = () => {
                     <p className="text-center font-bold p-1 font-['Montserrat']">
                       Add New Card
                     </p>
-                  </div>
+                  </li>
                   {!cards ? (
                     <Icon
                       icon="svg-spinners:180-ring"
@@ -348,37 +357,72 @@ const OrderPage = () => {
                     />
                   ) : (
                     cards.map((card, i: number) => (
-                      <div
+                      <li
                         key={i}
-                        className="rounded-lg bg-white p-1 sm:p-3 shadow-md border flex flex-col justify-between items-center w-full xl:w-[calc(50%-5px)]"
+                        className=" rounded-lg bg-white shadow-md border flex flex-col justify-between items-center w-full h-[250px] xl:w-[calc(50%-5px)]"
                       >
-                        <div className="w-full">
-                          <label className="flex gap-5 text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-md">
-                            <input
-                              type="radio"
-                              name="activeCard"
-                              value={card.card_no}
-                              className="bg-gray-100 border-gray-300 focus:ring-red-500"
-                              onChange={(e) => cardChangeHandler(e)}
+                        <input
+                          type="radio"
+                          id={String(card.card_no)}
+                          name="activeCard"
+                          value={card.card_no}
+                          className="hidden peer"
+                          onChange={(e) => cardChangeHandler(e)}
+                        />
+                        <label
+                          htmlFor={String(card.card_no)}
+                          className="flex items-center justify-around w-full h-full p-1 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer  peer-checked:border-sky-500 peer-checked:border-[2px] hover:text-gray-600 hover:bg-gray-100 "
+                        >
+                          <div className="w-full h-full  bg-black-100 rounded-xl relative text-white shadow-2xl flex">
+                            <img
+                              className="object-cover w-full h-full rounded-xl"
+                              src="https://images.unsplash.com/photo-1599239663833-4c1cdc22892a?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             />
-                            {card.card_no}
 
-                            <Icon
-                              icon="material-symbols:person"
-                              className="w-6 h-6 mr-3"
-                            />
-                            <p className="text-lg  text-gray-900 mr-2 font-['Montserrat']">
-                              {card.exp_date}
-                            </p>
-                            <p className="text-lg   text-gray-700 font-['Montserrat']">
-                              {card.ccv}
-                            </p>
-                          </label>
-                        </div>
-                      </div>
+                            <div className="w-full px-8 absolute top-8">
+                              <div className="flex justify-between">
+                                <div className="">
+                                  <p className="font-light">Name</p>
+                                  <p className="font-medium tracking-widest">
+                                    {card.name}
+                                  </p>
+                                </div>
+                                <img
+                                  className="w-14 h-14"
+                                  src="https://i.imgur.com/bbPHJVe.png"
+                                />
+                              </div>
+                              <div className="pt-1">
+                                <p className="font-light">Card Number</p>
+                                <p className="font-medium tracking-more-wider">
+                                  {card.card_no}
+                                </p>
+                              </div>
+                              <div className="pt-6 pr-6">
+                                <div className="flex justify-between">
+                                  <div className="">
+                                    <p className="font-lighttext-xs">Expiry</p>
+                                    <p className="font-medium tracking-wider text-sm">
+                                      <span>{card.exp_month}</span>
+                                      <span>{card.exp_year}</span>
+                                    </p>
+                                  </div>
+
+                                  <div className="">
+                                    <p className="font-light text-xs">CVV</p>
+                                    <p className="font-bold tracking-more-wider text-sm">
+                                      {card.ccv}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>{" "}
+                        </label>
+                      </li>
                     ))
                   )}
-                </div>
+                </ul>
               )}
             </div>
 
@@ -656,18 +700,50 @@ const OrderPage = () => {
               </div>
               <div className="mb-5 relative">
                 <label className="inputLabel">
+                  Name of Cardholder
+                  <input
+                    type="text"
+                    {...registerCard("name", {
+                      required: "Name of cardholder is required",
+                    })}
+                    placeholder="Name Surname"
+                    className={`defaultInput ${
+                      errorsCard.name ? "inputWithError" : ""
+                    }  `}
+                  />
+                </label>
+                {errorsCard.name && (
+                  <p role="alert" className="formErrorMessage">
+                    {errorsCard.name.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-5 relative">
+                <label className="inputLabel">
                   Exp Date
                   <input
-                    type="month"
+                    type="text"
                     {...registerCard("exp_date", {
-                      required: true,
+                      required: "Expire Date is required",
+                      validate: (val: any) => {
+                        const date = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+                        if (date.test(val)) {
+                        } else {
+                          return "Enter a valid exp date";
+                        }
+                      },
                     })}
-                    placeholder="Month"
+                    placeholder="MM/YY"
                     className={`defaultInput ${
                       errorsCard.exp_date ? "inputWithError" : ""
                     }  `}
                   />
                 </label>
+                {errorsCard.exp_date && (
+                  <p role="alert" className="formErrorMessage">
+                    {errorsCard.exp_date.message}
+                  </p>
+                )}
               </div>
 
               <div className="mb-5 relative">
@@ -676,13 +752,25 @@ const OrderPage = () => {
                   <input
                     type="text"
                     {...registerCard("ccv", {
-                      required: true,
+                      required: "CCV is required",
+                      validate: (val: any) => {
+                        const ccv = /^([0-9]{3})$/;
+                        if (ccv.test(val)) {
+                        } else {
+                          return "Enter a valid ccv";
+                        }
+                      },
                     })}
                     className={`defaultInput ${
                       errorsCard.ccv ? "inputWithError" : ""
                     }`}
                   />
                 </label>
+                {errorsCard.ccv && (
+                  <p role="alert" className="formErrorMessage">
+                    {errorsCard.ccv.message}
+                  </p>
+                )}
               </div>
 
               <button
