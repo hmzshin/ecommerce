@@ -381,9 +381,9 @@ const OrderPage = () => {
 
                             <div className="w-full px-8 absolute top-8">
                               <div className="flex justify-between">
-                                <div className="">
+                                <div className="font-['Montserrat']">
                                   <p className="font-light">Name</p>
-                                  <p className="font-medium tracking-widest">
+                                  <p className="font-medium tracking-tight">
                                     {card.name}
                                   </p>
                                 </div>
@@ -392,26 +392,32 @@ const OrderPage = () => {
                                   src="https://i.imgur.com/bbPHJVe.png"
                                 />
                               </div>
-                              <div className="pt-1">
-                                <p className="font-light">Card Number</p>
-                                <p className="font-medium tracking-more-wider">
-                                  {card.card_no}
+                              <div className="pt-1 ">
+                                <p className="font-light font-['Montserrat']">
+                                  Card Number
+                                </p>
+                                <p className="font-medium tracking-tight font-['Montserrat']">
+                                  ************{String(card.card_no).slice(-4)}
                                 </p>
                               </div>
                               <div className="pt-6 pr-6">
                                 <div className="flex justify-between">
                                   <div className="">
-                                    <p className="font-lighttext-xs">Expiry</p>
-                                    <p className="font-medium tracking-wider text-sm">
+                                    <p className="font-light text-sm font-['Montserrat']">
+                                      Expiry Date
+                                    </p>
+                                    <p className="font-medium tracking-tight text-sm font-['Montserrat']">
                                       <span>{card.exp_month}</span>
                                       <span>{card.exp_year}</span>
                                     </p>
                                   </div>
 
                                   <div className="">
-                                    <p className="font-light text-xs">CVV</p>
-                                    <p className="font-bold tracking-more-wider text-sm">
-                                      {card.ccv}
+                                    <p className="font-light text-sm font-['Montserrat']">
+                                      CVV
+                                    </p>
+                                    <p className="font-bold tracking-tight text-sm">
+                                      ***
                                     </p>
                                   </div>
                                 </div>
