@@ -229,7 +229,7 @@ const Header = () => {
                       >
                         <div className="flex flex-col items-start gap-3">
                           <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
-                            <Link to="/shop?filter=kadın">Kadın</Link>
+                            <Link to="/shop/s?filter=kadın">Kadın</Link>
                           </h6>
                           {women.map((category: any, i) => (
                             <Link
