@@ -57,14 +57,14 @@ const Header = () => {
     navigate("/");
     dispatch(setUser({ name: "", email: "", role_id: "" }));
   }
-  function seachHandler() {
+  function searchHandler() {
     if (searchInput) {
       navigate(`/shop/s?filter=${searchInput.replaceAll(" ", "+")}`);
     }
   }
   const w: number = innerWidth;
   useEffect(() => {
-    window.addEventListener("click", (event: any) => {
+    const handleClick = (event: any) => {
       event.stopPropagation();
       if (
         isMenuVisible &&
@@ -92,7 +92,8 @@ const Header = () => {
       ) {
         setShowUserDetails(false);
       }
-    });
+    };
+    window.addEventListener("click", handleClick);
 
     window.addEventListener("scroll", () => {
       setShowCategories(false);
@@ -103,6 +104,10 @@ const Header = () => {
     } else {
       document.body.style.overflowY = "auto";
     }
+
+    return () => {
+      window.removeEventListener("click", handleClick);
+    };
   }, [isMenuVisible, showCategories, showUserDetails]);
 
   return (
@@ -224,7 +229,7 @@ const Header = () => {
                       >
                         <div className="flex flex-col items-start gap-3">
                           <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
-                            <Link to="/shop?filter=kadın">Kadın</Link>
+                            <Link to="/shop/s?filter=kadın">Kadın</Link>
                           </h6>
                           {women.map((category: any, i) => (
                             <Link
@@ -269,13 +274,15 @@ const Header = () => {
               type="text"
               className="w-52 lg:w-full  rounded-md border bg-white py-2 px-6 text-base font-medium text-[#6B7280] outline-none"
               onChange={(e) => setSearchInput(e.target.value)}
-              onKeyDown={(e) => (e.key === "Enter" ? seachHandler() : () => {})}
+              onKeyDown={(e) =>
+                e.key === "Enter" ? searchHandler() : () => {}
+              }
               placeholder="Search in Store"
             />
             <img
               src={search}
               className="absolute  right-2 w-5 h-5 "
-              onClick={seachHandler}
+              onClick={searchHandler}
             />
           </div>
           <div className="flex items-center text-center font-bold font-['Montserrat'] tracking-tight ">
