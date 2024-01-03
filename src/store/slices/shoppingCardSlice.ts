@@ -6,11 +6,13 @@ interface CardData {
   numberOfItem: number;
   shipping: number;
 }
-interface UserData {
-  card: CardData[];
-  payment: number;
-  address: string;
+
+interface Payment {
+  subtotal: number;
+  shipping: number;
+  total: number;
 }
+
 interface Images {
   url: string;
 }
@@ -26,11 +28,56 @@ interface PayloadData {
   sell_count: number;
   images: Images[];
 }
-
+interface Address {
+  address: string;
+  city: string;
+  district: string;
+  id: number;
+  name: string;
+  neighborhood: string;
+  phone: string;
+  surname: string;
+  title: string;
+  user_id: number;
+}
+interface AddressData {
+  shipping: Address;
+  billing: Address;
+}
+interface UserData {
+  card: CardData[];
+  payment: Payment;
+  address: AddressData;
+}
 const initialState: UserData = {
   card: [],
-  payment: 0,
-  address: "",
+  payment: { subtotal: 0, shipping: 0, total: 0 },
+  address: {
+    shipping: {
+      address: "",
+      city: "",
+      district: "",
+      id: 0,
+      name: "",
+      neighborhood: "",
+      phone: "",
+      surname: "",
+      title: "",
+      user_id: 0,
+    },
+    billing: {
+      address: "",
+      city: "",
+      district: "",
+      id: 0,
+      name: "",
+      neighborhood: "",
+      phone: "",
+      surname: "",
+      title: "",
+      user_id: 0,
+    },
+  },
 };
 
 export const shoppingCardSlice = createSlice({
@@ -44,7 +91,7 @@ export const shoppingCardSlice = createSlice({
       const existingProduct = state.card.find(
         (item) => item.product.id === action.payload.id
       );
-      toast.success("Product succesfully added to cart.");
+      toast.success("Product successfully added to cart.");
       if (existingProduct) {
         return {
           ...state,
@@ -76,7 +123,7 @@ export const shoppingCardSlice = createSlice({
       state: UserData,
       action: PayloadAction<CardData>
     ): UserData => {
-      toast.warn("Product succesfully removed.");
+      toast.warn("Product successfully removed.");
       return {
         ...state,
         card: state.card.filter(
@@ -89,7 +136,7 @@ export const shoppingCardSlice = createSlice({
       state: UserData,
       action: PayloadAction<CardData>
     ): UserData => {
-      toast.warn("Product succesfully deleted.");
+      toast.warn("Product successfully deleted.");
       if (action.payload.numberOfItem > 1) {
         return {
           ...state,
@@ -115,9 +162,34 @@ export const shoppingCardSlice = createSlice({
         };
       }
     },
+
+    setPriceInfo: (
+      state: UserData,
+      action: PayloadAction<Payment>
+    ): UserData => {
+      return {
+        ...state,
+        payment: action.payload,
+      };
+    },
+
+    setAddressInfo: (
+      state: UserData,
+      action: PayloadAction<AddressData>
+    ): UserData => {
+      return {
+        ...state,
+        address: action.payload,
+      };
+    },
   },
 });
 
 export default shoppingCardSlice.reducer;
-export const { addProduct, deleteProduct, decreaseNumberOfItems } =
-  shoppingCardSlice.actions;
+export const {
+  addProduct,
+  deleteProduct,
+  decreaseNumberOfItems,
+  setPriceInfo,
+  setAddressInfo,
+} = shoppingCardSlice.actions;
