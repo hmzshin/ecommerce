@@ -40,7 +40,6 @@ const Thumb = ({ images }: any) => {
           inline: "center",
         });
       }
-      console.log("active element", activeElement1);
     }
   }, [activeId]);
 

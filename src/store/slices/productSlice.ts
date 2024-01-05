@@ -46,11 +46,9 @@ const initialState: UserData = {
 export const fetchProduct = createAsyncThunk(
   "fetch/product",
   async (param: any): Promise<void> => {
-    console.log("param", param);
     const response: AxiosResponse | undefined = await axiosInstance.get(
       `products/${param}`
     );
-    console.log("product ***********************", response?.data);
     return response?.data;
   }
 );
@@ -58,12 +56,10 @@ export const fetchProduct = createAsyncThunk(
 export const fetchProducts = createAsyncThunk(
   "fetch/products",
   async (param: any): Promise<void> => {
-    console.log("param", param);
     const response: AxiosResponse | undefined = await axiosInstance.get(
       "products",
       param
     );
-    console.log("product response data", response?.data);
     return response?.data;
   }
 );
@@ -71,12 +67,10 @@ export const fetchProducts = createAsyncThunk(
 export const fetchMoreProducts = createAsyncThunk(
   "more/products",
   async (param: any): Promise<void> => {
-    console.log("param", param);
     const response: AxiosResponse | undefined = await axiosInstance.get(
       "products",
       param
     );
-    console.log("product fetch more data response data", response?.data);
     return response?.data;
   }
 );
