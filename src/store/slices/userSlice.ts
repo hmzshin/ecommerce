@@ -2,6 +2,11 @@ import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import { axiosInstance } from "../../api/axiosInstance";
 
+interface Payload {
+  email: string;
+  password: string;
+}
+
 interface UserData {
   name: string;
   email: string;
@@ -16,7 +21,7 @@ const initialState: UserData = {
 
 export const sendLoginInfo = createAsyncThunk(
   "post/user",
-  async (payload: any): Promise<void> => {
+  async (payload: Payload): Promise<any> => {
     const response: AxiosResponse | undefined = await axiosInstance.post(
       "login",
       payload

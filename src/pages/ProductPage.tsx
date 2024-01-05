@@ -1,5 +1,3 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import ProductDetail from "../components/ProductDetail";
 
 import Clients from "../components/Clients";
@@ -24,6 +22,8 @@ const ProductPage = () => {
     (product) => product.id === Number(routerParams.productId)
   )[0];
 
+  console.log(routerParams);
+
   useEffect(() => {
     setProductsLoading(true);
     dispatch(
@@ -39,7 +39,6 @@ const ProductPage = () => {
 
   return (
     <>
-      <Header />
       <ProductDetail product={product} />
       <section id="bestsellers" className="px-[15%] py-20 bg-neutral-50 ">
         <p className=" text-slate-800 text-2xl font-bold font-['Montserrat'] tracking-tight">
@@ -63,7 +62,6 @@ const ProductPage = () => {
         </div>
       </section>
       <Clients bgColor={"bg-neutral-50"} />
-      <Footer bgColor={"bg-white"} />
     </>
   );
 };

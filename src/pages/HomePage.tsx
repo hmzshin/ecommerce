@@ -2,8 +2,6 @@ import TopProductsOfWeek from "../components/TopProductOfWeek.tsx";
 import Blog from "../components/Blog.tsx";
 import Clients from "../components/Clients.tsx";
 import Featured from "../components/Featured.tsx";
-import Footer from "../components/Footer.tsx";
-import Header from "../components/Header.tsx";
 import Hero from "../components/Hero.tsx";
 import Swiper from "../components/Swiper.tsx";
 import contentImg1 from "../assets/content/contentImg1.svg";
@@ -37,7 +35,6 @@ const HomePage = () => {
   }, []);
   return (
     <>
-      <Header />
       <Swiper
         slides={[<Hero />, <Hero />]}
         config={{
@@ -117,7 +114,6 @@ const HomePage = () => {
       </section>
       <Featured />
       <Blog />
-      <Footer />
     </>
   );
 };

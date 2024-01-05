@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   addProduct,
@@ -49,7 +47,6 @@ const ShoppingCartPage = () => {
 
   return (
     <>
-      <Header />
       <section
         id="shoppingChart"
         className={`bg-gray-100 px-3 pb-3 border shadow-2xl rounded-md flex flex-col `}
@@ -162,7 +159,6 @@ const ShoppingCartPage = () => {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };

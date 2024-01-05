@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
@@ -174,6 +172,7 @@ const OrderPage = () => {
   useEffect(() => {
     dispatch(fetchAddress())
       .unwrap()
+      .then()
       .catch((error) => {
         console.log(error);
         toast.error("Saved addresses could not loaded, Please refresh page.");
@@ -181,6 +180,7 @@ const OrderPage = () => {
     fetchProvinces();
     dispatch(fetchCards())
       .unwrap()
+      .then()
       .catch((error) => {
         toast.error("Saved cards could not loaded, Please refresh page.");
         throw error;
@@ -188,7 +188,6 @@ const OrderPage = () => {
   }, []);
   return (
     <>
-      <Header />
       <section id="orderDetails" className="flex xl:px-[5%] py-5">
         <div
           id="shoppingChart"
@@ -788,7 +787,6 @@ const OrderPage = () => {
           </div>
         )}
       </section>
-      <Footer />
     </>
   );
 };

@@ -41,8 +41,8 @@ interface Address {
   user_id: number;
 }
 interface AddressData {
-  shipping: Address;
-  billing: Address;
+  shipping: Address | null;
+  billing: Address | null;
 }
 interface UserData {
   card: CardData[];
@@ -182,6 +182,17 @@ export const shoppingCardSlice = createSlice({
         address: action.payload,
       };
     },
+    resetShoppingCart: (
+      state: UserData,
+      action: PayloadAction<UserData>
+    ): UserData => {
+      return {
+        ...state,
+        address: action.payload.address,
+        card: action.payload.card,
+        payment: action.payload.payment,
+      };
+    },
   },
 });
 
@@ -192,4 +203,5 @@ export const {
   decreaseNumberOfItems,
   setPriceInfo,
   setAddressInfo,
+  resetShoppingCart,
 } = shoppingCardSlice.actions;

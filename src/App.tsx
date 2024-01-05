@@ -1,14 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage.tsx";
-import ShopPage from "./pages/ShopPage.tsx";
-import ProductPage from "./pages/ProductPage.tsx";
-import AboutPage from "./pages/AboutPage.tsx";
-import TeamPage from "./pages/TeamPage.tsx";
-import ContactPage from "./pages/ContactPage.tsx";
-import SignUpPage from "./pages/SignUpPage.tsx";
-import ProtectedPage from "./pages/ProtectedPage.tsx";
-
-import { useEffect } from "react";
+import { useEffect, lazy } from "react";
 import { useAppDispatch } from "./store/store.ts";
 import {
   fetchCategories,
@@ -19,59 +10,67 @@ import { setUser } from "./store/slices/userSlice.ts";
 import { AxiosResponse } from "axios";
 import { axiosInstance } from "./api/axiosInstance.tsx";
 import ShoppingCartPage from "./pages/ShoppingCartPage.tsx";
-import OrderPage from "./pages/OrderPage.tsx";
+import ContentWrapper from "./components/ContentWrapper.tsx";
+
+const HomePage = lazy(() => import("./pages/HomePage.tsx"));
+const ShopPage = lazy(() => import("./pages/ShopPage.tsx"));
+const ProductPage = lazy(() => import("./pages/ProductPage.tsx"));
+const AboutPage = lazy(() => import("./pages/AboutPage.tsx"));
+const TeamPage = lazy(() => import("./pages/TeamPage.tsx"));
+const ContactPage = lazy(() => import("./pages/ContactPage.tsx"));
+const SignUpPage = lazy(() => import("./pages/SignUpPage.tsx"));
+const ProtectedPage = lazy(() => import("./pages/ProtectedPage.tsx"));
+const OrderPage = lazy(() => import("./pages/OrderPage.tsx"));
 
 function App() {
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    const verifyUser = async (): Promise<void> => {
-      try {
-        const response: AxiosResponse = await axiosInstance.get("verify");
-        console.log("app verify result", response.data);
-        dispatch(setUser(response.data));
-      } catch (error) {
-        localStorage.removeItem("token");
-        dispatch(setUser({ name: "", email: "", role_id: "" }));
-        throw error;
-      }
-    };
-    verifyUser();
-  }, []);
+
+  const verifyUser = async (): Promise<void> => {
+    try {
+      const response: AxiosResponse = await axiosInstance.get("verify");
+      console.log("app verify result", response.data);
+      dispatch(setUser(response.data));
+    } catch (error) {
+      localStorage.removeItem("token");
+      dispatch(setUser({ name: "", email: "", role_id: "" }));
+      throw error;
+    }
+  };
 
   useEffect(() => {
-    dispatch(fetchGlobalData());
-    dispatch(fetchCategories());
+    Promise.all([
+      dispatch(fetchGlobalData()),
+      dispatch(fetchCategories()),
+      verifyUser(),
+    ]);
   }, []);
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
-        <Route
-          path="/shop/:category_id/:gender/:category/:productId/:productName"
-          element={<ProductPage />}
-        />
-        <Route
-          path="/shop/:category_id/:gender/:category"
-          element={<ShopPage />}
-        />
-        <Route path="/shop/:search" element={<ShopPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/cart" element={<ShoppingCartPage />} />
-        <Route
-          path="/order"
-          element={
-            <ProtectedPage>
-              <OrderPage />
-            </ProtectedPage>
-          }
-        />
-        <Route path="/team" element={<TeamPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/" element={<ContentWrapper />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route
+            path="/shop/:category_id/:gender/:category/:productId/:productName"
+            element={<ProductPage />}
+          />
+          <Route
+            path="/shop/:category_id/:gender/:category"
+            element={<ShopPage />}
+          />
+          <Route path="/shop/:search" element={<ShopPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/cart" element={<ShoppingCartPage />} />
+          <Route path="/order" element={<ProtectedPage />}>
+            <Route index element={<OrderPage />} />
+          </Route>
+          <Route path="/team" element={<TeamPage />} />
+          <Route path="/contact" element={<ContactPage />} />
 
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/login" element={<SignInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/login" element={<SignInPage />} />
+        </Route>
       </Routes>
     </>
   );
