@@ -23,7 +23,6 @@ const SignInPage = () => {
   } = useForm<FormData>();
 
   const onSubmit = (data: FormData) => {
-    console.log("login info from form", data);
     dispatch(sendLoginInfo({ ...data }))
       .unwrap()
       .then(() => {

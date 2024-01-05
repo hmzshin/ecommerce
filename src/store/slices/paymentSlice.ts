@@ -23,7 +23,6 @@ export const fetchCards = createAsyncThunk(
     const response: AxiosResponse | undefined = await axiosInstance.get(
       "/card"
     );
-    console.log("payment slice response data", response?.data);
     return response?.data;
   }
 );
@@ -35,7 +34,6 @@ export const saveCard = createAsyncThunk(
       "card",
       payload
     );
-    console.log("payment slice  response data", response?.data);
     return response?.data;
   }
 );

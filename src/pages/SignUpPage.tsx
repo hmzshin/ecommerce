@@ -1,14 +1,14 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
 import { useAxios } from "../hooks/useAxios";
 import { AxiosError } from "axios";
 import { useAppSelector } from "../store/store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const SignUpPage = () => {
+  const [hidePassword, setHidePassword] = useState<boolean>(true);
   const [role, setRole] = useState<string>("customer");
-  const location = useLocation();
+  const roles = useAppSelector((state) => state.global.roles);
 
   const [postRequest, postLoading]: [
     (payload?: any, toastify?: boolean) => Promise<void>,
@@ -17,16 +17,8 @@ const SignUpPage = () => {
   ] = useAxios({
     reqType: "post",
     endpoint: "signup",
-    navPath: location.state ? location.state.pathname : "/",
+    navPath: "/",
   });
-
-  const rolesArray = useAppSelector((state) => state.global.roles);
-
-  useEffect(() => {
-    console.log("roles array", rolesArray);
-  }, [rolesArray]);
-
-  const [hidePassword, setHidePassword] = useState<boolean>(true);
 
   function activateStoreDetails(e: React.ChangeEvent<HTMLSelectElement>) {
     const activeElement = document.getElementById("storeDetails");
@@ -76,10 +68,7 @@ const SignUpPage = () => {
 
       submitData.store = storeDetails;
     }
-    console.log(submitData);
-    postRequest(submitData, true).then((response) => {
-      console.log("sign up response", response);
-    });
+    postRequest(submitData, true);
   };
 
   return (
@@ -251,9 +240,9 @@ const SignUpPage = () => {
               onChange={(e) => activateStoreDetails(e)}
               className={`defaultInput `}
             >
-              {rolesArray.map((role: any) => (
-                <option key={role[1]} value={role[1]}>
-                  {role[0]}
+              {roles.map((role) => (
+                <option key={role.id} value={role.code}>
+                  {role.name}
                 </option>
               ))}
             </select>

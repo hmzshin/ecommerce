@@ -26,7 +26,6 @@ export const sendLoginInfo = createAsyncThunk(
       "login",
       payload
     );
-    console.log("user slice response data", response?.data);
     localStorage.setItem("token", response?.data?.token);
     return response?.data;
   }

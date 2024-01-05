@@ -28,7 +28,6 @@ export const fetchAddress = createAsyncThunk(
     const response: AxiosResponse | undefined = await axiosInstance.get(
       "user/address"
     );
-    console.log("user slice address response data", response?.data);
     return response?.data;
   }
 );
@@ -40,7 +39,6 @@ export const saveAddress = createAsyncThunk(
       "user/address",
       payload
     );
-    console.log("user slice address response data", response?.data);
     return response?.data;
   }
 );

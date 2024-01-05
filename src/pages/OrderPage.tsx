@@ -65,13 +65,11 @@ const OrderPage = () => {
     setValue("city", selectedCity, { shouldValidate: true });
   }
   function onSubmit(data: FormDataAddress) {
-    console.log("form data", data);
     setIsNewAddress(false);
     dispatch(saveAddress(data));
   }
 
   function onSubmitCard(data: FormDataCard) {
-    console.log("form data", data);
     setAddNewCard(false);
     const exp_month = data.exp_date.split("-")[0];
     const exp_year = data.exp_date.split("-")[1];
