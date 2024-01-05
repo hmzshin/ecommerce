@@ -41,8 +41,8 @@ interface Address {
   user_id: number;
 }
 interface AddressData {
-  shipping: Address | null;
-  billing: Address | null;
+  shipping: Address;
+  billing: Address;
 }
 interface UserData {
   card: CardData[];
