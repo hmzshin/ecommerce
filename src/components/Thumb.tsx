@@ -48,7 +48,7 @@ const Thumb = ({ images }: any) => {
     <div className="flex flex-col gap-2">
       <section className="relative ">
         <div
-          className="absolute top-0 left-0 w-16 h-full flex items-center"
+          className="absolute top-0 left-0 w-16 h-full flex items-center cursor-pointer"
           onClick={toLeft}
         >
           <Icon
@@ -57,12 +57,12 @@ const Thumb = ({ images }: any) => {
           />
         </div>
         <div
-          className="absolute top-0 right-0 w-16 h-full flex items-center"
+          className="absolute top-0 right-0 w-16 h-full flex items-center cursor-pointer"
           onClick={toRight}
         >
           <Icon
             icon="fluent:ios-arrow-right-24-filled"
-            className="w-16 h-16 text-neutral-500 pr-5"
+            className="w-16 h-16 text-neutral-500 pr-5 "
           />
         </div>
         <div
@@ -93,7 +93,7 @@ const Thumb = ({ images }: any) => {
             } flex justify-center items-center`}
             onClick={() => handleClick(i)}
           >
-            <img src={image.url} className="h-full" />
+            <img src={image.url} className="h-full cursor-pointer" />
           </div>
         ))}
       </section>
