@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+
 const Thumb = ({ images }: any) => {
   const [activeId, setActiveId] = useState(0);
   const container1Ref = useRef<HTMLDivElement>(null);
@@ -28,7 +29,6 @@ const Thumb = ({ images }: any) => {
         });
       }
     }
-    console.log("ref1", container1Ref);
   }, [activeId]);
   useEffect(() => {
     if (container1Ref.current) {
