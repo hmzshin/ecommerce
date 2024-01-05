@@ -65,7 +65,32 @@ const Header = () => {
         resetShoppingCart({
           card: [],
           payment: { subtotal: 0, shipping: 0, total: 0 },
-          address: { shipping: null, billing: null },
+          address: {
+            shipping: {
+              address: "",
+              city: "",
+              district: "",
+              id: 0,
+              name: "",
+              neighborhood: "",
+              phone: "",
+              surname: "",
+              title: "",
+              user_id: 0,
+            },
+            billing: {
+              address: "",
+              city: "",
+              district: "",
+              id: 0,
+              name: "",
+              neighborhood: "",
+              phone: "",
+              surname: "",
+              title: "",
+              user_id: 0,
+            },
+          },
         })
       ),
     ]);
