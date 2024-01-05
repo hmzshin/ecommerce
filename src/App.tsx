@@ -25,7 +25,6 @@ function App() {
   const verifyUser = async (): Promise<void> => {
     try {
       const response: AxiosResponse = await axiosInstance.get("verify");
-      console.log("app verify result", response.data);
       dispatch(setUser(response.data));
     } catch (error) {
       localStorage.removeItem("token");
