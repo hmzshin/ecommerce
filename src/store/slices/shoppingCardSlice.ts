@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 interface CardData {
-  product: PayloadData;
+  product: Product;
   numberOfItem: number;
   shipping: number;
 }
@@ -16,7 +16,7 @@ interface Payment {
 interface Images {
   url: string;
 }
-interface PayloadData {
+interface Product {
   id: number;
   name: string;
   description: string;
@@ -84,10 +84,7 @@ export const shoppingCardSlice = createSlice({
   name: "shoppingCard",
   initialState,
   reducers: {
-    addProduct: (
-      state: UserData,
-      action: PayloadAction<PayloadData>
-    ): UserData => {
+    addProduct: (state: UserData, action: PayloadAction<Product>): UserData => {
       const existingProduct = state.card.find(
         (item) => item.product.id === action.payload.id
       );

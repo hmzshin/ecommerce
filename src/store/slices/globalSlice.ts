@@ -29,9 +29,8 @@ const initialState: GlobalData = {
   language: "tr",
   theme: "light",
 };
-export const fetchGlobalData = createAsyncThunk("fetch/data", async () => {
+export const fetchRoles = createAsyncThunk("fetch/data", async () => {
   const response: AxiosResponse | undefined = await axiosInstance.get("roles");
-  console.log("global slice global data:", response?.data);
   return response?.data;
 });
 
@@ -41,7 +40,6 @@ export const fetchCategories = createAsyncThunk(
     const response: AxiosResponse | undefined = await axiosInstance.get(
       "categories"
     );
-    console.log("global slice categories:", response?.data);
     return response?.data;
   }
 );
@@ -65,9 +63,8 @@ export const globalSlice = createSlice({
   },
 
   extraReducers(builder) {
-    builder.addCase(fetchGlobalData.fulfilled, (state, action: any) => {
-      const roles = action.payload?.map((role: any) => [role.name, role.code]);
-      return { ...state, roles: roles };
+    builder.addCase(fetchRoles.fulfilled, (state, action: any) => {
+      return { ...state, roles: action.payload };
     });
 
     builder.addCase(fetchCategories.fulfilled, (state, action: any) => {

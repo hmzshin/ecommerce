@@ -1,10 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { useEffect, lazy } from "react";
 import { useAppDispatch } from "./store/store.ts";
-import {
-  fetchCategories,
-  fetchGlobalData,
-} from "./store/slices/globalSlice.ts";
+import { fetchCategories, fetchRoles } from "./store/slices/globalSlice.ts";
 import SignInPage from "./pages/SignInPage.tsx";
 import { setUser } from "./store/slices/userSlice.ts";
 import { AxiosResponse } from "axios";
@@ -39,7 +36,7 @@ function App() {
 
   useEffect(() => {
     Promise.all([
-      dispatch(fetchGlobalData()),
+      dispatch(fetchRoles()),
       dispatch(fetchCategories()),
       verifyUser(),
     ]);

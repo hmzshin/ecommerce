@@ -25,12 +25,10 @@ const initialState: UserData = {
 export const fetchBestseller = createAsyncThunk(
   "fetch/bestsellers",
   async (param: any): Promise<void> => {
-    console.log("param", param);
     const response: AxiosResponse | undefined = await axiosInstance.get(
       "products",
       param
     );
-    console.log("bestsellers response", response?.data);
     return response?.data;
   }
 );
