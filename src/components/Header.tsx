@@ -10,10 +10,11 @@ import chart from "../assets/header/chart.svg";
 import like from "../assets/header/like.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setUser } from "../store/slices/userSlice";
-import ShoppingCart from "./ShoppingCart";
+import { resetAddress } from "../store/slices/addressSlice";
+import { resetShoppingCart } from "../store/slices/shoppingCardSlice";
 
 const data = [
   { svg: phone, text: "(225) 555-0118" },
@@ -24,6 +25,8 @@ const data = [
     socialMedia: [instagram, youtube, facebook, twitter],
   },
 ];
+
+const ShoppingCart = lazy(() => import("./ShoppingCart"));
 
 const Header = () => {
   const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
@@ -47,7 +50,7 @@ const Header = () => {
 
   const women = categories.filter((category: any) => category.gender === "k");
   const men = categories.filter((category: any) => category.gender === "e");
-  const numberOfItemsInCart = shoppingCart.reduce(
+  const numberOfItemsInCart = shoppingCart?.reduce(
     (sum: number, item) => sum + item.numberOfItem,
     0
   );
@@ -55,7 +58,17 @@ const Header = () => {
   function deleteToken(): void {
     localStorage.removeItem("token");
     navigate("/");
-    dispatch(setUser({ name: "", email: "", role_id: "" }));
+    Promise.all([
+      dispatch(setUser({ name: "", email: "", role_id: "" })),
+      dispatch(resetAddress([])),
+      dispatch(
+        resetShoppingCart({
+          card: [],
+          payment: { subtotal: 0, shipping: 0, total: 0 },
+          address: { shipping: null, billing: null },
+        })
+      ),
+    ]);
   }
   function searchHandler() {
     if (searchInput) {
@@ -331,7 +344,7 @@ const Header = () => {
                 src={chart}
                 className="w-5 h-5"
                 onClick={() => {
-                  setIsChartVisible(!isChartVisible);
+                  setIsChartVisible((prev) => !prev);
                 }}
               />
               <span className="hidden lg:inline w-3">
@@ -339,7 +352,19 @@ const Header = () => {
               </span>
               <img src={like} className="w-5 h-5 ml-10 hidden lg:block" />{" "}
               <span className="hidden lg:inline">1</span>
-              <ShoppingCart isChartVisible={isChartVisible} />
+              <Suspense
+                fallback={
+                  <Icon
+                    icon="svg-spinners:180-ring"
+                    className="m-auto w-5 h-5"
+                  />
+                }
+              >
+                <ShoppingCart
+                  isChartVisible={isChartVisible}
+                  setIsChartVisible={setIsChartVisible}
+                />
+              </Suspense>
             </div>
           </div>
         </div>

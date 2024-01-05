@@ -8,9 +8,13 @@ import { useNavigate } from "react-router-dom";
 
 interface CardProps {
   isChartVisible: boolean;
+  setIsChartVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
+const ShoppingCart: React.FC<CardProps> = ({
+  isChartVisible,
+  setIsChartVisible,
+}: CardProps) => {
   const navigate = useNavigate();
   const shoppingCart = useAppSelector((store) => store.shoppingCard.card);
   const dispatch = useAppDispatch();
@@ -20,7 +24,7 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
       id="shoppingChart"
       className={`absolute top-[calc(100%+35px)] right-0 lg:right-20 w-[400px] sm:w-[500px]  bg-gray-100 px-3 pb-3 border shadow-2xl rounded-md ${
         isChartVisible ? "activeChart" : "passiveChart"
-      } transition-all duration-500 overflow-hidden`}
+      } transition-all duration-300 overflow-hidden`}
     >
       <h1 className="py-3 sm:py-5 text-center text-xl font-bold">Cart Items</h1>
       <div className="justify-center gap-3 w-full  items-start flex flex-wrap ">
@@ -87,7 +91,13 @@ const ShoppingCart: React.FC<CardProps> = ({ isChartVisible }: CardProps) => {
           ))}
         </div>
 
-        <button className="blueBtn w-full" onClick={() => navigate("/cart")}>
+        <button
+          className="blueBtn w-full"
+          onClick={() => {
+            setIsChartVisible(false);
+            navigate("/cart");
+          }}
+        >
           Go to Cart
         </button>
       </div>

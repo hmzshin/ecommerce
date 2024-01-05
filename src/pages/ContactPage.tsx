@@ -1,13 +1,9 @@
 import heroImg from "../assets/contact/none.png";
 import { Icon } from "@iconify/react";
-import Footer from "../components/Footer";
-
 import arrow from "../assets/contact/arrow.svg";
-import Header from "../components/Header";
 const ContactPage = () => {
   return (
     <>
-      <Header />
       <section
         id="hero"
         className="flex flex-wrap justify-around px-[12%] lg:flex-nowrap lg:max-h-[700px] "
@@ -118,7 +114,6 @@ const ContactPage = () => {
         </p>
         <div className="blueBtn">Try it free now</div>
       </section>
-      <Footer />
     </>
   );
 };

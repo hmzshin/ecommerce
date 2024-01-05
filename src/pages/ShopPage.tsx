@@ -1,6 +1,4 @@
 import Clients from "../components/Clients";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -122,7 +120,6 @@ const ShopPage = () => {
 
   return (
     <>
-      <Header />
       <section id="shopCards">
         <div className="bg-neutral-50 flex justify-between items-center h-40 px-[15%]  ">
           <p className="text-slate-800 text-3xl font-bold font-['Montserrat'] tracking-[0.2px]">
@@ -253,7 +250,6 @@ const ShopPage = () => {
         )}
       </section>
       <Clients />
-      <Footer />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosPromise, AxiosResponse } from "axios";
 import { axiosInstance } from "../../api/axiosInstance";
 interface Address {
@@ -48,8 +48,8 @@ export const addressSlice = createSlice({
   name: "address",
   initialState,
   reducers: {
-    addAddress: (state: UserData, action: PayloadAction<object>): UserData => {
-      return { address: { ...state.address, ...action.payload } };
+    resetAddress: (state: UserData, action: PayloadAction<[]>): UserData => {
+      return { ...state, address: action.payload };
     },
   },
 
@@ -65,4 +65,4 @@ export const addressSlice = createSlice({
 });
 
 export default addressSlice.reducer;
-export const { addAddress } = addressSlice.actions;
+export const { resetAddress } = addressSlice.actions;
