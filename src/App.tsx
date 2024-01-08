@@ -28,7 +28,7 @@ function App() {
       dispatch(setUser(response.data));
     } catch (error) {
       localStorage.removeItem("token");
-      dispatch(setUser({ name: "", email: "", role_id: "" }));
+      dispatch(setUser({ name: "", email: "", role_id: "", token: "" }));
       throw error;
     }
   };

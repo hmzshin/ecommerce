@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
-import { fetchAddress, saveAddress } from "../store/slices/addressSlice";
+import { saveAddress, setUserAddresses } from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import { setAddressInfo } from "../store/slices/shoppingCardSlice";
-import { addCard, fetchCards } from "../store/slices/paymentSlice";
+import { addCard } from "../store/slices/paymentSlice";
+import axios from "axios";
 
 type FormDataAddress = {
   name: string;
@@ -40,6 +41,7 @@ const OrderPage = () => {
   const addRef = useRef<HTMLDivElement>(null);
   const addCardRef = useRef<HTMLLIElement>(null);
   const dispatch = useAppDispatch();
+  const userToken = useAppSelector((state) => state.user.token);
   const addresses = useAppSelector((state) => state.address.address);
   const cards = useAppSelector((state) => state.payment.cards);
   const payment = useAppSelector((state) => state.shoppingCard.payment);
@@ -168,21 +170,20 @@ const OrderPage = () => {
   }, [city]);
 
   useEffect(() => {
-    dispatch(fetchAddress())
-      .unwrap()
-      .then()
-      .catch((error) => {
-        console.log(error);
-        toast.error("Saved addresses could not loaded, Please refresh page.");
-      });
+    if (userToken) {
+      axios
+        .get("https://workintech-fe-ecommerce.onrender.com/user/address", {
+          headers: {
+            Authorization: userToken,
+          },
+        })
+        .then((res) => dispatch(setUserAddresses(res.data)))
+        .catch((error) => console.log(error));
+    }
+  }, [userToken]);
+
+  useEffect(() => {
     fetchProvinces();
-    dispatch(fetchCards())
-      .unwrap()
-      .then()
-      .catch((error) => {
-        toast.error("Saved cards could not loaded, Please refresh page.");
-        throw error;
-      });
   }, []);
   return (
     <>

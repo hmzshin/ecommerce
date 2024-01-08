@@ -58,8 +58,7 @@ const Header = () => {
   function deleteToken(): void {
     localStorage.removeItem("token");
     navigate("/");
-    Promise.all([
-      dispatch(setUser({ name: "", email: "", role_id: "" })),
+    dispatch(setUser({ name: "", email: "", role_id: "", token: "" })),
       dispatch(resetAddress([])),
       dispatch(
         resetShoppingCart({
@@ -92,8 +91,7 @@ const Header = () => {
             },
           },
         })
-      ),
-    ]);
+      );
   }
   function searchHandler() {
     if (searchInput) {
@@ -131,6 +129,7 @@ const Header = () => {
         setShowUserDetails(false);
       }
     };
+
     window.addEventListener("click", handleClick);
 
     window.addEventListener("scroll", () => {
@@ -146,7 +145,7 @@ const Header = () => {
     return () => {
       window.removeEventListener("click", handleClick);
     };
-  }, [isMenuVisible, showCategories, showUserDetails]);
+  }, [menuRef, shopListRef, userMenuRef]);
 
   return (
     <section id="header" className="">
@@ -267,7 +266,15 @@ const Header = () => {
                       >
                         <div className="flex flex-col items-start gap-3">
                           <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
-                            <Link to="/shop/s?filter=kadın">Kadın</Link>
+                            <Link
+                              onClick={() => {
+                                setShowCategories(false),
+                                  setIsMenuVisible(false);
+                              }}
+                              to="/shop/s?filter=kadın"
+                            >
+                              Kadın
+                            </Link>
                           </h6>
                           {women.map((category: any, i) => (
                             <Link
@@ -275,7 +282,10 @@ const Header = () => {
                               to={`/shop/${
                                 category.id
                               }/kadın/${category.title.toLowerCase()}`}
-                              onClick={() => setShowCategories(false)}
+                              onClick={() => {
+                                setShowCategories(false),
+                                  setIsMenuVisible(false);
+                              }}
                             >
                               <p className="text-neutral-500  text-base font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer hover:text-slate-800">
                                 {category.title}
@@ -285,7 +295,15 @@ const Header = () => {
                         </div>
                         <div className="flex flex-col items-start gap-3">
                           <h6 className="text-neutral-700 text-2xl font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer">
-                            <Link to="/shop/s?filter=erkek">Erkek</Link>
+                            <Link
+                              onClick={() => {
+                                setShowCategories(false),
+                                  setIsMenuVisible(false);
+                              }}
+                              to="/shop/s?filter=erkek"
+                            >
+                              Erkek
+                            </Link>
                           </h6>
                           {men.map((category: any, i) => (
                             <Link
@@ -294,7 +312,10 @@ const Header = () => {
                               }/erkek/${category.title.toLowerCase()}`}
                               key={i}
                               className="text-neutral-500  text-base font-bold font-['Montserrat'] leading-normal tracking-tight cursor-pointer hover:text-slate-800"
-                              onClick={() => setShowCategories(false)}
+                              onClick={() => {
+                                setShowCategories(false),
+                                  setIsMenuVisible(false);
+                              }}
                             >
                               {category.title}
                             </Link>

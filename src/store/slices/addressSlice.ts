@@ -22,16 +22,6 @@ const initialState: UserData = {
   address: [],
 };
 
-export const fetchAddress = createAsyncThunk(
-  "get/address",
-  async (): AxiosPromise<void> => {
-    const response: AxiosResponse | undefined = await axiosInstance.get(
-      "user/address"
-    );
-    return response?.data;
-  }
-);
-
 export const saveAddress = createAsyncThunk(
   "post/address",
   async (payload: any): AxiosPromise<void> => {
@@ -49,13 +39,15 @@ export const addressSlice = createSlice({
     resetAddress: (state: UserData, action: PayloadAction<[]>): UserData => {
       return { ...state, address: action.payload };
     },
+    setUserAddresses: (
+      state: UserData,
+      action: PayloadAction<[]>
+    ): UserData => {
+      return { ...state, address: [...action.payload] };
+    },
   },
 
   extraReducers(builder) {
-    builder.addCase(fetchAddress.fulfilled, (state: UserData, action: any) => {
-      return { ...state, address: [...action.payload] };
-    });
-
     builder.addCase(saveAddress.fulfilled, (state: UserData, action: any) => {
       return { ...state, address: [...state.address, action.payload[0]] };
     });
@@ -63,4 +55,4 @@ export const addressSlice = createSlice({
 });
 
 export default addressSlice.reducer;
-export const { resetAddress } = addressSlice.actions;
+export const { resetAddress, setUserAddresses } = addressSlice.actions;
