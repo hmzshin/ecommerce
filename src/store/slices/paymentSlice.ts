@@ -1,12 +1,13 @@
 import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { AxiosPromise, AxiosResponse } from "axios";
+import axios, { AxiosPromise, AxiosResponse } from "axios";
 import { axiosInstance } from "../../api/axiosInstance";
+import { store } from "../store";
 interface CardInfo {
   card_no: number;
   ccv: number;
-  exp_month: string;
-  exp_year: string;
-  name: string;
+  expire_month: string;
+  expire_year: string;
+  name_on_card: string;
 }
 
 interface UserData {
@@ -20,9 +21,13 @@ const initialState: UserData = {
 export const fetchCards = createAsyncThunk(
   "get/cards",
   async (): AxiosPromise<void> => {
-    const response: AxiosResponse | undefined = await axiosInstance.get(
-      "/card"
+    const userToken = store.getState().user.token;
+    const response: AxiosResponse | undefined = await axios.get(
+      "https://workintech-fe-ecommerce.onrender.com/user/card",
+      { headers: { Authorization: userToken } }
     );
+    console.log("card slice response ", response?.data);
+
     return response?.data;
   }
 );
@@ -31,9 +36,10 @@ export const saveCard = createAsyncThunk(
   "post/card",
   async (payload: any): AxiosPromise<void> => {
     const response: AxiosResponse | undefined = await axiosInstance.post(
-      "card",
+      "user/card",
       payload
     );
+
     return response?.data;
   }
 );

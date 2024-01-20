@@ -2,12 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
-import { saveAddress, setUserAddresses } from "../store/slices/addressSlice";
+import { fetchAddress, saveAddress } from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import { setAddressInfo } from "../store/slices/shoppingCardSlice";
-import { addCard } from "../store/slices/paymentSlice";
-import axios from "axios";
+import { fetchCards, saveCard } from "../store/slices/paymentSlice";
 
 type FormDataAddress = {
   name: string;
@@ -48,7 +47,6 @@ const OrderPage = () => {
   const shippingAddress = useAppSelector(
     (state) => state.shoppingCard.address.shipping
   );
-
   const {
     register,
     handleSubmit,
@@ -73,18 +71,22 @@ const OrderPage = () => {
 
   function onSubmitCard(data: FormDataCard) {
     setAddNewCard(false);
-    const exp_month = data.exp_date.split("-")[0];
-    const exp_year = data.exp_date.split("-")[1];
-
+    const date = data.exp_date.split("/");
+    const expire_month = date[0];
+    const expire_year = date[1];
+    console.log("On submit çalışıyor");
     dispatch(
-      addCard({
-        card_no: data.card_no,
-        exp_month,
-        exp_year,
-        ccv: data.ccv,
-        name: data.name,
+      saveCard({
+        card_no: String(data.card_no),
+        expire_month: Number(expire_month),
+        expire_year: Number(`20${expire_year}`),
+        name_on_card: data.name,
       })
-    );
+    )
+      .unwrap()
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   async function fetchProvinces() {
@@ -130,6 +132,7 @@ const OrderPage = () => {
       }
     } else if (firstStep) {
       toast.warn("Please choose an address");
+    } else {
     }
   }
 
@@ -171,14 +174,19 @@ const OrderPage = () => {
 
   useEffect(() => {
     if (userToken) {
-      axios
-        .get("https://workintech-fe-ecommerce.onrender.com/user/address", {
-          headers: {
-            Authorization: userToken,
-          },
-        })
-        .then((res) => dispatch(setUserAddresses(res.data)))
-        .catch((error) => console.log(error));
+      dispatch(fetchAddress())
+        .unwrap()
+        .catch((error) => {
+          console.log(error);
+          toast.error("Saved addresses could not loaded, Please refresh page.");
+        });
+      fetchProvinces();
+      dispatch(fetchCards())
+        .unwrap()
+        .catch((error) => {
+          toast.error("Saved cards could not loaded, Please refresh page.");
+          throw error;
+        });
     }
   }, [userToken]);
 
@@ -382,7 +390,7 @@ const OrderPage = () => {
                                 <div className="font-['Montserrat']">
                                   <p className="font-light">Name</p>
                                   <p className="font-medium tracking-tight">
-                                    {card.name}
+                                    {card.name_on_card}
                                   </p>
                                 </div>
                                 <img
@@ -405,8 +413,9 @@ const OrderPage = () => {
                                       Expiry Date
                                     </p>
                                     <p className="font-medium tracking-tight text-sm font-['Montserrat']">
-                                      <span>{card.exp_month}</span>
-                                      <span>{card.exp_year}</span>
+                                      <span>{card.expire_month}</span>
+                                      <span>/ </span>
+                                      <span>{card.expire_year}</span>
                                     </p>
                                   </div>
 
@@ -451,7 +460,7 @@ const OrderPage = () => {
                 className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400"
                 onClick={stepHandler}
               >
-                {firstStep ? "Save and Continue" : "Make Payment"}
+                {firstStep ? "Save and Continue" : "Proceed to Payment"}
               </button>
             </div>
           </div>

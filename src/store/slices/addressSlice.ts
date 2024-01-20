@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { AxiosPromise, AxiosResponse } from "axios";
+import axios, { AxiosPromise, AxiosResponse } from "axios";
 import { axiosInstance } from "../../api/axiosInstance";
+import { store } from "../store";
 interface Address {
   address: string;
   city: string;
@@ -21,12 +22,24 @@ interface UserData {
 const initialState: UserData = {
   address: [],
 };
+export const fetchAddress = createAsyncThunk(
+  "get/address",
+  async (): AxiosPromise<void> => {
+    const userToken = store.getState().user.token;
+    const response: AxiosResponse | undefined = await axios.get(
+      "https://workintech-fe-ecommerce.onrender.com/user/address",
+      { headers: { Authorization: userToken } }
+    );
+    console.log("address slice response data", response?.data);
+    return response?.data;
+  }
+);
 
 export const saveAddress = createAsyncThunk(
   "post/address",
   async (payload: any): AxiosPromise<void> => {
     const response: AxiosResponse | undefined = await axiosInstance.post(
-      "user/address",
+      "/user/address",
       payload
     );
     return response?.data;
@@ -50,6 +63,10 @@ export const addressSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(saveAddress.fulfilled, (state: UserData, action: any) => {
       return { ...state, address: [...state.address, action.payload[0]] };
+    });
+
+    builder.addCase(fetchAddress.fulfilled, (state: UserData, action: any) => {
+      return { ...state, address: [...action.payload] };
     });
   },
 });

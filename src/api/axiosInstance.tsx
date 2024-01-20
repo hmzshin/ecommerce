@@ -4,6 +4,7 @@ type Token = string | null;
 
 export const axiosInstanceCreator = (): AxiosInstance => {
   const token: Token = localStorage.getItem("token");
+  console.log(token);
 
   return token
     ? axios.create({
