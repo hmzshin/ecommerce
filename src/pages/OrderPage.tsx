@@ -7,6 +7,7 @@ import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import { setAddressInfo } from "../store/slices/shoppingCardSlice";
 import { fetchCards, saveCard } from "../store/slices/paymentSlice";
+import { AxiosResponse } from "axios";
 
 type FormDataAddress = {
   name: string;
@@ -24,7 +25,13 @@ type FormDataCard = {
   exp_date: string;
   name: string;
 };
-
+type CardInfo = {
+  card_no: number;
+  ccv: number;
+  expire_month: string;
+  expire_year: string;
+  name_on_card: string;
+};
 const OrderPage = () => {
   const [firstStep, setFirstStep] = useState<boolean>(true);
   const [isNewAddress, setIsNewAddress] = useState<boolean>(false);
@@ -35,6 +42,7 @@ const OrderPage = () => {
   const [activeAddress, setActiveAddress] = useState<string>();
   const [activeBillingAddress, setActiveBillingAddress] = useState<string>();
   const [city, setCity] = useState<string>("default");
+  const [activeCard, setActiveCard] = useState<CardInfo>();
   const formRef = useRef<HTMLFormElement>(null);
   const cardFormRef = useRef<HTMLFormElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
@@ -44,9 +52,12 @@ const OrderPage = () => {
   const addresses = useAppSelector((state) => state.address.address);
   const cards = useAppSelector((state) => state.payment.cards);
   const payment = useAppSelector((state) => state.shoppingCard.payment);
+  const productsInCart = useAppSelector((state) => state.shoppingCard.card);
+
   const shippingAddress = useAppSelector(
     (state) => state.shoppingCard.address.shipping
   );
+
   const {
     register,
     handleSubmit,
@@ -115,7 +126,38 @@ const OrderPage = () => {
   }
 
   function cardChangeHandler(e: any) {
-    console.log(e.target.value);
+    const { value } = e.target;
+    const chosenCard = cards.find((card) => card.card_no === value);
+    setActiveCard(chosenCard);
+  }
+
+  async function makeOrder() {
+    const orderDetails = {
+      address_id: shippingAddress.id,
+      order_date: new Date(),
+      card_no: activeCard?.card_no,
+      card_name: activeCard?.name_on_card,
+      card_expire_month: activeCard?.expire_month,
+      card_expire_year: activeCard?.expire_year,
+      card_ccv: 123,
+      price: payment.total,
+      products: productsInCart.map((product) => {
+        return {
+          product_id: product.product.id,
+          count: product.numberOfItem,
+          detail: product.product.description,
+        };
+      }),
+    };
+    try {
+      const response: AxiosResponse = await axiosInstance.post(
+        "/order",
+        orderDetails
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function stepHandler() {
@@ -133,6 +175,7 @@ const OrderPage = () => {
     } else if (firstStep) {
       toast.warn("Please choose an address");
     } else {
+      makeOrder();
     }
   }
 
@@ -193,6 +236,7 @@ const OrderPage = () => {
   useEffect(() => {
     fetchProvinces();
   }, []);
+
   return (
     <>
       <section id="orderDetails" className="flex xl:px-[5%] py-5">
