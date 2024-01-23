@@ -207,7 +207,7 @@ const OrderPage = () => {
       window.removeEventListener("click", handleClick);
       window.removeEventListener("click", handleClickCard);
     };
-  }, [isNewAddress, addNewCard]);
+  }, [addRef, addCardRef, cardFormRef, formRef]);
 
   useEffect(() => {
     const province = provinceData?.find((province) => province.name === city);
