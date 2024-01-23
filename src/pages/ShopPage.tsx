@@ -24,8 +24,8 @@ type RouterParams = {
 };
 
 type FormData = {
-  filter?: string | undefined;
-  sort?: string | undefined;
+  filter: string;
+  sort: string;
 };
 
 const ShopPage = () => {
@@ -71,15 +71,21 @@ const ShopPage = () => {
   };
 
   const onSubmit = (data: FormData) => {
-    if (data.filter && data.sort) {
-      setSearchParams({
-        filter: data.filter,
-        sort: data.sort === "none" ? "" : data.sort,
-      });
-    } else if (data.sort) {
+    if (data.filter && data.sort !== "none") {
       setSearchParams({
         ...queryParams,
-        sort: data.sort === "none" ? "" : data.sort,
+        filter: data.filter,
+        sort: data.sort,
+      });
+    } else if (!data.filter && data.sort !== "none") {
+      setSearchParams({
+        ...queryParams,
+        sort: data.sort,
+      });
+    } else {
+      setSearchParams({
+        ...queryParams,
+        filter: data.filter,
       });
     }
   };
