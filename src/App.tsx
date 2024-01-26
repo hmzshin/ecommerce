@@ -17,7 +17,7 @@ const ContactPage = lazy(() => import("./pages/ContactPage.tsx"));
 const SignUpPage = lazy(() => import("./pages/SignUpPage.tsx"));
 const ProtectedPage = lazy(() => import("./pages/ProtectedPage.tsx"));
 const OrderPage = lazy(() => import("./pages/OrderPage.tsx"));
-const SuccessPage = lazy(() => import("./pages/SuccessPage.tsx"));
+const OrdersListPage = lazy(() => import("./pages/OrdersListPage.tsx"));
 const ShoppingCartPage = lazy(() => import("./pages/ShoppingCartPage.tsx"));
 
 function App() {
@@ -67,7 +67,7 @@ function App() {
 
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<SignInPage />} />
-          <Route path="/orders" element={<SuccessPage />} />
+          <Route path="/orders" element={<OrdersListPage />} />
         </Route>
       </Routes>
     </>

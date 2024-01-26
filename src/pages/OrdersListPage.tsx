@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import { fetchOrders } from "../store/slices/ordersSlice";
 import { formatDistanceToNow } from "date-fns";
 
-const SuccessPage = () => {
+const OrdersListPage = () => {
   const orders = useAppSelector((store) => store.orders.orders);
   const dispatch = useAppDispatch();
 
@@ -74,4 +74,4 @@ const SuccessPage = () => {
   );
 };
 
-export default SuccessPage;
+export default OrdersListPage;
