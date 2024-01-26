@@ -145,7 +145,7 @@ const Header = () => {
     return () => {
       window.removeEventListener("click", handleClick);
     };
-  }, [menuRef, shopListRef, userMenuRef]);
+  }, [menuRef, shopListRef, userMenuRef, userNameREf]);
 
   return (
     <section id="header" className="">
@@ -366,7 +366,7 @@ const Header = () => {
               className={`${
                 userInfo.name ? "block" : "hidden"
               } mr-10 md:mr-16 relative cursor-pointer`}
-              onClick={() => setShowUserDetails(!showUserDetails)}
+              onClick={() => setShowUserDetails((prev) => !prev)}
             >
               <span>{userInfo.name}</span>
 
@@ -376,10 +376,16 @@ const Header = () => {
                   showUserDetails ? "block" : "hidden"
                 }`}
               >
-                <ul className="flex flex-col gap-2 items-center whitespace-nowrap">
+                <ul className="flex flex-col gap-2 items-start whitespace-nowrap ">
                   <li className="cursor-pointer">Account</li>
                   <li className="cursor-pointer" onClick={deleteToken}>
                     Sign Out
+                  </li>
+                  <li
+                    className="cursor-ponter"
+                    onClick={() => navigate("/orders")}
+                  >
+                    Orders
                   </li>
                 </ul>
               </div>
