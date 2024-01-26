@@ -7,7 +7,8 @@ import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import { setAddressInfo } from "../store/slices/shoppingCardSlice";
 import { fetchCards, saveCard } from "../store/slices/paymentSlice";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 
 type FormDataAddress = {
   name: string;
@@ -53,6 +54,7 @@ const OrderPage = () => {
   const cards = useAppSelector((state) => state.payment.cards);
   const payment = useAppSelector((state) => state.shoppingCard.payment);
   const productsInCart = useAppSelector((state) => state.shoppingCard.card);
+  const navigate = useNavigate();
 
   const shippingAddress = useAppSelector(
     (state) => state.shoppingCard.address.shipping
@@ -175,7 +177,15 @@ const OrderPage = () => {
     } else if (firstStep) {
       toast.warn("Please choose an address");
     } else {
-      makeOrder();
+      makeOrder()
+        .then(() => {
+          toast.success("Order is succesfully made.");
+          navigate("/orders");
+        })
+        .catch((error: AxiosError) => {
+          toast.error("Order could not completed please try again.");
+          console.error(error);
+        });
     }
   }
 
