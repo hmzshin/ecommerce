@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
-import { fetchAddress, saveAddress } from "../store/slices/addressSlice";
+import {
+  fetchAddress,
+  saveAddress,
+  updateAddress,
+  updateLocalAddress,
+} from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import { setAddressInfo } from "../store/slices/shoppingCardSlice";
@@ -13,12 +18,13 @@ import { useNavigate } from "react-router-dom";
 type FormDataAddress = {
   name: string;
   surname: string;
-  phone: number;
+  phone: string;
   city: string;
   district: string;
   neighborhood: string;
   address: string;
   title: string;
+  [key: string]: any;
 };
 type FormDataCard = {
   card_no: number;
@@ -33,6 +39,16 @@ type CardInfo = {
   expire_year: string;
   name_on_card: string;
 };
+type AddressField =
+  | "name"
+  | "address"
+  | "title"
+  | "city"
+  | "district"
+  | "neighborhood"
+  | "phone"
+  | "surname";
+
 const OrderPage = () => {
   const [firstStep, setFirstStep] = useState<boolean>(true);
   const [isNewAddress, setIsNewAddress] = useState<boolean>(false);
@@ -44,10 +60,12 @@ const OrderPage = () => {
   const [activeBillingAddress, setActiveBillingAddress] = useState<string>();
   const [city, setCity] = useState<string>("default");
   const [activeCard, setActiveCard] = useState<CardInfo>();
+  const [editAddressId, setEditAddressId] = useState<number>(-1);
   const formRef = useRef<HTMLFormElement>(null);
   const cardFormRef = useRef<HTMLFormElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
   const addCardRef = useRef<HTMLLIElement>(null);
+  const editRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const userToken = useAppSelector((state) => state.user.token);
   const addresses = useAppSelector((state) => state.address.address);
@@ -64,6 +82,7 @@ const OrderPage = () => {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FormDataAddress>();
   const {
@@ -77,9 +96,22 @@ const OrderPage = () => {
     setCity(selectedCity);
     setValue("city", selectedCity, { shouldValidate: true });
   }
+
   function onSubmit(data: FormDataAddress) {
     setIsNewAddress(false);
-    dispatch(saveAddress(data));
+    if (editAddressId !== -1) {
+      dispatch(updateAddress({ ...data, id: editAddressId }))
+        .unwrap()
+        .then(() =>
+          dispatch(
+            updateLocalAddress({ ...data, id: editAddressId, user_id: 21 })
+          )
+        );
+      setEditAddressId(-1);
+      dispatch;
+    } else {
+      dispatch(saveAddress(data));
+    }
   }
 
   function onSubmitCard(data: FormDataCard) {
@@ -88,6 +120,7 @@ const OrderPage = () => {
     const expire_month = date[0];
     const expire_year = date[1];
     console.log("On submit çalışıyor");
+
     dispatch(
       saveCard({
         card_no: String(data.card_no),
@@ -98,8 +131,19 @@ const OrderPage = () => {
     )
       .unwrap()
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
+  }
+
+  function setValuesToForm(addressToEdit: FormDataAddress) {
+    setIsNewAddress(true);
+    setEditAddressId(addressToEdit.id);
+    setCity(addressToEdit.city);
+    for (const key in addressToEdit) {
+      setValue(key as AddressField, addressToEdit[key], {
+        shouldValidate: true,
+      });
+    }
   }
 
   async function fetchProvinces() {
@@ -131,6 +175,10 @@ const OrderPage = () => {
     const { value } = e.target;
     const chosenCard = cards.find((card) => card.card_no === value);
     setActiveCard(chosenCard);
+  }
+
+  function addNewAddressHandler() {
+    setIsNewAddress(true);
   }
 
   async function makeOrder() {
@@ -190,36 +238,6 @@ const OrderPage = () => {
   }
 
   useEffect(() => {
-    const handleClick = (event: any) => {
-      if (
-        addRef.current &&
-        formRef.current &&
-        !formRef.current?.contains(event.target) &&
-        !addRef.current?.contains(event.target)
-      ) {
-        setIsNewAddress(false);
-      }
-    };
-    const handleClickCard = (event: any) => {
-      if (
-        addCardRef.current &&
-        cardFormRef.current &&
-        !cardFormRef.current?.contains(event.target) &&
-        !addCardRef.current?.contains(event.target)
-      ) {
-        setAddNewCard(false);
-      }
-    };
-    window.addEventListener("click", handleClick);
-    window.addEventListener("click", handleClickCard);
-
-    return () => {
-      window.removeEventListener("click", handleClick);
-      window.removeEventListener("click", handleClickCard);
-    };
-  }, [addRef, addCardRef, cardFormRef, formRef]);
-
-  useEffect(() => {
     const province = provinceData?.find((province) => province.name === city);
     const districts = province?.districts.map((district: any) => district.name);
     setDistricts(districts);
@@ -246,6 +264,40 @@ const OrderPage = () => {
   useEffect(() => {
     fetchProvinces();
   }, []);
+
+  useEffect(() => {
+    const handleClick = (event: any) => {
+      if (
+        addRef.current &&
+        formRef.current &&
+        editRef.current &&
+        !formRef.current?.contains(event.target) &&
+        !addRef.current?.contains(event.target) &&
+        !editRef.current?.contains(event.target)
+      ) {
+        setIsNewAddress(false);
+        setCity("default");
+        reset();
+      }
+    };
+    const handleClickCard = (event: any) => {
+      if (
+        addCardRef.current &&
+        cardFormRef.current &&
+        !cardFormRef.current?.contains(event.target) &&
+        !addCardRef.current?.contains(event.target)
+      ) {
+        setAddNewCard(false);
+      }
+    };
+    window.addEventListener("click", handleClick);
+    window.addEventListener("click", handleClickCard);
+
+    return () => {
+      window.removeEventListener("click", handleClick);
+      window.removeEventListener("click", handleClickCard);
+    };
+  }, [addRef, addCardRef, cardFormRef, formRef]);
 
   return (
     <>
@@ -334,7 +386,7 @@ const OrderPage = () => {
                   <div className="flex flex-wrap w-full gap-y-2 justify-between ">
                     <div
                       className="rounded-lg bg-white p-1 sm:p-3 min-h-[150px] shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
-                      onClick={() => setIsNewAddress(true)}
+                      onClick={addNewAddressHandler}
                       ref={addRef}
                     >
                       <Icon icon="material-symbols:add" className="w-5 h-5" />
@@ -353,16 +405,39 @@ const OrderPage = () => {
                           key={i}
                           className="rounded-lg bg-white p-1 sm:p-3 shadow-md border flex flex-col justify-between items-center w-full xl:w-[calc(50%-5px)]"
                         >
-                          <div className="w-full">
-                            <label className="flex gap-5 text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-md">
-                              <input
-                                type="radio"
-                                name="activeAddress"
-                                value={address.title}
-                                className="bg-gray-100 border-gray-300 focus:ring-red-500"
-                                onChange={(e) => addressChangeHandler(e)}
-                              />
-                              {address.title}
+                          <div className="w-full" ref={editRef}>
+                            <label className="flex justify-between gap-5 text-left font-bold p-1 px-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-md">
+                              <span>
+                                <input
+                                  type="radio"
+                                  name="activeAddress"
+                                  value={address.title}
+                                  className="bg-gray-100 border-gray-300 focus:ring-red-500"
+                                  onChange={(e) => addressChangeHandler(e)}
+                                />
+                                {address.title}
+                              </span>
+
+                              <span
+                                className="cursor-pointer"
+                                onClick={() => {
+                                  const addressToEdit = {
+                                    name: address.name,
+                                    surname: address.surname,
+                                    phone: address.phone,
+                                    city: address.city,
+                                    district: address.district,
+                                    neighborhood: address.neighborhood,
+                                    address: address.address,
+                                    title: address.title,
+                                    id: address.id,
+                                  };
+
+                                  setValuesToForm(addressToEdit);
+                                }}
+                              >
+                                Edit
+                              </span>
                             </label>
                           </div>
                           <div className="rounded-lg bg-white p-1 sm:p-3 flex flex-col justify-between items-center  w-full">
@@ -728,7 +803,7 @@ const OrderPage = () => {
               <button
                 className={`hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none `}
               >
-                Add Address
+                {editAddressId !== -1 ? "Update Address" : "Add Address"}
               </button>
             </form>
           </div>

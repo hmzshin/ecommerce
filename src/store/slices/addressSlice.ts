@@ -45,6 +45,19 @@ export const saveAddress = createAsyncThunk(
     return response?.data;
   }
 );
+
+export const updateAddress = createAsyncThunk(
+  "put/address",
+  async (payload: any): AxiosPromise<void> => {
+    const response: AxiosResponse | undefined = await axiosInstance.put(
+      "/user/address",
+      payload
+    );
+    console.log("put request result:  ", response?.data);
+
+    return response?.data;
+  }
+);
 export const addressSlice = createSlice({
   name: "address",
   initialState,
@@ -57,6 +70,15 @@ export const addressSlice = createSlice({
       action: PayloadAction<[]>
     ): UserData => {
       return { ...state, address: [...action.payload] };
+    },
+    updateLocalAddress: (
+      state: UserData,
+      action: PayloadAction<Address>
+    ): UserData => {
+      const update = state.address.map((address) =>
+        address.id === action.payload.id ? action.payload : address
+      );
+      return { ...state, address: update };
     },
   },
 
@@ -72,4 +94,5 @@ export const addressSlice = createSlice({
 });
 
 export default addressSlice.reducer;
-export const { resetAddress, setUserAddresses } = addressSlice.actions;
+export const { resetAddress, setUserAddresses, updateLocalAddress } =
+  addressSlice.actions;
