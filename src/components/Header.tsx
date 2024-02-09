@@ -378,14 +378,14 @@ const Header = () => {
               >
                 <ul className="flex flex-col gap-2 items-start whitespace-nowrap ">
                   <li className="cursor-pointer">Account</li>
-                  <li className="cursor-pointer" onClick={deleteToken}>
-                    Sign Out
-                  </li>
                   <li
                     className="cursor-ponter"
                     onClick={() => navigate("/orders")}
                   >
                     Orders
+                  </li>
+                  <li className="cursor-pointer" onClick={deleteToken}>
+                    Sign Out
                   </li>
                 </ul>
               </div>
