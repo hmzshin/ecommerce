@@ -10,8 +10,16 @@ import {
 } from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
-import { setAddressInfo } from "../store/slices/shoppingCardSlice";
-import { fetchCards, saveCard } from "../store/slices/paymentSlice";
+import {
+  resetShoppingCart,
+  setAddressInfo,
+} from "../store/slices/shoppingCardSlice";
+import {
+  fetchCards,
+  saveCard,
+  updateCard,
+  updateLocalCard,
+} from "../store/slices/paymentSlice";
 import { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -49,6 +57,8 @@ type AddressField =
   | "phone"
   | "surname";
 
+type CardField = "card_no" | "ccv" | "exp_date" | "name";
+
 const OrderPage = () => {
   const [firstStep, setFirstStep] = useState<boolean>(true);
   const [isNewAddress, setIsNewAddress] = useState<boolean>(false);
@@ -61,11 +71,13 @@ const OrderPage = () => {
   const [city, setCity] = useState<string>("default");
   const [activeCard, setActiveCard] = useState<CardInfo>();
   const [editAddressId, setEditAddressId] = useState<number>(-1);
+  const [editCardId, setEditCardId] = useState<number>(-1);
   const formRef = useRef<HTMLFormElement>(null);
   const cardFormRef = useRef<HTMLFormElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
   const addCardRef = useRef<HTMLLIElement>(null);
   const editRef = useRef<HTMLDivElement>(null);
+  const editCardRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const userToken = useAppSelector((state) => state.user.token);
   const addresses = useAppSelector((state) => state.address.address);
@@ -85,9 +97,11 @@ const OrderPage = () => {
     reset,
     formState: { errors },
   } = useForm<FormDataAddress>();
+
   const {
     register: registerCard,
     handleSubmit: handleSubmitCard,
+    setValue: setValueCard,
     formState: { errors: errorsCard },
   } = useForm<FormDataCard>();
 
@@ -121,18 +135,43 @@ const OrderPage = () => {
     const expire_year = date[1];
     console.log("On submit çalışıyor");
 
-    dispatch(
-      saveCard({
+    if (editCardId === -1) {
+      dispatch(
+        saveCard({
+          card_no: String(data.card_no),
+          expire_month: Number(expire_month),
+          expire_year: Number(`20${expire_year}`),
+          name_on_card: data.name,
+        })
+      )
+        .unwrap()
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      const updated = {
+        id: editCardId,
         card_no: String(data.card_no),
         expire_month: Number(expire_month),
         expire_year: Number(`20${expire_year}`),
         name_on_card: data.name,
-      })
-    )
-      .unwrap()
-      .catch((error) => {
-        console.error(error);
-      });
+      };
+      dispatch(updateCard(updated))
+        .unwrap()
+        .then(() =>
+          dispatch(
+            updateLocalCard({
+              expire_month: expire_month,
+              expire_year: expire_year,
+              name_on_card: data.name,
+              id: editCardId,
+              card_no: data.card_no,
+              ccv: data.ccv,
+            })
+          )
+        );
+      console.log(updated);
+    }
   }
 
   function setValuesToForm(addressToEdit: FormDataAddress) {
@@ -141,6 +180,14 @@ const OrderPage = () => {
     setCity(addressToEdit.city);
     for (const key in addressToEdit) {
       setValue(key as AddressField, addressToEdit[key], {
+        shouldValidate: true,
+      });
+    }
+  }
+  function setValuesToFormCard(cardToEdit: FormDataCard) {
+    setAddNewCard(true);
+    for (const key in cardToEdit) {
+      setValueCard(key as CardField, cardToEdit[key as CardField], {
         shouldValidate: true,
       });
     }
@@ -174,7 +221,9 @@ const OrderPage = () => {
   function cardChangeHandler(e: any) {
     const { value } = e.target;
     const chosenCard = cards.find((card) => card.card_no === value);
-    setActiveCard(chosenCard);
+    if (chosenCard) {
+      setActiveCard(chosenCard);
+    }
   }
 
   function addNewAddressHandler() {
@@ -229,6 +278,38 @@ const OrderPage = () => {
         .then(() => {
           toast.success("Order is succesfully made.");
           navigate("/orders");
+          dispatch(
+            resetShoppingCart({
+              card: [],
+              payment: { subtotal: 0, shipping: 0, total: 0 },
+              address: {
+                shipping: {
+                  address: "",
+                  city: "",
+                  district: "",
+                  id: -1,
+                  name: "",
+                  neighborhood: "",
+                  phone: "",
+                  surname: "",
+                  title: "",
+                  user_id: -1,
+                },
+                billing: {
+                  address: "",
+                  city: "",
+                  district: "",
+                  id: -1,
+                  name: "",
+                  neighborhood: "",
+                  phone: "",
+                  surname: "",
+                  title: "",
+                  user_id: -1,
+                },
+              },
+            })
+          );
         })
         .catch((error: AxiosError) => {
           toast.error("Order could not completed please try again.");
@@ -284,8 +365,10 @@ const OrderPage = () => {
       if (
         addCardRef.current &&
         cardFormRef.current &&
-        !cardFormRef.current?.contains(event.target) &&
-        !addCardRef.current?.contains(event.target)
+        editCardRef.current &&
+        !cardFormRef.current.contains(event.target) &&
+        !editCardRef.current.contains(event.target) &&
+        !addCardRef.current.contains(event.target)
       ) {
         setAddNewCard(false);
       }
@@ -496,6 +579,22 @@ const OrderPage = () => {
                         key={i}
                         className=" rounded-lg bg-white shadow-md border flex flex-col justify-between items-center w-full h-[250px] xl:w-[calc(50%-5px)]"
                       >
+                        <div
+                          ref={editCardRef}
+                          className="cursor-pointer"
+                          onClick={() => {
+                            setAddNewCard(true);
+                            setEditCardId(card.id);
+                            setValuesToFormCard({
+                              card_no: card.card_no,
+                              ccv: card.ccv,
+                              exp_date: `${card.expire_month}/${card.expire_year} `,
+                              name: card.name_on_card,
+                            });
+                          }}
+                        >
+                          Edit Card
+                        </div>
                         <input
                           type="radio"
                           id={String(card.card_no)}

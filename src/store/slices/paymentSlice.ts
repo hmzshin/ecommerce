@@ -8,6 +8,7 @@ interface CardInfo {
   expire_month: string;
   expire_year: string;
   name_on_card: string;
+  id: number;
 }
 
 interface UserData {
@@ -32,6 +33,20 @@ export const fetchCards = createAsyncThunk(
   }
 );
 
+export const updateCard = createAsyncThunk(
+  "put/card",
+  async (payload: any): AxiosPromise<void> => {
+    const response: AxiosResponse | undefined = await axiosInstance.put(
+      "user/card",
+      payload
+    );
+
+    console.log("update card", response?.data);
+
+    return response?.data;
+  }
+);
+
 export const saveCard = createAsyncThunk(
   "post/card",
   async (payload: any): AxiosPromise<void> => {
@@ -49,6 +64,16 @@ export const paymentSlice = createSlice({
   reducers: {
     addCard: (state: UserData, action: PayloadAction<CardInfo>): UserData => {
       return { cards: [...state.cards, action.payload] };
+    },
+    updateLocalCard: (
+      state: UserData,
+      action: PayloadAction<CardInfo>
+    ): UserData => {
+      return {
+        cards: state.cards.map((card) =>
+          card.id === action.payload.id ? action.payload : card
+        ),
+      };
     },
   },
 
@@ -70,4 +95,4 @@ export const paymentSlice = createSlice({
 });
 
 export default paymentSlice.reducer;
-export const { addCard } = paymentSlice.actions;
+export const { addCard, updateLocalCard } = paymentSlice.actions;
