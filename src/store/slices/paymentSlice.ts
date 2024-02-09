@@ -40,9 +40,7 @@ export const updateCard = createAsyncThunk(
       "user/card",
       payload
     );
-
     console.log("update card", response?.data);
-
     return response?.data;
   }
 );
@@ -82,6 +80,17 @@ export const paymentSlice = createSlice({
       fetchCards.fulfilled,
       (state: UserData, action: PayloadAction<any>) => {
         return { ...state, cards: [...action.payload] };
+      }
+    );
+    builder.addCase(
+      updateCard.fulfilled,
+      (state: UserData, action: PayloadAction<any>) => {
+        return {
+          ...state,
+          cards: state.cards.map((card) =>
+            card.id === action.payload[0].id ? action.payload[0] : card
+          ),
+        };
       }
     );
 

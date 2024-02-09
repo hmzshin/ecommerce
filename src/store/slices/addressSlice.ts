@@ -87,6 +87,15 @@ export const addressSlice = createSlice({
       return { ...state, address: [...state.address, action.payload[0]] };
     });
 
+    builder.addCase(updateAddress.fulfilled, (state: UserData, action: any) => {
+      return {
+        ...state,
+        address: state.address.map((adrs) =>
+          adrs.id === action.payload[0].id ? action.payload[0] : adrs
+        ),
+      };
+    });
+
     builder.addCase(fetchAddress.fulfilled, (state: UserData, action: any) => {
       return { ...state, address: [...action.payload] };
     });

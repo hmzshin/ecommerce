@@ -6,7 +6,6 @@ import {
   fetchAddress,
   saveAddress,
   updateAddress,
-  updateLocalAddress,
 } from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
@@ -14,12 +13,7 @@ import {
   resetShoppingCart,
   setAddressInfo,
 } from "../store/slices/shoppingCardSlice";
-import {
-  fetchCards,
-  saveCard,
-  updateCard,
-  updateLocalCard,
-} from "../store/slices/paymentSlice";
+import { fetchCards, saveCard, updateCard } from "../store/slices/paymentSlice";
 import { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -102,6 +96,7 @@ const OrderPage = () => {
     register: registerCard,
     handleSubmit: handleSubmitCard,
     setValue: setValueCard,
+    reset: resetCard,
     formState: { errors: errorsCard },
   } = useForm<FormDataCard>();
 
@@ -116,11 +111,7 @@ const OrderPage = () => {
     if (editAddressId !== -1) {
       dispatch(updateAddress({ ...data, id: editAddressId }))
         .unwrap()
-        .then(() =>
-          dispatch(
-            updateLocalAddress({ ...data, id: editAddressId, user_id: 21 })
-          )
-        );
+        .then(() => toast.success("Address successfully updated"));
       setEditAddressId(-1);
       dispatch;
     } else {
@@ -158,18 +149,7 @@ const OrderPage = () => {
       };
       dispatch(updateCard(updated))
         .unwrap()
-        .then(() =>
-          dispatch(
-            updateLocalCard({
-              expire_month: expire_month,
-              expire_year: expire_year,
-              name_on_card: data.name,
-              id: editCardId,
-              card_no: data.card_no,
-              ccv: data.ccv,
-            })
-          )
-        );
+        .then(() => toast.success("Card successfully updated"));
       console.log(updated);
     }
   }
@@ -346,6 +326,8 @@ const OrderPage = () => {
     fetchProvinces();
   }, []);
 
+  useEffect(() => console.log(isNewAddress), [isNewAddress]);
+
   useEffect(() => {
     const handleClick = (event: any) => {
       if (
@@ -358,6 +340,7 @@ const OrderPage = () => {
       ) {
         setIsNewAddress(false);
         setCity("default");
+        setEditAddressId(-1);
         reset();
       }
     };
@@ -370,6 +353,9 @@ const OrderPage = () => {
         !editCardRef.current.contains(event.target) &&
         !addCardRef.current.contains(event.target)
       ) {
+        setAddNewCard(false);
+        setEditCardId(-1);
+        resetCard();
         setAddNewCard(false);
       }
     };
@@ -488,8 +474,8 @@ const OrderPage = () => {
                           key={i}
                           className="rounded-lg bg-white p-1 sm:p-3 shadow-md border flex flex-col justify-between items-center w-full xl:w-[calc(50%-5px)]"
                         >
-                          <div className="w-full" ref={editRef}>
-                            <label className="flex justify-between gap-5 text-left font-bold p-1 px-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-md">
+                          <div className="w-full flex">
+                            <label className="flex text-left font-bold p-1 px-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-l-md w-full">
                               <span>
                                 <input
                                   type="radio"
@@ -500,28 +486,28 @@ const OrderPage = () => {
                                 />
                                 {address.title}
                               </span>
-
-                              <span
-                                className="cursor-pointer"
-                                onClick={() => {
-                                  const addressToEdit = {
-                                    name: address.name,
-                                    surname: address.surname,
-                                    phone: address.phone,
-                                    city: address.city,
-                                    district: address.district,
-                                    neighborhood: address.neighborhood,
-                                    address: address.address,
-                                    title: address.title,
-                                    id: address.id,
-                                  };
-
-                                  setValuesToForm(addressToEdit);
-                                }}
-                              >
-                                Edit
-                              </span>
                             </label>
+                            <div
+                              ref={editRef}
+                              className="cursor-pointer w-fit bg-[#176B87]  text-sky-50 rounded-r-md pr-5 flex items-center"
+                              onClick={(e) => {
+                                const addressToEdit = {
+                                  name: address.name,
+                                  surname: address.surname,
+                                  phone: address.phone,
+                                  city: address.city,
+                                  district: address.district,
+                                  neighborhood: address.neighborhood,
+                                  address: address.address,
+                                  title: address.title,
+                                  id: address.id,
+                                };
+                                e.stopPropagation();
+                                setValuesToForm(addressToEdit);
+                              }}
+                            >
+                              Edit
+                            </div>
                           </div>
                           <div className="rounded-lg bg-white p-1 sm:p-3 flex flex-col justify-between items-center  w-full">
                             <div className=" w-full flex gap-2 justify-between items-center font-['Montserrat']  pb-5">
@@ -557,7 +543,7 @@ const OrderPage = () => {
                   </div>{" "}
                 </>
               ) : (
-                <ul className="flex flex-wrap w-full gap-y-2 justify-between ">
+                <ul className="flex flex-wrap w-full gap-y-10 justify-between ">
                   <li
                     className="rounded-lg bg-white p-1 sm:p-3 min-h-[150px] shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
                     onClick={() => setAddNewCard(true)}
@@ -582,7 +568,8 @@ const OrderPage = () => {
                         <div
                           ref={editCardRef}
                           className="cursor-pointer"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setAddNewCard(true);
                             setEditCardId(card.id);
                             setValuesToFormCard({
@@ -1017,7 +1004,7 @@ const OrderPage = () => {
               <button
                 className={`hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none `}
               >
-                Add Card
+                {editCardId === -1 ? `Add Card` : "Update Card"}
               </button>
             </form>
           </div>
