@@ -2,22 +2,37 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useForm } from "react-hook-form";
-import { saveAddress, setUserAddresses } from "../store/slices/addressSlice";
+import {
+  fetchAddress,
+  saveAddress,
+  updateAddress,
+  updateLocalAddress,
+} from "../store/slices/addressSlice";
 import { axiosInstance } from "../api/axiosInstance";
 import { toast } from "react-toastify";
-import { setAddressInfo } from "../store/slices/shoppingCardSlice";
-import { addCard } from "../store/slices/paymentSlice";
-import axios from "axios";
+import {
+  resetShoppingCart,
+  setAddressInfo,
+} from "../store/slices/shoppingCardSlice";
+import {
+  fetchCards,
+  saveCard,
+  updateCard,
+  updateLocalCard,
+} from "../store/slices/paymentSlice";
+import { AxiosError, AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 
 type FormDataAddress = {
   name: string;
   surname: string;
-  phone: number;
+  phone: string;
   city: string;
   district: string;
   neighborhood: string;
   address: string;
   title: string;
+  [key: string]: any;
 };
 type FormDataCard = {
   card_no: number;
@@ -25,6 +40,24 @@ type FormDataCard = {
   exp_date: string;
   name: string;
 };
+type CardInfo = {
+  card_no: number;
+  ccv: number;
+  expire_month: string;
+  expire_year: string;
+  name_on_card: string;
+};
+type AddressField =
+  | "name"
+  | "address"
+  | "title"
+  | "city"
+  | "district"
+  | "neighborhood"
+  | "phone"
+  | "surname";
+
+type CardField = "card_no" | "ccv" | "exp_date" | "name";
 
 const OrderPage = () => {
   const [firstStep, setFirstStep] = useState<boolean>(true);
@@ -36,15 +69,23 @@ const OrderPage = () => {
   const [activeAddress, setActiveAddress] = useState<string>();
   const [activeBillingAddress, setActiveBillingAddress] = useState<string>();
   const [city, setCity] = useState<string>("default");
+  const [activeCard, setActiveCard] = useState<CardInfo>();
+  const [editAddressId, setEditAddressId] = useState<number>(-1);
+  const [editCardId, setEditCardId] = useState<number>(-1);
   const formRef = useRef<HTMLFormElement>(null);
   const cardFormRef = useRef<HTMLFormElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
   const addCardRef = useRef<HTMLLIElement>(null);
+  const editRef = useRef<HTMLDivElement>(null);
+  const editCardRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const userToken = useAppSelector((state) => state.user.token);
   const addresses = useAppSelector((state) => state.address.address);
   const cards = useAppSelector((state) => state.payment.cards);
   const payment = useAppSelector((state) => state.shoppingCard.payment);
+  const productsInCart = useAppSelector((state) => state.shoppingCard.card);
+  const navigate = useNavigate();
+
   const shippingAddress = useAppSelector(
     (state) => state.shoppingCard.address.shipping
   );
@@ -53,11 +94,14 @@ const OrderPage = () => {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FormDataAddress>();
+
   const {
     register: registerCard,
     handleSubmit: handleSubmitCard,
+    setValue: setValueCard,
     formState: { errors: errorsCard },
   } = useForm<FormDataCard>();
 
@@ -66,25 +110,87 @@ const OrderPage = () => {
     setCity(selectedCity);
     setValue("city", selectedCity, { shouldValidate: true });
   }
+
   function onSubmit(data: FormDataAddress) {
     setIsNewAddress(false);
-    dispatch(saveAddress(data));
+    if (editAddressId !== -1) {
+      dispatch(updateAddress({ ...data, id: editAddressId }))
+        .unwrap()
+        .then(() =>
+          dispatch(
+            updateLocalAddress({ ...data, id: editAddressId, user_id: 21 })
+          )
+        );
+      setEditAddressId(-1);
+      dispatch;
+    } else {
+      dispatch(saveAddress(data));
+    }
   }
 
   function onSubmitCard(data: FormDataCard) {
     setAddNewCard(false);
-    const exp_month = data.exp_date.split("-")[0];
-    const exp_year = data.exp_date.split("-")[1];
+    const date = data.exp_date.split("/");
+    const expire_month = date[0];
+    const expire_year = date[1];
+    console.log("On submit çalışıyor");
 
-    dispatch(
-      addCard({
-        card_no: data.card_no,
-        exp_month,
-        exp_year,
-        ccv: data.ccv,
-        name: data.name,
-      })
-    );
+    if (editCardId === -1) {
+      dispatch(
+        saveCard({
+          card_no: String(data.card_no),
+          expire_month: Number(expire_month),
+          expire_year: Number(`20${expire_year}`),
+          name_on_card: data.name,
+        })
+      )
+        .unwrap()
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      const updated = {
+        id: editCardId,
+        card_no: String(data.card_no),
+        expire_month: Number(expire_month),
+        expire_year: Number(`20${expire_year}`),
+        name_on_card: data.name,
+      };
+      dispatch(updateCard(updated))
+        .unwrap()
+        .then(() =>
+          dispatch(
+            updateLocalCard({
+              expire_month: expire_month,
+              expire_year: expire_year,
+              name_on_card: data.name,
+              id: editCardId,
+              card_no: data.card_no,
+              ccv: data.ccv,
+            })
+          )
+        );
+      console.log(updated);
+    }
+  }
+
+  function setValuesToForm(addressToEdit: FormDataAddress) {
+    setIsNewAddress(true);
+    setEditAddressId(addressToEdit.id);
+    setCity(addressToEdit.city);
+    for (const key in addressToEdit) {
+      setValue(key as AddressField, addressToEdit[key], {
+        shouldValidate: true,
+      });
+    }
+  }
+  function setValuesToFormCard(cardToEdit: FormDataCard) {
+    setAddNewCard(true);
+    for (const key in cardToEdit) {
+      setValueCard(key as CardField, cardToEdit[key as CardField], {
+        shouldValidate: true,
+      });
+    }
   }
 
   async function fetchProvinces() {
@@ -113,7 +219,44 @@ const OrderPage = () => {
   }
 
   function cardChangeHandler(e: any) {
-    console.log(e.target.value);
+    const { value } = e.target;
+    const chosenCard = cards.find((card) => card.card_no === value);
+    if (chosenCard) {
+      setActiveCard(chosenCard);
+    }
+  }
+
+  function addNewAddressHandler() {
+    setIsNewAddress(true);
+  }
+
+  async function makeOrder() {
+    const orderDetails = {
+      address_id: shippingAddress.id,
+      order_date: new Date(),
+      card_no: activeCard?.card_no,
+      card_name: activeCard?.name_on_card,
+      card_expire_month: activeCard?.expire_month,
+      card_expire_year: activeCard?.expire_year,
+      card_ccv: 123,
+      price: payment.total,
+      products: productsInCart.map((product) => {
+        return {
+          product_id: product.product.id,
+          count: product.numberOfItem,
+          detail: product.product.description,
+        };
+      }),
+    };
+    try {
+      const response: AxiosResponse = await axiosInstance.post(
+        "/order",
+        orderDetails
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function stepHandler() {
@@ -130,26 +273,102 @@ const OrderPage = () => {
       }
     } else if (firstStep) {
       toast.warn("Please choose an address");
+    } else {
+      makeOrder()
+        .then(() => {
+          toast.success("Order is succesfully made.");
+          navigate("/success");
+          dispatch(
+            resetShoppingCart({
+              card: [],
+              payment: { subtotal: 0, shipping: 0, total: 0 },
+              address: {
+                shipping: {
+                  address: "",
+                  city: "",
+                  district: "",
+                  id: -1,
+                  name: "",
+                  neighborhood: "",
+                  phone: "",
+                  surname: "",
+                  title: "",
+                  user_id: -1,
+                },
+                billing: {
+                  address: "",
+                  city: "",
+                  district: "",
+                  id: -1,
+                  name: "",
+                  neighborhood: "",
+                  phone: "",
+                  surname: "",
+                  title: "",
+                  user_id: -1,
+                },
+              },
+            })
+          );
+        })
+        .catch((error: AxiosError) => {
+          toast.error("Order could not completed please try again.");
+          console.error(error);
+        });
     }
   }
+
+  useEffect(() => {
+    const province = provinceData?.find((province) => province.name === city);
+    const districts = province?.districts.map((district: any) => district.name);
+    setDistricts(districts);
+  }, [city]);
+
+  useEffect(() => {
+    if (userToken) {
+      dispatch(fetchAddress())
+        .unwrap()
+        .catch((error) => {
+          console.log(error);
+          toast.error("Saved addresses could not loaded, Please refresh page.");
+        });
+      fetchProvinces();
+      dispatch(fetchCards())
+        .unwrap()
+        .catch((error) => {
+          toast.error("Saved cards could not loaded, Please refresh page.");
+          throw error;
+        });
+    }
+  }, [userToken]);
+
+  useEffect(() => {
+    fetchProvinces();
+  }, []);
 
   useEffect(() => {
     const handleClick = (event: any) => {
       if (
         addRef.current &&
         formRef.current &&
+        editRef.current &&
         !formRef.current?.contains(event.target) &&
-        !addRef.current?.contains(event.target)
+        !addRef.current?.contains(event.target) &&
+        !editRef.current?.contains(event.target)
       ) {
         setIsNewAddress(false);
+        setCity("default");
+        reset();
       }
     };
     const handleClickCard = (event: any) => {
       if (
         addCardRef.current &&
         cardFormRef.current &&
-        !cardFormRef.current?.contains(event.target) &&
-        !addCardRef.current?.contains(event.target)
+        editCardRef.current &&
+        !cardFormRef.current.contains(event.target) &&
+        !editCardRef.current.contains(event.target) &&
+        !addCardRef.current.contains(event.target)
       ) {
         setAddNewCard(false);
       }
@@ -161,30 +380,8 @@ const OrderPage = () => {
       window.removeEventListener("click", handleClick);
       window.removeEventListener("click", handleClickCard);
     };
-  }, [isNewAddress, addNewCard]);
+  }, [addRef, addCardRef, cardFormRef, formRef]);
 
-  useEffect(() => {
-    const province = provinceData?.find((province) => province.name === city);
-    const districts = province?.districts.map((district: any) => district.name);
-    setDistricts(districts);
-  }, [city]);
-
-  useEffect(() => {
-    if (userToken) {
-      axios
-        .get("https://workintech-fe-ecommerce.onrender.com/user/address", {
-          headers: {
-            Authorization: userToken,
-          },
-        })
-        .then((res) => dispatch(setUserAddresses(res.data)))
-        .catch((error) => console.log(error));
-    }
-  }, [userToken]);
-
-  useEffect(() => {
-    fetchProvinces();
-  }, []);
   return (
     <>
       <section id="orderDetails" className="flex xl:px-[5%] py-5">
@@ -272,7 +469,7 @@ const OrderPage = () => {
                   <div className="flex flex-wrap w-full gap-y-2 justify-between ">
                     <div
                       className="rounded-lg bg-white p-1 sm:p-3 min-h-[150px] shadow-md flex justify-center items-center gap-3 w-full xl:w-[calc(50%-5px)] flex-wrap cursor-pointer border"
-                      onClick={() => setIsNewAddress(true)}
+                      onClick={addNewAddressHandler}
                       ref={addRef}
                     >
                       <Icon icon="material-symbols:add" className="w-5 h-5" />
@@ -291,16 +488,39 @@ const OrderPage = () => {
                           key={i}
                           className="rounded-lg bg-white p-1 sm:p-3 shadow-md border flex flex-col justify-between items-center w-full xl:w-[calc(50%-5px)]"
                         >
-                          <div className="w-full">
-                            <label className="flex gap-5 text-left font-bold p-1 pl-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-md">
-                              <input
-                                type="radio"
-                                name="activeAddress"
-                                value={address.title}
-                                className="bg-gray-100 border-gray-300 focus:ring-red-500"
-                                onChange={(e) => addressChangeHandler(e)}
-                              />
-                              {address.title}
+                          <div className="w-full" ref={editRef}>
+                            <label className="flex justify-between gap-5 text-left font-bold p-1 px-5 text-sky-50 font-['Montserrat'] bg-[#176B87] rounded-md">
+                              <span>
+                                <input
+                                  type="radio"
+                                  name="activeAddress"
+                                  value={address.title}
+                                  className="bg-gray-100 border-gray-300 focus:ring-red-500"
+                                  onChange={(e) => addressChangeHandler(e)}
+                                />
+                                {address.title}
+                              </span>
+
+                              <span
+                                className="cursor-pointer"
+                                onClick={() => {
+                                  const addressToEdit = {
+                                    name: address.name,
+                                    surname: address.surname,
+                                    phone: address.phone,
+                                    city: address.city,
+                                    district: address.district,
+                                    neighborhood: address.neighborhood,
+                                    address: address.address,
+                                    title: address.title,
+                                    id: address.id,
+                                  };
+
+                                  setValuesToForm(addressToEdit);
+                                }}
+                              >
+                                Edit
+                              </span>
                             </label>
                           </div>
                           <div className="rounded-lg bg-white p-1 sm:p-3 flex flex-col justify-between items-center  w-full">
@@ -359,6 +579,22 @@ const OrderPage = () => {
                         key={i}
                         className=" rounded-lg bg-white shadow-md border flex flex-col justify-between items-center w-full h-[250px] xl:w-[calc(50%-5px)]"
                       >
+                        <div
+                          ref={editCardRef}
+                          className="cursor-pointer"
+                          onClick={() => {
+                            setAddNewCard(true);
+                            setEditCardId(card.id);
+                            setValuesToFormCard({
+                              card_no: card.card_no,
+                              ccv: card.ccv,
+                              exp_date: `${card.expire_month}/${card.expire_year} `,
+                              name: card.name_on_card,
+                            });
+                          }}
+                        >
+                          Edit Card
+                        </div>
                         <input
                           type="radio"
                           id={String(card.card_no)}
@@ -382,7 +618,7 @@ const OrderPage = () => {
                                 <div className="font-['Montserrat']">
                                   <p className="font-light">Name</p>
                                   <p className="font-medium tracking-tight">
-                                    {card.name}
+                                    {card.name_on_card}
                                   </p>
                                 </div>
                                 <img
@@ -405,8 +641,9 @@ const OrderPage = () => {
                                       Expiry Date
                                     </p>
                                     <p className="font-medium tracking-tight text-sm font-['Montserrat']">
-                                      <span>{card.exp_month}</span>
-                                      <span>{card.exp_year}</span>
+                                      <span>{card.expire_month}</span>
+                                      <span>/ </span>
+                                      <span>{card.expire_year}</span>
                                     </p>
                                   </div>
 
@@ -451,7 +688,7 @@ const OrderPage = () => {
                 className="mt-6 w-full rounded-md bg-sky-500 py-1.5 font-medium text-blue-50 hover:bg-sky-400"
                 onClick={stepHandler}
               >
-                {firstStep ? "Save and Continue" : "Make Payment"}
+                {firstStep ? "Save and Continue" : "Proceed to Payment"}
               </button>
             </div>
           </div>
@@ -665,7 +902,7 @@ const OrderPage = () => {
               <button
                 className={`hover:bg-sky-400 w-full rounded-md bg-sky-500 py-3 px-8 text-center text-base font-semibold text-white outline-none `}
               >
-                Add Address
+                {editAddressId !== -1 ? "Update Address" : "Add Address"}
               </button>
             </form>
           </div>

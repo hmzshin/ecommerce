@@ -24,14 +24,15 @@ type RouterParams = {
 };
 
 type FormData = {
-  filter?: string | undefined;
-  sort?: string | undefined;
+  filter: string;
+  sort: string;
 };
 
 const ShopPage = () => {
   const routerParams = useParams<RouterParams>();
   const [productsLoading, setProductsLoading] = useState<boolean>(false);
   const [params, setParams] = useState<Params>();
+  const [queryParams, setQueryParams] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const categories: any = useAppSelector((state) => state.global.categories);
@@ -70,13 +71,22 @@ const ShopPage = () => {
   };
 
   const onSubmit = (data: FormData) => {
-    if (data.filter && data.sort) {
-      setSearchParams({ filter: data.filter, sort: data.sort });
-    } else if (data.filter) {
-      setSearchParams({ filter: data.filter });
-    } else if (data.sort) {
-      setSearchParams({ sort: data.sort });
+    if (data.filter && data.sort !== "none") {
+      setSearchParams({
+        ...queryParams,
+        filter: data.filter,
+        sort: data.sort,
+      });
+    } else if (!data.filter && data.sort !== "none") {
+      setSearchParams({
+        ...queryParams,
+        sort: data.sort,
+      });
     } else {
+      setSearchParams({
+        ...queryParams,
+        filter: data.filter,
+      });
     }
   };
 
@@ -85,9 +95,10 @@ const ShopPage = () => {
     for (const entry of searchParams.entries()) {
       urlParams[entry[0]] = entry[1];
     }
+    setQueryParams(urlParams);
 
     if (routerParams.search) {
-      if (urlParams.p) {
+      if (urlParams?.p) {
       } else {
         fetchProductsHandler({
           ...urlParams,
@@ -112,7 +123,10 @@ const ShopPage = () => {
       } else {
         if (urlParams.p) {
         } else {
-          fetchProductsHandler({});
+          fetchProductsHandler({ ...urlParams });
+          setParams({
+            ...urlParams,
+          });
         }
       }
     }
@@ -196,7 +210,7 @@ const ShopPage = () => {
               {...register("sort")}
               className="w-full sm:w-fit h-14 px-1 bg-stone-50 rounded-md border border-zinc-300 "
             >
-              <option value="">Sort by: Featured</option>
+              <option value="none">Sort by: Featured</option>
               <option value="price:asc">Price: Low to High</option>
               <option value="price:desc">Price: High to Low</option>
               <option value="rating:asc">Rating: Low to High</option>

@@ -6,7 +6,6 @@ import SignInPage from "./pages/SignInPage.tsx";
 import { setUser } from "./store/slices/userSlice.ts";
 import { AxiosResponse } from "axios";
 import { axiosInstance } from "./api/axiosInstance.tsx";
-import ShoppingCartPage from "./pages/ShoppingCartPage.tsx";
 import ContentWrapper from "./components/ContentWrapper.tsx";
 
 const HomePage = lazy(() => import("./pages/HomePage.tsx"));
@@ -18,6 +17,9 @@ const ContactPage = lazy(() => import("./pages/ContactPage.tsx"));
 const SignUpPage = lazy(() => import("./pages/SignUpPage.tsx"));
 const ProtectedPage = lazy(() => import("./pages/ProtectedPage.tsx"));
 const OrderPage = lazy(() => import("./pages/OrderPage.tsx"));
+const OrdersListPage = lazy(() => import("./pages/OrdersListPage.tsx"));
+const ShoppingCartPage = lazy(() => import("./pages/ShoppingCartPage.tsx"));
+const SuccessPage = lazy(() => import("./components/Success.tsx"));
 
 function App() {
   const dispatch = useAppDispatch();
@@ -66,6 +68,8 @@ function App() {
 
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<SignInPage />} />
+          <Route path="/orders" element={<OrdersListPage />} />
+          <Route path="/success" element={<SuccessPage />} />
         </Route>
       </Routes>
     </>

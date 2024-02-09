@@ -1,12 +1,14 @@
 import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { AxiosPromise, AxiosResponse } from "axios";
+import axios, { AxiosPromise, AxiosResponse } from "axios";
 import { axiosInstance } from "../../api/axiosInstance";
+import { store } from "../store";
 interface CardInfo {
   card_no: number;
   ccv: number;
-  exp_month: string;
-  exp_year: string;
-  name: string;
+  expire_month: string;
+  expire_year: string;
+  name_on_card: string;
+  id: number;
 }
 
 interface UserData {
@@ -20,9 +22,27 @@ const initialState: UserData = {
 export const fetchCards = createAsyncThunk(
   "get/cards",
   async (): AxiosPromise<void> => {
-    const response: AxiosResponse | undefined = await axiosInstance.get(
-      "/card"
+    const userToken = store.getState().user.token;
+    const response: AxiosResponse | undefined = await axios.get(
+      "https://workintech-fe-ecommerce.onrender.com/user/card",
+      { headers: { Authorization: userToken } }
     );
+    console.log("card slice response ", response?.data);
+
+    return response?.data;
+  }
+);
+
+export const updateCard = createAsyncThunk(
+  "put/card",
+  async (payload: any): AxiosPromise<void> => {
+    const response: AxiosResponse | undefined = await axiosInstance.put(
+      "user/card",
+      payload
+    );
+
+    console.log("update card", response?.data);
+
     return response?.data;
   }
 );
@@ -31,9 +51,10 @@ export const saveCard = createAsyncThunk(
   "post/card",
   async (payload: any): AxiosPromise<void> => {
     const response: AxiosResponse | undefined = await axiosInstance.post(
-      "card",
+      "user/card",
       payload
     );
+
     return response?.data;
   }
 );
@@ -43,6 +64,16 @@ export const paymentSlice = createSlice({
   reducers: {
     addCard: (state: UserData, action: PayloadAction<CardInfo>): UserData => {
       return { cards: [...state.cards, action.payload] };
+    },
+    updateLocalCard: (
+      state: UserData,
+      action: PayloadAction<CardInfo>
+    ): UserData => {
+      return {
+        cards: state.cards.map((card) =>
+          card.id === action.payload.id ? action.payload : card
+        ),
+      };
     },
   },
 
@@ -64,4 +95,4 @@ export const paymentSlice = createSlice({
 });
 
 export default paymentSlice.reducer;
-export const { addCard } = paymentSlice.actions;
+export const { addCard, updateLocalCard } = paymentSlice.actions;
