@@ -277,7 +277,7 @@ const OrderPage = () => {
       makeOrder()
         .then(() => {
           toast.success("Order is succesfully made.");
-          navigate("/orders");
+          navigate("/success");
           dispatch(
             resetShoppingCart({
               card: [],
