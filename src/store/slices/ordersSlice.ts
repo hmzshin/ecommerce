@@ -37,13 +37,13 @@ export const ordersSlice = createSlice({
   initialState,
   reducers: {
     setOrders: (state: UserData, action: PayloadAction<[]>): UserData => {
-      return { orders: action.payload };
+      return { ...state, orders: action.payload };
     },
   },
 
   extraReducers(builder) {
     builder.addCase(fetchOrders.fulfilled, (state: UserData, action: any) => {
-      return { orders: action.payload };
+      return { ...state, orders: action.payload };
     });
   },
 });
